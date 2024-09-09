@@ -13,13 +13,28 @@ exports.getAllImoveis = async (req, res) => {
 
 // Função para criar um novo imóvel
 exports.createImovel = async (req, res) => {
-  const { cliente, condominio, endereco, preco } = req.body;
+  const {
+    titulo,
+    descricao,
+    valor,
+    localizacao,
+    area,
+    tipo,
+    categoria,
+    cliente,
+    message,
+  } = req.body;
 
   const novoImovel = new Imovel({
+    titulo,
+    descricao,
+    valor,
+    localizacao,
+    area,
+    tipo,
+    categoria,
     cliente,
-    condominio,
-    endereco,
-    preco,
+    message,
     status: "pendente", // Imóvel começa como "pendente"
   });
 
@@ -93,21 +108,29 @@ exports.aprovarImovel = async (req, res) => {
     };
 
     // Adicionar parâmetros específicos com base na categoria
-    if (imovel.categoria === "apartamentos") {
-      leadData.BusinessType = ["SALE"];
-      leadData.category = 1000; // Código para apartamentos
-    } else if (imovel.categoria === "casas") {
-      leadData.BusinessType = ["SALE"];
-      leadData.category = 1010; // Código para casas
-    } else if (imovel.categoria === "temporada") {
-      leadData.BusinessType = ["RENTAL"];
-      leadData.category = 1030; // Código para temporada
-    } else if (imovel.categoria === "terrenos") {
-      leadData.BusinessType = ["SALE"];
-      leadData.category = 1040; // Código para terrenos
-    } else if (imovel.categoria === "comercio-industria") {
-      leadData.BusinessType = ["SALE"];
-      leadData.category = 1120; // Código para comércio e indústria
+    switch (imovel.categoria) {
+      case "apartamentos":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 1000; // Código para apartamentos
+        break;
+      case "casas":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 1010; // Código para casas
+        break;
+      case "temporada":
+        leadData.BusinessType = ["RENTAL"];
+        leadData.category = 1030; // Código para temporada
+        break;
+      case "terrenos":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 1040; // Código para terrenos
+        break;
+      case "comercio-industria":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 1120; // Código para comércio e indústria
+        break;
+      default:
+        return res.status(400).json({ error: "Categoria de imóvel inválida" });
     }
 
     // Enviar requisição para OLX/Zap

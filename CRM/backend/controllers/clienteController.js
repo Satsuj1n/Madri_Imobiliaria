@@ -12,28 +12,35 @@ exports.getAllClientes = async (req, res) => {
 
 // Função para criar um novo cliente
 exports.createCliente = async (req, res) => {
-  const { cpfCnpj, codigo, nomeRazaoSocial, email, telefone, relacionamento } =
-    req.body;
-
-  const novoCliente = new Cliente({
-    cpfCnpj,
-    codigo,
-    nomeRazaoSocial,
-    email,
-    telefone,
-    relacionamento,
-  });
-
   try {
-    const cliente = await novoCliente.save();
-    res.status(201).json(cliente);
-  } catch (err) {
-    if (err.code === 11000) {
-      // Erro de duplicação
-      res.status(400).json({ error: "cpf/CNPJ ou Código já existente" });
-    } else {
-      res.status(500).json({ error: "Erro ao criar cliente" });
+
+    const { cpfCnpj, nomeRazaoSocial, email, telefone, relacionamento, senha } =
+      req.body;
+
+    console.log(req.body); // Verificar se os dados estão corretos
+
+    // Verificar se o cliente já existe
+    let cliente = await Cliente.findOne({ cpfCnpj });
+    if (cliente) {
+      console.log("Cliente já existe");
+      return res.status(400).json({ message: "Cliente já existe" });
     }
+
+    // Criar um novo cliente
+    cliente = new Cliente({
+      cpfCnpj,
+      nomeRazaoSocial,
+      email,
+      telefone,
+      relacionamento,
+      senha, // Incluindo a senha na criação do cliente
+    });
+
+    await cliente.save();
+    res.status(201).json({ message: "Cliente criado com sucesso", cliente });
+  } catch (err) {
+    console.error("Erro ao criar cliente:", err);
+    res.status(500).json({ error: "Erro ao criar cliente" });
   }
 };
 
