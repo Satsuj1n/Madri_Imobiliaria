@@ -19,7 +19,7 @@ router.put("/:id", auth, imovelController.updateImovel);
 // Rota para deletar um imóvel
 router.delete("/:id", auth, imovelController.deleteImovel);
 
-// Rota para o admin aprovar um imóvel
+// Rota para o admin aprovar um imóvel e enviar para OLX/Zap
 router.put("/:id/aprovar", auth, checkAdmin, imovelController.aprovarImovel);
 
 module.exports = router;

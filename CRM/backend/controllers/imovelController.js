@@ -1,4 +1,5 @@
 const Imovel = require("../models/Imovel");
+const axios = require("axios");
 
 // Função para listar todos os imóveis
 exports.getAllImoveis = async (req, res) => {
@@ -68,7 +69,7 @@ exports.deleteImovel = async (req, res) => {
   }
 };
 
-// Função para aprovar um imóvel (somente admins)
+// Função para aprovar um imóvel (somente admins) e enviar o anúncio para OLX/Zap
 exports.aprovarImovel = async (req, res) => {
   try {
     const imovel = await Imovel.findByIdAndUpdate(
@@ -76,10 +77,64 @@ exports.aprovarImovel = async (req, res) => {
       { status: "aprovado" },
       { new: true }
     );
-    if (!imovel)
+    if (!imovel) {
       return res.status(404).json({ error: "Imóvel não encontrado" });
-    res.json({ message: "Imóvel aprovado com sucesso", imovel });
+    }
+
+    // Dados básicos para envio de leads
+    const leadData = {
+      LeadName: imovel.cliente.nome,
+      LeadEmail: imovel.cliente.email,
+      LeadTelephone: imovel.cliente.telefone,
+      Message: `Anúncio aprovado para o imóvel: ${imovel.titulo}`,
+      ExternalId: imovel._id,
+      BrokerEmail: "seu_email@imobiliaria.com",
+      LeadOrigin: "ImobiliariaSistema",
+    };
+
+    // Adicionar parâmetros específicos com base na categoria
+    if (imovel.categoria === "apartamentos") {
+      leadData.BusinessType = ["SALE"];
+      leadData.category = 1000; // Código para apartamentos
+    } else if (imovel.categoria === "casas") {
+      leadData.BusinessType = ["SALE"];
+      leadData.category = 1010; // Código para casas
+    } else if (imovel.categoria === "temporada") {
+      leadData.BusinessType = ["RENTAL"];
+      leadData.category = 1030; // Código para temporada
+    } else if (imovel.categoria === "terrenos") {
+      leadData.BusinessType = ["SALE"];
+      leadData.category = 1040; // Código para terrenos
+    } else if (imovel.categoria === "comercio-industria") {
+      leadData.BusinessType = ["SALE"];
+      leadData.category = 1120; // Código para comércio e indústria
+    }
+
+    // Enviar requisição para OLX/Zap
+    const response = await axios.post(
+      "https://crm-leadmanager-leadreceiver-api.gestao.prod.olxbr.io/v1/addLeads",
+      leadData,
+      {
+        headers: {
+          "X-API-KEY": process.env.OLX_API_KEY,
+          "X-Agent-Name": process.env.OLX_AGENT_NAME,
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.status(200).json({
+      message: "Imóvel aprovado e anúncio enviado para OLX/Zap",
+      data: response.data,
+    });
   } catch (err) {
-    res.status(500).json({ error: "Erro ao aprovar imóvel" });
+    console.error(
+      "Erro ao aprovar imóvel ou enviar para OLX/Zap:",
+      err.message
+    );
+    res
+      .status(500)
+      .json({ error: "Erro ao aprovar imóvel ou enviar para OLX/Zap" });
   }
 };
