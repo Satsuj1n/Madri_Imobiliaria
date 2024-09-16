@@ -1,5 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap');
 
+=======
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+:root {
+  --greyscale-grey-100: #f4f4f6;
+  --greyscale-grey-200: #e5e6eb;
+  --greyscale-grey-300: #d3d5da;
+  --greyscale-grey-600: #4d5461;
+  --greyscale-grey-700: #394150;
+  --greyscale-grey-800: #212936;
+  --greyscale-grey-900: #161d21;
+  --main-colorblack: #000929;
+  --main-colorprimary: #192126;
+  --main-colorsecondary: #384046;
+  --main-colorwhite: #ffffff;
+  --shades-of-purplepurple-90: #d8d6f5;
+  --shades-of-purplepurple-92: #e0def7;
+  --shades-of-purplepurple-94: #e8e6f9;
+  --shades-of-purplepurple-96: #f0effb;
+  --shades-of-purplepurple-98: #f7f7fd;
+}
+>>>>>>> 74a9ce6975ecfe371b01186914454e6f4717edb1
