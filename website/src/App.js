@@ -1,23 +1,108 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { Button } from './components/ui/button'; // Caminho ajustado para o componente Button
+import { ReactComponent as PlusIcon } from './assets/icons/PlusIcon.svg'; // Importe o ícone SVG do caminho correto
+import { ReactComponent as PlusIconPurple } from './assets/icons/PlusIconPurple.svg'; // Importe o novo ícone SVG como um componente React
+import { ReactComponent as GoogleIcon } from './assets/icons/googleIcon.svg'; // Importe o ícone do Google como um componente React
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <br />
+      {/* Botão Padrão */}
+      <Button onClick={() => alert('Botão padrão clicado!')}>Button</Button>
+      <br />
+      <br />
+      {/* Novo Botão Maior */}
+      <Button variant="large" size="large" onClick={() => alert('Botão maior clicado!')}>
+        Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão Extra Grande */}
+      <Button variant="extraLarge" size="extraLarge" onClick={() => alert('Botão extra grande clicado!')}>
+        Button
+      </Button>
+      <br />
+      <br />
+      <Button
+
+        onClick={() => alert('Botão com ícone clicado!')}
+      >
+        <PlusIcon className="mr-2 w-4 h-4" /> {/* Ícone adicionado ao lado do texto */}
+        Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão large com Ícone */}
+      <Button
+        variant="large"
+        size="large"
+        onClick={() => alert('Botão com ícone clicado!')}
+      >
+        <PlusIcon className="mr-2 w-4 h-4" /> {/* Ícone adicionado ao lado do texto */}
+        Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão extraLarge com Ícone */}
+      <Button
+        variant="extraLarge"
+        size="extraLarge"
+        onClick={() => alert('Botão com ícone clicado!')}
+      >
+        <PlusIcon className="mr-2 w-4 h-4" /> {/* Ícone adicionado ao lado do texto */}
+        Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão Outline Default */}
+      <Button variant="outlineDefault" onClick={() => alert('Botão outline default clicado!')}>
+        Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão Outline Large */}
+      <Button variant="outlineLarge" size="large" onClick={() => alert('Botão outline large clicado!')}>
+        Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão Outline Extra Grande */}
+      <Button variant="outlineExtraLarge" size="extraLarge" onClick={() => alert('Botão outline extra grande clicado!')}>
+        Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão Default com Ícone Purple */}
+      <Button variant="outlineDefault" onClick={() => alert('Botão default com ícone purple clicado!')}>
+      <PlusIconPurple className="mr-2 w-4 h-4" /> {/* Ícone Purple adicionado ao lado do texto */}
+      Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão Large com Ícone Purple */}
+      <Button variant="outlineLarge" size="large" onClick={() => alert('Botão large com ícone purple clicado!')}>
+      <PlusIconPurple className="mr-2 w-4 h-4" /> {/* Ícone Purple adicionado ao lado do texto */}
+        Button
+      </Button>
+      <br />
+      <br />
+      {/* Botão Extra Grande com Ícone Purple */}
+      <Button variant="outlineExtraLarge" size="extraLarge" onClick={() => alert('Botão extra grande com ícone purple clicado!')}>
+      <PlusIconPurple className="mr-2 w-4 h-4" /> {/* Ícone Purple adicionado ao lado do texto */}
+       Button
+      </Button>
+      <br />
+      <br/>
+      {/* Botão Google */}
+      <Button variant="google" size="google" onClick={() => alert('Login com Google clicado!')}>
+        <GoogleIcon className="mr-2 w-6 h-6" /> {/* Ícone do Google */}
+        Continue with Google
+      </Button>
+      <br />
+      <br />
     </div>
   );
 }
