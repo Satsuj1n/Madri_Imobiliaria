@@ -7,7 +7,7 @@ import { ReactComponent as GoogleIcon } from './assets/icons/googleIcon.svg'; //
 import { Checkbox } from './components_i/ui/Checkbox';
 import { Radio } from './components_i/ui/Radio';  // Importe o componente RadioGroup
 import { Toggle } from './components_i/ui/Toggle'; // Importe o componente Toggle
-
+import { SingleAmenities } from './components_i/ui/Amenities';
 
 
 function App() {
@@ -122,6 +122,9 @@ function App() {
       <div className="flex space-x-4 justify-center mt-4">
         {/* Toggle */}
         <Toggle />
+      </div>
+      <div className="flex justify-center mt-4">
+        <SingleAmenities />
       </div>
       
       <br/>
