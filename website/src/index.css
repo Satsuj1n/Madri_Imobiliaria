@@ -1,10 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-<<<<<<< HEAD
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap');
-
-=======
 
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
 
@@ -40,4 +36,3 @@ code {
   --shades-of-purplepurple-96: #f0effb;
   --shades-of-purplepurple-98: #f7f7fd;
 }
->>>>>>> 74a9ce6975ecfe371b01186914454e6f4717edb1

@@ -1,9 +1,10 @@
 import React from 'react';
 import './App.css';
-import { Button } from './components/ui/button'; // Caminho ajustado para o componente Button
+import { Button } from './components_i/ui/button'; // Caminho ajustado para o componente Button
 import { ReactComponent as PlusIcon } from './assets/icons/PlusIcon.svg'; // Importe o ícone SVG do caminho correto
 import { ReactComponent as PlusIconPurple } from './assets/icons/PlusIconPurple.svg'; // Importe o novo ícone SVG como um componente React
 import { ReactComponent as GoogleIcon } from './assets/icons/googleIcon.svg'; // Importe o ícone do Google como um componente React
+import { Checkbox } from './components_i/ui/Checkbox';
 
 
 function App() {
@@ -103,6 +104,13 @@ function App() {
       </Button>
       <br />
       <br />
+            {/* Seção de Checkbox, Radio, Toggle */}
+      <h2 className="text-center font-bold text-[18px] font-['Plus Jakarta Sans']">Checkbox, Radio, Toggle</h2>
+      <div className="flex space-x-4 justify-center mt-4">
+        {/* Checkbox */}
+        <Checkbox />
+        {/* Outras Checkboxes e elementos vão aqui */}
+      </div>
     </div>
   );
 }
