@@ -11,6 +11,8 @@ import { SingleAmenities } from './components_i/ui/Amenities';
 import TableOfContent from './components_i/ui/TableOfContent'; // Importe o novo componente
 import SegmentedControl from './components_i/ui/SegmentedControl';
 import SearchBar from './components_i/ui/SearchBar';
+import DropdownOptions from './components_i/ui/DropDownOptions'; // Novo componente de seleção
+
 
 
 
@@ -146,6 +148,10 @@ function App() {
       </div>
       <div className="mt-4 flex justify-center">
       <SearchBar />
+
+      </div>
+      <div className="mt-4 flex justify-center">
+      <DropdownOptions />
       </div>
       
       <br/>
