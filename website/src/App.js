@@ -8,6 +8,11 @@ import { Checkbox } from './components_i/ui/Checkbox';
 import { Radio } from './components_i/ui/Radio';  // Importe o componente RadioGroup
 import { Toggle } from './components_i/ui/Toggle'; // Importe o componente Toggle
 import { SingleAmenities } from './components_i/ui/Amenities';
+import TableOfContent from './components_i/ui/TableOfContent'; // Importe o novo componente
+import SegmentedControl from './components_i/ui/SegmentedControl';
+import SearchBar from './components_i/ui/SearchBar';
+
+
 
 
 function App() {
@@ -125,6 +130,22 @@ function App() {
       </div>
       <div className="flex justify-center mt-4">
         <SingleAmenities />
+      </div>
+      <div className="mt-4 flex justify-center">
+        <TableOfContent options={['Profile', 'My Account', 'Notifications']} />
+      </div>
+      <div className="mt-4 flex justify-center">
+      <SegmentedControl
+        options={[
+          { value: 'rent', label: 'Rent' },
+          { value: 'buy', label: 'Buy' },
+          { value: 'sell', label: 'Sell' },
+        ]}
+        defaultValue="rent"
+      />
+      </div>
+      <div className="mt-4 flex justify-center">
+      <SearchBar />
       </div>
       
       <br/>
