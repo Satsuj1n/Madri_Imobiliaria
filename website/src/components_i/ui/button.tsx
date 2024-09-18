@@ -17,7 +17,7 @@ const buttonVariants = cva(
         outlineExtraLarge: "border-2 border-[#E0DEF7] text-[#7065F0] hover:bg-[#E0DEF7]/20",
         ghost: "text-purple-600 hover:bg-purple-100",
         link: "text-blue-600 underline hover:text-blue-800",
-        google: "border border-[#D6DDEB] bg-white text-[#000929] font-bold text-[16px] leading-[1.5] font-['Plus Jakarta Sans'] gap-2", // Estilo do botão Google
+        google: "border border-[#D6DDEB] bg-white text-[#000929] font-bold text-[16px] leading-[1.5] font-['Plus Jakarta Sans'] gap-2", 
       },
       size: {
         sm: "h-8 px-3 rounded-md font-bold text-[14px] leading-[1.4] font-['Plus Jakarta Sans']",
