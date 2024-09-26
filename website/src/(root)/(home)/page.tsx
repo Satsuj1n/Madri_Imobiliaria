@@ -1,46 +1,59 @@
-import React from 'react';
-import Navbar from '../../components_i/ui/Navbar'; // Adjust the path based on your structure
-
+import React from "react";
+import Navbar from "../../components_i/ui/Navbar";
+import HouseCard from "../../components_i/ui/HouseCard";
+import BrowseProperties from "components_i/ui/BrowseProperties";
 
 const LandingPage = () => {
   return (
-    <div className="landing-page">
-      {/* Navbar */}
+    <>
       <Navbar />
-
-      {/* Hero Section */}
-      <section className="hero bg-gray-100 py-16">
-        <div className="container mx-auto flex flex-col items-center text-center">
-          <h1 className="text-4xl font-bold text-black mb-4">
-            Buy, rent, or sell your property easily
+      <div className="flex min-h-screen bg-[#F7F7FD] ">
+        {/* Coluna Esquerda com Textos e Componentes */}
+        <div className="w-1/2 flex flex-col justify-center p-10">
+          <h1 className="text-[64px] font-bold text-black mb-4 ml-36 leading-[70px]">
+            Compre, venda ou alugue sua propriedade
           </h1>
-          <p className="text-lg text-gray-600 mb-8">
-            A great platform to buy, sell, or even rent your properties without any commissions.
+          <p className="text-[20px] text-gray-600 mb-8 ml-36">
+            Uma ótima plataforma para comprar, vender ou até mesmo alugar suas
+            propriedades sem qualquer comissão.
           </p>
-          <div className="flex space-x-8">
-            <div className="bg-purple-100 p-8 rounded-lg shadow-md text-center">
-              <h2 className="text-2xl font-bold text-purple-500">50k+</h2>
-              <p className="text-sm text-gray-500">Renters</p>
+
+          {/* Novo div para os elementos 50k+ e 10k+ com linhas de separação */}
+          <div className="flex ml-36 space-x-8 items-center mb-8">
+            {/* Linha antes do 50k+ */}
+            <div className="h-[64px] w-[3px] bg-[#E0DEF7]"></div>
+
+            <div className="text-center">
+              <h2 className="font-bold text-[#7065F0] text-[32px]">50k+</h2>
+              <p className="text-sm text-gray-500">Inquilinos</p>
             </div>
-            <div className="bg-purple-100 p-8 rounded-lg shadow-md text-center">
-              <h2 className="text-2xl font-bold text-purple-500">10k+</h2>
-              <p className="text-sm text-gray-500">Properties</p>
+
+            {/* Linha entre 50k+ e 10k+ */}
+            <div className="h-[64px] w-[3px] bg-[#E0DEF7]"></div>
+
+            <div className="text-center">
+              <h2 className="text-[32px] font-bold text-[#7065F0]">10k+</h2>
+              <p className="text-sm text-gray-500">Propriedades</p>
             </div>
+
+          
+          </div>
+
+          <div className="flex ml-36">
+            <BrowseProperties />
           </div>
         </div>
-      </section>
 
-      {/* Add more sections as needed */}
-      <section className="additional-section bg-white py-16">
-        <div className="container mx-auto">
-          <h2 className="text-2xl font-bold mb-8">Why Choose Us?</h2>
-          <p className="text-lg text-gray-600">
-            We make it easy for landlords to find tenants and for renters to find the perfect property.
-          </p>
-          {/* Additional content can be added here */}
+        {/* Coluna Direita com o Mapa como uma Imagem */}
+        <div className="w-[60%] flex justify-center items-center mt-12">
+          <img
+            src="https://i.imgur.com/k9dwT5R.png"
+            alt="Imagem do Mapa"
+            className="w-full h-auto object-cover "
+          />
         </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 };
 
