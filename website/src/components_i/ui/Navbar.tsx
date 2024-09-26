@@ -6,10 +6,10 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-md w-full fixed top-0 left-0">
       <div className="container mx-auto flex justify-between items-center p-4 w-full">
-        {/* Div para Logo e Estatery */}
+        {/* Div para Logo e Madri Imobiliária */}
         <div className="flex items-center gap-2">
           <Logo className="h-8" />
-          {/* Estatery com estilos atualizados */}
+          {/* Madri Imobiliária com estilos atualizados */}
           <a
             href="#"
             className="text-[#100A55] font-bold text-xl"
@@ -19,42 +19,42 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* Div para Links (Rent, Buy, Sell, Manage Property) */}
+        {/* Div para Links (Alugar, Comprar, Vender, Gerenciar Propriedade) */}
         <div className="flex items-center space-x-8">
           <a
             href="#"
             className="text-[#000929] font-medium text-sm hover:text-[#7065F0]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
-            Rent
+            Alugar
           </a>
           <a
             href="#"
             className="text-[#000929] font-medium text-sm hover:text-[#7065F0]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
-            Buy
+            Comprar
           </a>
           <a
             href="#"
             className="text-[#000929] font-medium text-sm hover:text-[#7065F0]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
-            Sell
+            Vender
           </a>
           <a
             href="#"
             className="text-[#000929] font-medium text-sm hover:text-[#7065F0]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
-            Manage Property
+            Gerenciar Propriedade
           </a>
         </div>
 
-        {/* Botões de Login e Sign up */}
+        {/* Botões de Login e Cadastro */}
         <div className="flex gap-5">
-          <Button variant="default">Login</Button>
-          <Button variant="outlineDefault">Sign up</Button>
+          <Button variant="default">Entrar</Button>
+          <Button variant="outlineDefault">Cadastrar-se</Button>
         </div>
       </div>
     </nav>
