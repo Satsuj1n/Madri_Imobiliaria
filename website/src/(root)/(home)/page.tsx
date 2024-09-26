@@ -23,15 +23,15 @@ const LandingPage = () => {
             {/* Linha antes do 50k+ */}
             <div className="h-[64px] w-[3px] bg-[#E0DEF7]"></div>
 
-            <div className="text-center">
+            <div className=" items-start">
               <h2 className="font-bold text-[#7065F0] text-[32px]">50k+</h2>
-              <p className="text-sm text-gray-500">Inquilinos</p>
+              <p className="text-sm text-gray-500 ">Inquilinos</p>
             </div>
 
             {/* Linha entre 50k+ e 10k+ */}
             <div className="h-[64px] w-[3px] bg-[#E0DEF7]"></div>
 
-            <div className="text-center">
+            <div className="items-start">
               <h2 className="text-[32px] font-bold text-[#7065F0]">10k+</h2>
               <p className="text-sm text-gray-500">Propriedades</p>
             </div>
