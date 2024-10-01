@@ -8,7 +8,7 @@ const BrowseProperties = () => {
   const options = ["Alugar", "Comprar", "Vender"];
 
   return (
-    <div className="flex flex-col items-left relative z-30">
+    <div className="flex flex-col items-left relative z-10">
       {/* Div compacta para Alugar, Comprar, Vender */}
       <div className="bg-white p-3 rounded-t-lg shadow-md w-[420px] flex justify-left items-center border-b border-gray-200">
         {options.map((option) => (

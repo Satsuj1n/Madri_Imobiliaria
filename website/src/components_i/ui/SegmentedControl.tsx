@@ -10,17 +10,17 @@ const SegmentedControl = () => {
   const [selected, setSelected] = useState("Rent");
 
   const options = [
-    { value: "Rent", IconOn: KeyOn, IconOff: KeyOff },
-    { value: "Buy", IconOn: BuyIconOn, IconOff: BuyIconOff },
-    { value: "Sell", IconOn: SellIconOn, IconOff: SellIconOff },
+    { value: "Alugar", IconOn: KeyOn, IconOff: KeyOff },
+    { value: "Comprar", IconOn: BuyIconOn, IconOff: BuyIconOff },
+    { value: "Vender", IconOn: SellIconOn, IconOff: SellIconOff },
   ];
 
   const buttonStyles = `inline-flex items-center justify-center gap-2 p-2 rounded-md cursor-pointer`;
-  const selectedStyles = `bg-white border-2 border-[#E0DEF7] shadow px-4`; // Adicionado px-4 para espaçamento lateral
+  const selectedStyles = `bg-white border-2 border-[#0053f8] shadow px-4`; // Adicionado px-4 para espaçamento lateral
   const nonSelectedStyles = `border-transparent text-[#100A55]`;
 
   return (
-    <div className="flex justify-center items-center p-2 rounded-lg border border-purple-200 bg-purple-50 gap-2">
+    <div className="flex justify-center items-center p-2 rounded-lg border border-blue-300 bg-[#f9fbff] gap-2">
       {" "}
       {/* Ajustado gap-2 para 8px de espaçamento entre opções */}
       {options.map(({ value, IconOn, IconOff }) => (

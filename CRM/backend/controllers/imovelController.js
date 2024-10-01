@@ -1,4 +1,4 @@
-const Imovel = require("../models/Imovel");
+const Imovel = require("../models/imovel");
 const axios = require("axios");
 
 // Função para listar todos os imóveis

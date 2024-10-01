@@ -4,16 +4,15 @@ import { Button } from "./Button"; // Reutilizando o componente de Button
 
 const Navbar = () => {
   return (
-    <nav className="bg-white shadow-md w-full fixed top-0 left-0 z-40">
-      <div className="container mx-auto flex justify-between items-center p-4 w-full">
+    <nav className="bg-white shadow-md w-full fixed z-50">
+      <div className="container  flex justify-between items-center p-4">
         {/* Div para Logo e Madri Imobiliária */}
-        {/* Div para Logo e Madri Imobiliária */}
-        <div className="flex items-center gap-2">
-          <Logo className="h-10" />
+        <div className="flex items-center gap-2 ">
+          <Logo className="h-8 ml-40" />
           {/* Madri Imobiliária com estilos atualizados */}
           <a
             href="#"
-            className="text-[#100A55] font-bold text-xl whitespace-nowrap"
+            className="text-[#100A55] font-bold text-xl whitespace-nowrap "
             style={{ fontFamily: "Plus Jakarta Sans", lineHeight: "28px" }}
           >
             Madri Imobiliária
@@ -21,47 +20,39 @@ const Navbar = () => {
         </div>
 
         {/* Div para Links (Alugar, Comprar, Vender, Gerenciar Propriedade) */}
-        {/* Div para Links (Alugar, Comprar, Vender, Gerenciar Propriedade) */}
-        <div className="flex items-center space-x-8">
+        <div className="flex items-center space-x-8 ml-8">
           <a
             href="#"
-            className="text-[#000929] font-medium text-sm hover:text-[#0053f8]"
+            className="text-[#000929] font-medium text-sm hover:text-[#7065F0]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
-            Alugar
             Alugar
           </a>
           <a
             href="#"
-            className="text-[#000929] font-medium text-sm hover:text-[#0053f8]"
+            className="text-[#000929] font-medium text-sm hover:text-[#7065F0]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
-            Comprar
             Comprar
           </a>
           <a
             href="#"
-            className="text-[#000929] font-medium text-sm hover:text-[#0053f8]"
+            className="text-[#000929] font-medium text-sm hover:text-[#7065F0]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
-            Vender
             Vender
           </a>
           <a
             href="#"
-            className="text-[#000929] font-medium text-sm hover:text-[#0053f8]"
+            className="text-[#000929] font-medium text-sm hover:text-[#7065F0]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
-            Gerenciar Propriedade
             Gerenciar Propriedade
           </a>
         </div>
 
-        {/* Botões de Login e Cadastro */}
-        {/* Botões de Login e Cadastro */}
-        <div className="flex gap-5">
-          <Button variant="default">Entrar</Button>
-          <Button variant="outlineDefault">Cadastrar-se</Button>
+        {/* Botões de Entrar e Cadastrar */}
+        <div className="flex items-center gap-5 mr-[-180px]">
           <Button variant="default">Entrar</Button>
           <Button variant="outlineDefault">Cadastrar-se</Button>
         </div>

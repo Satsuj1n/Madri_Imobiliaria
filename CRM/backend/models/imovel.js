@@ -1,42 +1,44 @@
 const mongoose = require("mongoose");
 
-// Definir o esquema de um Imóvel
 const ImovelSchema = new mongoose.Schema({
-  titulo: { type: String, required: true }, // Título do imóvel (nome do anúncio)
-  descricao: { type: String }, // Descrição do imóvel
-  valor: { type: Number, required: true }, // Valor do imóvel
-  localizacao: { type: String, required: true }, // Localização (endereço do imóvel)
-  area: { type: Number, required: true }, // Área em m²
+  titulo: { type: String, required: true },
+  descricao: { type: String },
+  valor: { type: Number, required: true },
+  localizacao: { type: String, required: true },
+  area: { type: Number, required: true },
+  quarto: { type: Number, required: false },
+  banheiro: { type: Number, required: false },
   tipo: {
     type: String,
-    enum: ["venda", "aluguel"], // Tipo de transação (venda ou aluguel)
+    enum: ["venda", "aluguel"],
     required: true,
   },
   categoria: {
     type: String,
-    enum: ["apartamentos", "casas", "temporada", "terrenos", "comercio-industria"], // Categorias da OLX
+    enum: ["apartamentos", "casas", "temporada", "terrenos", "comercio-industria"],
     required: true,
   },
   cliente: {
-    // Cliente associado ao imóvel (quem está vendendo ou alugando)
-    nome: { type: String, required: true }, // Nome do cliente (LeadName)
-    email: { type: String, required: true }, // Email do cliente (LeadEmail)
-    telefone: { type: String, required: true }, // Telefone do cliente (LeadTelephone)
+    nome: { type: String, required: true },
+    email: { type: String, required: true },
+    telefone: { type: String, required: true },
   },
-  message: { type: String }, // Mensagem do cliente (LeadMessage)
+  message: { type: String },
   status: {
     type: String,
     enum: ["pendente", "aprovado"],
-    default: "pendente", // Status do imóvel (aguardando aprovação)
+    default: "pendente",
   },
-  clientListingId: { type: String }, // Identificador do anúncio para o cliente
-  originLeadId: { type: String }, // Identificador da origem do lead (fornecido pela OLX/Zap)
+  clientListingId: { type: String },
+  originLeadId: { type: String },
   temperaturaLead: {
     type: String,
-    enum: ["baixa", "media", "alta"], // Temperatura do lead (interesse do cliente)
+    enum: ["baixa", "media", "alta"],
   },
-  dataCadastro: { type: Date, default: Date.now }, // Data de cadastro do imóvel
+  dataCadastro: { type: Date, default: Date.now },
+  imagem: { type: String }, // Campo para uma única imagem
+  // Ou, se você quiser armazenar várias imagens, use um array de strings
+  imagens: [{ type: String }], // Campo para múltiplas imagens
 });
 
-// Exportar o modelo de Imóvel
 module.exports = mongoose.model("Imovel", ImovelSchema);

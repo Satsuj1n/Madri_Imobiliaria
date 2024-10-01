@@ -10,8 +10,8 @@ const SearchBar = () => {
   const variantStyles = isFocused
     ? 'border-2 border-primary bg-white shadow'
     : inputValue
-    ? 'border-2 border-purple-200 bg-purple-50'
-    : 'border-2 border-purple-200 bg-purple-50';
+    ? 'border-2 border-blue-300 bg-[#f9fbff]'
+    : 'border-2 border-blue-300 bg-[#f9fbff]';
 
   const inputTextStyles = inputValue
     ? 'text-black font-bold'
@@ -26,7 +26,7 @@ const SearchBar = () => {
         onChange={(e) => setInputValue(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        placeholder="Search..."
+        placeholder="Buscar..."
         className={`w-full bg-transparent outline-none ${inputTextStyles}`}
       />
     </div>

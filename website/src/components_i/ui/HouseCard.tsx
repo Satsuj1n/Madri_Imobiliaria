@@ -7,6 +7,7 @@ interface HouseCardProps {
   price: string;
   name: string;
   location: string;
+  city: string; // Separate city prop
   beds: number;
   baths: number;
   size: string;
@@ -17,18 +18,19 @@ const HouseCard: React.FC<HouseCardProps> = ({
   price,
   name,
   location,
+  city,
   beds,
   baths,
   size,
   image,
 }) => {
   return (
-    <div className={`border rounded-lg shadow-md bg-white mb-8`}>
+    <div className={`border rounded-lg shadow-md bg-white `}>
       {/* Imagem da Casa */}
       <img
         src={image}
         alt={name}
-        className="rounded-t-lg w-full h-[200px] object-fill"
+        className="rounded-t-lg w-full h-[200px] object-cover"
       />
 
       <div className="p-6">
@@ -39,10 +41,14 @@ const HouseCard: React.FC<HouseCardProps> = ({
         </div>
 
         {/* Nome da Propriedade */}
-        <h4 className="text-[#000929] font-bold text-xl mt-2">{name}</h4>
+        <h4 className="text-[#000929] font-bold text-xl mt-2 whitespace-nowrap">{name}</h4>
 
         {/* Localização */}
-        <p className="text-[#6C727F] font-normal text-sm mt-1">{location}</p>
+        <p className="text-[#6C727F] font-normal text-sm mt-1">
+          {location}
+          <br />
+          {city} {/* Always show the city and state on a separate line */}
+        </p>
 
         {/* Linha separadora */}
         <div className="border-t mt-4 mb-4 border-gray-200"></div>
@@ -64,7 +70,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
           <div className="flex items-center">
             <SizeIcon />
             <span className="text-[#6C727F] ml-2 font-normal text-sm">
-              {size}
+              {size}m²
             </span>
           </div>
         </div>
