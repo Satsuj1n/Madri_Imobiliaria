@@ -142,7 +142,7 @@ const LandingPage = () => {
         </div>
 
         {/* Blue section */}
-        <div className="w-full bg-[#100A55] py-10 flex justify-center">
+        <div className="w-full bg-[#02166c] py-10 flex justify-center">
           <div className="flex flex-col items-center w-[1440px]">
             <h4 className="text-[#A0A3BD] text-[16px] mb-2">No Spam Promise</h4>
             <h2 className="text-white text-[32px] font-bold mb-4">
