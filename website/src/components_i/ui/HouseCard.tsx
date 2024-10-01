@@ -70,7 +70,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
           <div className="flex items-center">
             <SizeIcon />
             <span className="text-[#6C727F] ml-2 font-normal text-sm">
-              {size}m²
+              {size}
             </span>
           </div>
         </div>
