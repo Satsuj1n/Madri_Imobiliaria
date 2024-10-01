@@ -24,21 +24,17 @@ const HouseCard: React.FC<HouseCardProps> = ({
 }) => {
   return (
     <div className={`border rounded-lg shadow-md bg-white mb-8`}>
-    <div className={`border rounded-lg shadow-md bg-white mb-8`}>
       {/* Imagem da Casa */}
       <img
-        src={image}
         src={image}
         alt={name}
         className="rounded-t-lg w-full h-[200px] object-fill"
       />
 
       <div className="p-6">
-      <div className="p-6">
         {/* Preço */}
         <div className="text-[#0053f8] font-bold text-2xl">
           {price}
-          <span className="text-[#000929] text-base font-normal opacity-50"></span>
           <span className="text-[#000929] text-base font-normal opacity-50"></span>
         </div>
 
@@ -51,23 +47,17 @@ const HouseCard: React.FC<HouseCardProps> = ({
         {/* Linha separadora */}
         <div className="border-t mt-4 mb-4 border-gray-200"></div>
 
-        {/* Linha separadora */}
-        <div className="border-t mt-4 mb-4 border-gray-200"></div>
-
         {/* Ícones com informações */}
-        <div className="flex items-center justify-start gap-6">
         <div className="flex items-center justify-start gap-6">
           <div className="flex items-center">
             <BedIcon />
             <span className="text-[#6C727F] ml-2 font-normal text-sm">
-              {" "}
               {beds}
             </span>
           </div>
           <div className="flex items-center">
             <BathIcon />
             <span className="text-[#6C727F] ml-2 font-normal text-sm">
-              {" "}
               {baths}
             </span>
           </div>
