@@ -8,7 +8,7 @@ const BrowseProperties = () => {
   const options = ["Alugar", "Comprar", "Vender"];
 
   return (
-    <div className="flex flex-col items-left relative">
+    <div className="flex flex-col items-left relative z-30">
       {/* Div compacta para Alugar, Comprar, Vender */}
       <div className="bg-white p-3 rounded-t-lg shadow-md w-[420px] flex justify-left items-center border-b border-gray-200">
         {options.map((option) => (
@@ -16,12 +16,12 @@ const BrowseProperties = () => {
             key={option}
             onClick={() => setSelectedOption(option)}
             className={`cursor-pointer mx-8 text-lg font-medium ${
-              selectedOption === option ? "text-[#7065F0]" : "text-gray-600"
+              selectedOption === option ? "text-[#0053f8]" : "text-gray-600"
             }`}
           >
             {option}
             {selectedOption === option && (
-              <div className="h-1 mt-1 bg-[#7065F0]"></div>
+              <div className="h-1 mt-1 bg-[#0053f8]"></div>
             )}
           </div>
         ))}

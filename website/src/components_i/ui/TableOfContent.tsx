@@ -18,7 +18,7 @@ const TableOfContent: React.FC<TableOfContentProps> = ({ options }) => {
           key={index}
           className={`cursor-pointer py-2 text-[16px] leading-[24px] font-medium font-['Plus Jakarta Sans'] tracking-[0.02em] ${
             selected === option
-              ? "text-[#000929] font-bold border-l-2 border-[#7065F0] pl-4"
+              ? "text-[#000929] font-bold border-l-2 border-[#0053f8] pl-4"
               : "text-[#394150] font-medium pl-6"
           }`}
           onClick={() => handleSelect(option)}

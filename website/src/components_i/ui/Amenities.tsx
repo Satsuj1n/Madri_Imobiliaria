@@ -12,7 +12,7 @@ const Amenities: React.FC<AmenitiesProps> = ({ selected = false, onClick }) => {
       className={`inline-flex items-center justify-center px-4 py-2 rounded-md border text-center
         ${
           selected
-            ? "border-[#7065F0] bg-[#E8E6F9] text-[#7065F0]"
+            ? "border-[#0053f8] bg-[#E8E6F9] text-[#0053f8]"
             : "border-[#E0DEF7] bg-white text-[#000929]"
         } font-['Plus Jakarta Sans'] text-[16px] font-normal leading-[24px]`}
     >

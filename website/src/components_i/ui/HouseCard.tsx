@@ -1,7 +1,7 @@
-import React from 'react';
-import { ReactComponent as BedIcon } from '../../assets/icons/bedIcon.svg';
-import { ReactComponent as BathIcon } from '../../assets/icons/bathIcon.svg';
-import { ReactComponent as SizeIcon } from '../../assets/icons/sizeIcon.svg';
+import React from "react";
+import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
+import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
+import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
 
 interface HouseCardProps {
   price: string;
@@ -11,10 +11,17 @@ interface HouseCardProps {
   baths: number;
   size: string;
   image: string;
-
 }
 
-const HouseCard: React.FC<HouseCardProps> = ({ price, name, location, beds, baths, size, image }) => {
+const HouseCard: React.FC<HouseCardProps> = ({
+  price,
+  name,
+  location,
+  beds,
+  baths,
+  size,
+  image,
+}) => {
   return (
     <div className={`border rounded-lg shadow-md bg-white mb-8`}>
       {/* Imagem da Casa */}
@@ -26,7 +33,7 @@ const HouseCard: React.FC<HouseCardProps> = ({ price, name, location, beds, bath
 
       <div className="p-6">
         {/* Preço */}
-        <div className="text-[#7065F0] font-bold text-2xl">
+        <div className="text-[#0053f8] font-bold text-2xl">
           {price}
           <span className="text-[#000929] text-base font-normal opacity-50"></span>
         </div>
@@ -44,15 +51,23 @@ const HouseCard: React.FC<HouseCardProps> = ({ price, name, location, beds, bath
         <div className="flex items-center justify-start gap-6">
           <div className="flex items-center">
             <BedIcon />
-            <span className="text-[#6C727F] ml-2 font-normal text-sm"> {beds}</span>
+            <span className="text-[#6C727F] ml-2 font-normal text-sm">
+              {" "}
+              {beds}
+            </span>
           </div>
           <div className="flex items-center">
             <BathIcon />
-            <span className="text-[#6C727F] ml-2 font-normal text-sm"> {baths}</span>
+            <span className="text-[#6C727F] ml-2 font-normal text-sm">
+              {" "}
+              {baths}
+            </span>
           </div>
           <div className="flex items-center">
             <SizeIcon />
-            <span className="text-[#6C727F] ml-2 font-normal text-sm">{size}</span>
+            <span className="text-[#6C727F] ml-2 font-normal text-sm">
+              {size}
+            </span>
           </div>
         </div>
       </div>
