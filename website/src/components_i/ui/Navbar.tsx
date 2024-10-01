@@ -7,6 +7,7 @@ const Navbar = () => {
     <nav className="bg-white shadow-md w-full fixed top-0 left-0 z-40">
       <div className="container mx-auto flex justify-between items-center p-4 w-full">
         {/* Div para Logo e Madri Imobiliária */}
+        {/* Div para Logo e Madri Imobiliária */}
         <div className="flex items-center gap-2">
           <Logo className="h-10" />
           {/* Madri Imobiliária com estilos atualizados */}
@@ -20,12 +21,14 @@ const Navbar = () => {
         </div>
 
         {/* Div para Links (Alugar, Comprar, Vender, Gerenciar Propriedade) */}
+        {/* Div para Links (Alugar, Comprar, Vender, Gerenciar Propriedade) */}
         <div className="flex items-center space-x-8">
           <a
             href="#"
             className="text-[#000929] font-medium text-sm hover:text-[#0053f8]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
+            Alugar
             Alugar
           </a>
           <a
@@ -34,12 +37,14 @@ const Navbar = () => {
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
             Comprar
+            Comprar
           </a>
           <a
             href="#"
             className="text-[#000929] font-medium text-sm hover:text-[#0053f8]"
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
+            Vender
             Vender
           </a>
           <a
@@ -48,11 +53,15 @@ const Navbar = () => {
             style={{ fontFamily: "Plus Jakarta Sans" }}
           >
             Gerenciar Propriedade
+            Gerenciar Propriedade
           </a>
         </div>
 
         {/* Botões de Login e Cadastro */}
+        {/* Botões de Login e Cadastro */}
         <div className="flex gap-5">
+          <Button variant="default">Entrar</Button>
+          <Button variant="outlineDefault">Cadastrar-se</Button>
           <Button variant="default">Entrar</Button>
           <Button variant="outlineDefault">Cadastrar-se</Button>
         </div>

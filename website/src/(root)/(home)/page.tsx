@@ -1,11 +1,13 @@
 import React from "react";
 import Navbar from "../../components_i/ui/Navbar";
 import HouseCard from "../../components_i/ui/HouseCard";
-import BrowseProperties from "components_i/ui/BrowseProperties";
+import {BrowseProperties} from "components_i/ui/BrowseProperties";
 import { Button } from "components_i/ui/Button";
+
 
 const LandingPage = () => {
   return (
+    <>
     <>
       <Navbar />
       <div className="flex min-h-screen flex-col items-center mt-12">
@@ -120,6 +122,22 @@ const LandingPage = () => {
                 </p>
               </div>
             </div>
+
+          
+          </div>
+
+          <div className="flex ml-36">
+            <BrowseProperties />
+          </div>
+
+          {/* Imagem do lado direito ocupando metade do box */}
+          <div className="w-1/2 h-full flex justify-end items-end">
+            <img
+              src="https://i.imgur.com/aKr2xVQ.png"
+              alt="Ilustração de casa"
+              className="w-full h-full object-cover rounded-r-lg"
+              style={{ margin: 0 }}
+            />
           </div>
 
           {/* Imagem do lado direito ocupando metade do box */}
