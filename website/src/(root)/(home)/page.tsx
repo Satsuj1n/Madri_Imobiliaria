@@ -4,6 +4,7 @@ import HouseCard from "../../components_i/ui/HouseCard";
 import BrowseProperties from "components_i/ui/BrowseProperties";
 import { Button } from "components_i/ui/Button";
 import PropertyListing from "components_i/ui/PropertyListing";
+import Footer from "components_i/ui/Footer";
 
 // Importing your Button component
 
@@ -170,6 +171,7 @@ const LandingPage = () => {
             </p>
           </div>
         </div>
+        <Footer/>
       </div>
     </>
   );
