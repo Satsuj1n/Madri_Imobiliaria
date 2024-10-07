@@ -163,16 +163,16 @@ const LandingPage = () => {
               listado. Sem Spam.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center bg-white rounded-lg shadow-lg w-full sm:w-[400px] lg:w-[543px] h-[80px]">
+            <div className="flex flex-col sm:flex-row items-center bg-white rounded-lg shadow-lg w-full sm:w-[400px] lg:w-[543px] p-4 sm:p-0 h-auto sm:h-[80px]">
               <input
                 type="email"
                 placeholder="Insira seu endereço de e-mail"
-                className="w-full h-full pl-4 outline-none rounded-lg text-[#100A55]"
+                className="w-full h-12 sm:h-full pl-4 outline-none rounded-lg text-[#100A55] mb-2 sm:mb-0"
               />
               <Button
                 variant="default"
                 size="lg"
-                className="rounded-lg w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 mr-4"
+                className="w-full sm:w-auto rounded-lg mt-2 sm:mt-0 sm:ml-2 sm:mr-4"
               >
                 Inscrever-se
               </Button>

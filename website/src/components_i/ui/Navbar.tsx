@@ -28,10 +28,10 @@ const Navbar = () => {
       >
         {/* Logo e Nome da Marca à esquerda, ajustando distância uniforme */}
         <div className="flex items-center gap-2">
-          <Logo className="h-8 md:h-10 lg:h-12 ml-2 md:ml-4 lg:ml-6" />
+          <Logo className="h-8 md:h-10 lg:h-9 ml-2 md:ml-4 lg:ml-6" />
           <a
             href="#"
-            className="text-[#100A55] font-bold text-xl md:text-2xl lg:text-3xl whitespace-nowrap"
+            className="text-[#100A55] font-bold text-xl md:text-xl lg:text-2xl whitespace-nowrap"
             style={{ fontFamily: "Plus Jakarta Sans", lineHeight: "1.2" }}
           >
             Madri Imobiliária
@@ -44,16 +44,16 @@ const Navbar = () => {
             isOpen ? "hidden" : ""
           }`}
         >
-          <a href="#" className="text-sm md:text-base lg:text-lg text-gray-700">
+          <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
             Alugar
           </a>
-          <a href="#" className="text-sm md:text-base lg:text-lg text-gray-700">
+          <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
             Comprar
           </a>
-          <a href="#" className="text-sm md:text-base lg:text-lg text-gray-700">
+          <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
             Vender
           </a>
-          <a href="#" className="text-sm md:text-base lg:text-lg text-gray-700">
+          <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
             Gerenciar
           </a>
         </div>

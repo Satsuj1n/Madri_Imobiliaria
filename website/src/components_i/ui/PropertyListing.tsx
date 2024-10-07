@@ -1,7 +1,7 @@
 import React from "react";
-import HouseCard from "./HouseCard"; // Adjust the path according to your project structure
-import SegmentedControl from "./SegmentedControl"; // Adjust the path according to your project structure
-import SearchBar from "./SearchBar"; // Adjust the path according to your project structure
+import HouseCard from "./HouseCard";
+import SegmentedControl from "./SegmentedControl";
+import SearchBar from "./SearchBar";
 import { Button } from "./Button";
 
 const PropertyListing = () => {
@@ -20,7 +20,7 @@ const PropertyListing = () => {
           Baseado na sua localização
         </h2>
         <p
-          className="text-[#6C727F] mb-16 mt-6"
+          className="text-[#6C727F] mt-2 mb-6 md:mt-6 md:mb-16"
           style={{
             fontSize: "16px",
             lineHeight: "24px",
@@ -31,7 +31,7 @@ const PropertyListing = () => {
       </div>
 
       {/* Header with SegmentedControl and SearchBar */}
-      <div className="flex flex-col md:flex-row justify-between w-full max-w-[1120px] mt-8 px-4 mb-4 space-y-4 md:space-y-0">
+      <div className="flex flex-col md:flex-row justify-between w-full max-w-[1120px] mt-4 px-4 mb-4 space-y-2 md:space-y-0">
         <div className="w-full md:w-auto">
           <SegmentedControl />
         </div>
