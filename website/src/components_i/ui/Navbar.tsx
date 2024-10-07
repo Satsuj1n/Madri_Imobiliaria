@@ -64,17 +64,11 @@ const Navbar = () => {
             isOpen ? "hidden" : ""
           }`}
         >
-          <Button
-            onClick={handleLoginClick}
-            className="px-6 py-2 text-white bg-blue-500 hover:bg-blue-700 text-sm font-semibold rounded-md shadow-md transition"
-          >
-            Login
+          <Button variant="default" onClick={handleLoginClick}>
+            Entrar
           </Button>
-          <Button
-            onClick={handleRegisterClick}
-            className="px-6 py-2 text-white bg-blue-500 hover:bg-blue-700 text-sm font-semibold rounded-md shadow-md transition"
-          >
-            Registrar
+          <Button variant="outlineDefault" onClick={handleRegisterClick}>
+            Cadastrar-se
           </Button>
         </div>
 
