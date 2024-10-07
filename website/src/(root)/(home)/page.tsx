@@ -153,7 +153,7 @@ const LandingPage = () => {
         <div className="w-full bg-[#02166c] py-10 flex justify-center px-4">
           <div className="flex flex-col items-center w-full lg:w-[80%] xl:w-[1440px]">
             <h4 className="text-[#A0A3BD] text-[14px] lg:text-[16px] mb-2">
-              No Spam Promise
+              Promessa de Não Enviar Spam
             </h4>
             <h2 className="text-white text-2xl lg:text-[32px] font-bold mb-4">
               Você é um locador?
@@ -167,12 +167,12 @@ const LandingPage = () => {
               <input
                 type="email"
                 placeholder="Insira seu endereço de e-mail"
-                className="w-full h-full pl-4 outline-none rounded-l-lg text-[#100A55] sm:rounded-none"
+                className="w-full h-full pl-4 outline-none rounded-lg text-[#100A55]"
               />
               <Button
                 variant="default"
                 size="lg"
-                className="rounded-r-lg w-full sm:w-auto"
+                className="rounded-lg w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 mr-4"
               >
                 Inscrever-se
               </Button>
