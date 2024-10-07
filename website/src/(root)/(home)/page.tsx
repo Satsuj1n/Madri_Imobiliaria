@@ -32,12 +32,16 @@ const LandingPage = () => {
             <div className="hidden lg:flex lg:ml-36 space-x-8 items-center mb-8">
               <div className="h-[64px] w-[3px] bg-[#E0DEF7]"></div>
               <div className="items-start">
-                <h2 className="font-bold text-[#0053f8] text-[24px] md:text-[32px]">50k+</h2>
+                <h2 className="font-bold text-[#0053f8] text-[24px] md:text-[32px]">
+                  50k+
+                </h2>
                 <p className="text-sm text-gray-500">Inquilinos</p>
               </div>
               <div className="h-[64px] w-[3px] bg-[#E0DEF7]"></div>
               <div className="items-start">
-                <h2 className="text-[24px] md:text-[32px] font-bold text-[#0053f8]">10k+</h2>
+                <h2 className="text-[24px] md:text-[32px] font-bold text-[#0053f8]">
+                  10k+
+                </h2>
                 <p className="text-sm text-gray-500">Propriedades</p>
               </div>
             </div>
@@ -69,9 +73,9 @@ const LandingPage = () => {
             />
           </div>
         </div>
-        
+
         {/* Adjusted Benefit Section */}
-        <div className="bg-[#F7F7FD] border border-[#E0DEF7] rounded-lg w-full lg:w-[90%] xl:w-[1120px] h-auto flex flex-col lg:flex-row my-8 lg:my-24 p-4 lg:p-8">
+        <div className="bg-[#F7F7FD] border border-[#E0DEF7] rounded-lg w-[90%] md:w-full lg:w-[90%] xl:w-[1120px] h-auto flex flex-col lg:flex-row my-8 lg:my-24 p-4 lg:p-8 mx-auto">
           {/* Left Column with text and icons with padding applied */}
           <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 lg:px-10 py-4 lg:py-8">
             <div className="flex flex-col space-y-4">
@@ -79,7 +83,8 @@ const LandingPage = () => {
                 A nova maneira de encontrar sua nova casa
               </h2>
               <p className="text-[#000929] text-base lg:text-lg">
-                Encontre o lugar dos seus sonhos para morar com mais de 10k+ propriedades listadas.
+                Encontre o lugar dos seus sonhos para morar com mais de 10k+
+                propriedades listadas.
               </p>
             </div>
 
@@ -91,7 +96,9 @@ const LandingPage = () => {
                   alt="Icone de porcentagem"
                   className="w-[36px] h-[36px] lg:w-[48px] lg:h-[48px]"
                 />
-                <h3 className="text-[20px] lg:text-[24px] font-bold text-[#100A55] mt-2">7.4%</h3>
+                <h3 className="text-[20px] lg:text-[24px] font-bold text-[#100A55] mt-2">
+                  7.4%
+                </h3>
                 <p className="text-xs lg:text-sm text-gray-500 text-center leading-tight">
                   Taxa de Retorno de Propriedade
                 </p>
@@ -103,7 +110,9 @@ const LandingPage = () => {
                   alt="Icone de apartamento"
                   className="w-[36px] h-[36px] lg:w-[48px] lg:h-[48px]"
                 />
-                <h3 className="text-[20px] lg:text-[24px] font-bold text-[#100A55] mt-2">3,856</h3>
+                <h3 className="text-[20px] lg:text-[24px] font-bold text-[#100A55] mt-2">
+                  3,856
+                </h3>
                 <p className="text-xs lg:text-sm text-gray-500 text-center leading-tight">
                   Propriedades em Venda e Aluguel
                 </p>
@@ -115,7 +124,9 @@ const LandingPage = () => {
                   alt="Icone de transação"
                   className="w-[36px] h-[36px] lg:w-[48px] lg:h-[48px]"
                 />
-                <h3 className="text-[20px] lg:text-[24px] font-bold text-[#100A55] mt-2">2,540</h3>
+                <h3 className="text-[20px] lg:text-[24px] font-bold text-[#100A55] mt-2">
+                  2,540
+                </h3>
                 <p className="text-xs lg:text-sm text-gray-500 text-center leading-tight">
                   Transações Diárias Completadas
                 </p>
@@ -141,12 +152,15 @@ const LandingPage = () => {
         {/* Blue section */}
         <div className="w-full bg-[#02166c] py-10 flex justify-center px-4">
           <div className="flex flex-col items-center w-full lg:w-[80%] xl:w-[1440px]">
-            <h4 className="text-[#A0A3BD] text-[14px] lg:text-[16px] mb-2">No Spam Promise</h4>
+            <h4 className="text-[#A0A3BD] text-[14px] lg:text-[16px] mb-2">
+              No Spam Promise
+            </h4>
             <h2 className="text-white text-2xl lg:text-[32px] font-bold mb-4">
               Você é um locador?
             </h2>
             <p className="text-[#A0A3BD] mb-6 text-center text-sm lg:text-base">
-              Descubra maneiras de aumentar o valor da sua propriedade e seja listado. Sem Spam.
+              Descubra maneiras de aumentar o valor da sua propriedade e seja
+              listado. Sem Spam.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center bg-white rounded-lg shadow-lg w-full sm:w-[400px] lg:w-[543px] h-[80px]">
@@ -155,7 +169,11 @@ const LandingPage = () => {
                 placeholder="Insira seu endereço de e-mail"
                 className="w-full h-full pl-4 outline-none rounded-l-lg text-[#100A55] sm:rounded-none"
               />
-              <Button variant="default" size="lg" className="rounded-r-lg w-full sm:w-auto">
+              <Button
+                variant="default"
+                size="lg"
+                className="rounded-r-lg w-full sm:w-auto"
+              >
                 Inscrever-se
               </Button>
             </div>

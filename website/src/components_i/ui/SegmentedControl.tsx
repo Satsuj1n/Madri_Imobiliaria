@@ -15,14 +15,13 @@ const SegmentedControl = () => {
     { value: "Vender", IconOn: SellIconOn, IconOff: SellIconOff },
   ];
 
-  const buttonStyles = `inline-flex items-center justify-center gap-2 p-2 rounded-md cursor-pointer`;
-  const selectedStyles = `bg-white border-2 border-[#0053f8] shadow px-4`; // Adicionado px-4 para espaçamento lateral
+  const buttonStyles = `inline-flex items-center justify-center gap-2 p-1.5 md:p-2 rounded-md cursor-pointer`;
+  const selectedStyles = `bg-white border-2 border-[#0053f8] shadow px-3 md:px-4`; // Ajuste de padding para mobile
   const nonSelectedStyles = `border-transparent text-[#100A55]`;
 
   return (
-    <div className="flex justify-center items-center p-2 rounded-lg border border-blue-300 bg-[#f9fbff] gap-2">
-      {" "}
-      {/* Ajustado gap-2 para 8px de espaçamento entre opções */}
+    <div className="flex justify-center items-center p-1.5 md:p-2 rounded-lg border border-blue-300 bg-[#f9fbff] gap-1 md:gap-2">
+      {/* Ajustado para 4px de espaçamento entre opções em mobile e 8px em desktop */}
       {options.map(({ value, IconOn, IconOff }) => (
         <div
           key={value}
@@ -30,19 +29,18 @@ const SegmentedControl = () => {
             selected === value ? selectedStyles : nonSelectedStyles
           }`}
           onClick={() => setSelected(value)}
-          style={{ paddingRight: "22px" }} // Ajuste de padding para a opção selecionada
         >
           {selected === value ? (
-            <IconOn className="mr-0.5" />
+            <IconOn className="w-4 h-4 md:w-5 md:h-5 mr-0.5" /> // Ajuste do tamanho do ícone
           ) : (
-            <IconOff className="mr-0.5" />
+            <IconOff className="w-4 h-4 md:w-5 md:h-5 mr-0.5" />
           )}
           <span
             className={`${
               selected === value
                 ? "text-[#0053f8] font-bold"
                 : "text-[#100A55] font-medium"
-            } text-lg`}
+            } text-md md:text-lg`}
           >
             {value}
           </span>

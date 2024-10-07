@@ -31,9 +31,13 @@ const PropertyListing = () => {
       </div>
 
       {/* Header with SegmentedControl and SearchBar */}
-      <div className="flex justify-between w-full max-w-[1120px] mt-8 px-4 mb-4">
-        <SegmentedControl />
-        <SearchBar />
+      <div className="flex flex-col md:flex-row justify-between w-full max-w-[1120px] mt-8 px-4 mb-4 space-y-4 md:space-y-0">
+        <div className="w-full md:w-auto">
+          <SegmentedControl />
+        </div>
+        <div className="w-full md:w-auto">
+          <SearchBar />
+        </div>
       </div>
 
       {/* Properties Grid */}
@@ -101,7 +105,7 @@ const PropertyListing = () => {
       </div>
       <div className="mb-28">
         <Button variant="large" size="large">
-            Ver Mais Propriedades
+          Ver Mais Propriedades
         </Button>
       </div>
     </div>
