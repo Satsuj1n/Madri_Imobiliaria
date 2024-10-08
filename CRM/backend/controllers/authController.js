@@ -2,13 +2,17 @@ router.post("/signup", async (req, res) => {
   const { email, senha, nomeRazaoSocial, cpfCnpj, telefone, relacionamento } =
     req.body;
 
-  console.log("Recebendo requisição de signup com dados:", req.body);
+  // Log dos dados recebidos no backend
+  console.log(
+    "Recebendo requisição de signup com os seguintes dados:",
+    req.body
+  );
 
   try {
     // Verificar se o usuário já existe
     let cliente = await Cliente.findOne({ email });
     if (cliente) {
-      console.log("Usuário já existe:", email);
+      console.log(`Usuário com o email ${email} já existe.`);
       return res.status(400).json({ message: "Usuário já existe" });
     }
 
@@ -31,11 +35,15 @@ router.post("/signup", async (req, res) => {
     // Salvar o cliente no banco de dados
     await cliente.save();
 
-    console.log("Cliente salvo no banco de dados");
+    console.log("Cliente salvo com sucesso no banco de dados");
 
-    res.status(201).json({ message: "Usuário registrado com sucesso" });
+    // Retornar a resposta de sucesso
+    return res.status(201).json({ message: "Usuário registrado com sucesso" });
   } catch (err) {
+    // Tratamento de erro
     console.error("Erro ao registrar o usuário:", err);
-    res.status(500).json({ message: "Erro no registro" });
+    return res
+      .status(500)
+      .json({ message: "Erro no registro. Por favor, tente novamente." });
   }
 });
