@@ -19,6 +19,32 @@ const Register = () => {
     relacionamento: "", // Adicionando relacionamento ao estado
   });
 
+  // Estado para controlar erros e mensagens de erro
+  const [error, setError] = useState<string | null>(null);
+  const [inputError, setInputError] = useState({
+    cpfCnpj: false,
+    email: false,
+    telefone: false,
+  });
+
+  // Função para verificar se o CPF ou CNPJ é válido
+  const isValidCpfCnpj = (value: string): boolean => {
+    const onlyNumbers = value.replace(/\D/g, ""); // Remover qualquer caractere que não seja número
+    return onlyNumbers.length === 11 || onlyNumbers.length === 14; // CPF: 11 dígitos, CNPJ: 14 dígitos
+  };
+
+  // Função para verificar se o email é válido
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Função para verificar se o número de telefone é válido (11 dígitos com DDD)
+  const isValidPhone = (phone: string): boolean => {
+    const phoneRegex = /^\d{11}$/; // Verificar se tem exatamente 11 números
+    return phoneRegex.test(phone.replace(/\D/g, "")); // Remover caracteres não numéricos e testar
+  };
+
   // Função para lidar com a mudança dos inputs
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -27,14 +53,41 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+    // Resetar o erro ao digitar novamente
+    setInputError({
+      ...inputError,
+      [e.target.name]: false,
+    });
+    setError(null);
   };
 
   // Função para lidar com o submit do formulário e enviar os dados para o backend
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Exibir os dados enviados para o backend no console
-    console.log("Dados enviados para o backend:", formData);
+    // Validações de CPF/CNPJ, email e telefone
+    if (!isValidCpfCnpj(formData.cpfCnpj)) {
+      setError(
+        "CPF ou CNPJ inválido. Verifique se está correto e contém apenas números."
+      );
+      setInputError({ cpfCnpj: true, email: false, telefone: false });
+      return;
+    }
+
+    if (!isValidEmail(formData.email)) {
+      setError("Email inválido. Verifique o formato.");
+      setInputError({ cpfCnpj: false, email: true, telefone: false });
+      return;
+    }
+
+    if (!isValidPhone(formData.telefone)) {
+      setError(
+        "Telefone inválido. Certifique-se de incluir o DDD e ter 11 dígitos."
+      );
+      setInputError({ cpfCnpj: false, email: false, telefone: true });
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -45,16 +98,33 @@ const Register = () => {
       // Exibir a resposta do backend no console
       console.log("Resposta do backend:", response.data);
 
-      alert(response.data.message); // Exibe mensagem de sucesso
-      navigate("/login"); // Navega para a página de login após o registro bem-sucedido
+      // Redirecionar para a página de login após o registro bem-sucedido
+      navigate("/login");
     } catch (err) {
       // Verificar o erro detalhadamente
-      if (axios.isAxiosError(err)) {
-        console.error("Erro na requisição ao backend:", err.response || err);
+      if (axios.isAxiosError(err) && err.response?.status === 400) {
+        const errorMessage = err.response.data.message;
+
+        if (errorMessage.includes("CPF") || errorMessage.includes("CNPJ")) {
+          console.error("Erro de CPF/CNPJ duplicado:", errorMessage);
+          setError("O CPF ou CNPJ já existe.");
+          setInputError({ cpfCnpj: true, email: false, telefone: false });
+        } else if (errorMessage.includes("email")) {
+          console.error("Erro de email duplicado:", errorMessage);
+          setError("O email já existe.");
+          setInputError({ cpfCnpj: false, email: true, telefone: false });
+        } else {
+          console.error("Erro desconhecido:", errorMessage);
+          setError(
+            "Erro ao registrar. Verifique as informações e tente novamente."
+          );
+        }
       } else {
         console.error("Erro desconhecido:", err);
+        setError(
+          "Erro ao registrar. Verifique as informações e tente novamente."
+        );
       }
-      alert("Erro ao registrar. Verifique as informações e tente novamente.");
     }
   };
 
@@ -93,6 +163,12 @@ const Register = () => {
           <p className="text-[#6C727F] mb-8 text-center">
             Por favor, insira as informações abaixo para criar sua conta.
           </p>
+
+          {/* Mensagem de erro, se houver */}
+          {error && (
+            <div className="text-red-500 text-sm mb-4 text-center">{error}</div>
+          )}
+
           <form className="w-full space-y-4" onSubmit={handleSubmit}>
             <div>
               <label
@@ -121,7 +197,12 @@ const Register = () => {
                 CPF/CNPJ
               </label>
               <input
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0053f8] bg-[#f9fbff]"
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 
+                ${
+                  inputError.cpfCnpj
+                    ? "border-red-500 focus:ring-red-500"
+                    : "focus:ring-[#0053f8]"
+                } bg-[#f9fbff]`}
                 type="text"
                 id="cpfCnpj"
                 name="cpfCnpj"
@@ -140,7 +221,12 @@ const Register = () => {
                 Email
               </label>
               <input
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0053f8] bg-[#f9fbff]"
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 
+                ${
+                  inputError.email
+                    ? "border-red-500 focus:ring-red-500"
+                    : "focus:ring-[#0053f8]"
+                } bg-[#f9fbff]`}
                 type="email"
                 id="email"
                 name="email"
@@ -178,13 +264,19 @@ const Register = () => {
                 Telefone
               </label>
               <input
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0053f8] bg-[#f9fbff]"
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 
+                ${
+                  inputError.telefone
+                    ? "border-red-500 focus:ring-red-500"
+                    : "focus:ring-[#0053f8]"
+                } bg-[#f9fbff]`}
                 type="text"
                 id="telefone"
                 name="telefone"
-                placeholder="Seu telefone"
+                placeholder="Seu telefone (inclua DDD)"
                 value={formData.telefone}
                 onChange={handleChange}
+                required
               />
             </div>
 

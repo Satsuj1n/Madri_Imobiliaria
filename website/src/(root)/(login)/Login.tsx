@@ -15,41 +15,59 @@ const Login = () => {
     senha: "",
   });
 
+  // Estado para armazenar o erro e controlar o estilo dos inputs
+  const [error, setError] = useState<string | null>(null);
+  const [inputError, setInputError] = useState({
+    email: false,
+    senha: false,
+  });
+
   // Função para lidar com as mudanças nos inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+    // Resetar o erro ao digitar novamente
+    setInputError({
+      ...inputError,
+      [e.target.name]: false,
+    });
+    setError(null);
   };
 
   // Função para lidar com o envio do formulário e integração com o backend
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Log dos dados sendo enviados ao backend
-    console.log("Dados enviados para o login:", formData);
-
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        formData
+      );
 
       // Exibir a resposta do backend no console
       console.log("Resposta do backend:", response.data);
 
-      alert("Login bem-sucedido!"); // Exibe uma mensagem de sucesso
+      // Salvando o token no localStorage
+      localStorage.setItem("token", response.data.token); // Armazena o token
 
-      // Você pode salvar o token ou outros dados recebidos do backend aqui
-      // localStorage.setItem('token', response.data.token);
+      // Redirecionar para a página inicial
+      navigate("/");
 
-      navigate("/"); // Redireciona após o login
+      // Atualize a página para refletir o novo estado de login
+      window.location.reload(); // Recarrega a página para atualizar o estado da Navbar
     } catch (err) {
       // Capturar e exibir o erro
-      if (axios.isAxiosError(err) && err.response) {
-        console.error("Erro na requisição ao backend:", err.response);
+      if (axios.isAxiosError(err) && err.response?.status === 400) {
+        console.error("Erro de autenticação:", err.response.data.message);
+        setError("Email ou senha incorretos.");
+        setInputError({ email: true, senha: true }); // Define erro nos inputs
       } else {
-        console.error("Erro na requisição ao backend:", err);
+        console.error("Erro desconhecido:", err);
+        setError("Ocorreu um erro ao fazer login. Tente novamente.");
       }
-      alert("Erro ao fazer login. Verifique suas credenciais e tente novamente.");
     }
   };
 
@@ -88,13 +106,27 @@ const Login = () => {
           <p className="text-[#6C727F] mb-8 text-center">
             Por favor, insira suas credenciais abaixo.
           </p>
+
+          {/* Mensagem de erro, se houver */}
+          {error && (
+            <div className="text-red-500 text-sm mb-4 text-center">{error}</div>
+          )}
+
           <form className="w-full space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-gray-700 text-sm mb-2" htmlFor="email">
+              <label
+                className="block text-gray-700 text-sm mb-2"
+                htmlFor="email"
+              >
                 Email
               </label>
               <input
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0053f8] bg-[#f9fbff]"
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 
+                ${
+                  inputError.email
+                    ? "border-red-500 focus:ring-red-500"
+                    : "focus:ring-[#0053f8]"
+                } bg-[#f9fbff]`}
                 type="email"
                 id="email"
                 name="email"
@@ -106,11 +138,19 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-gray-700 text-sm mb-2" htmlFor="senha">
+              <label
+                className="block text-gray-700 text-sm mb-2"
+                htmlFor="senha"
+              >
                 Senha
               </label>
               <input
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0053f8] bg-[#f9fbff]"
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 
+                ${
+                  inputError.senha
+                    ? "border-red-500 focus:ring-red-500"
+                    : "focus:ring-[#0053f8]"
+                } bg-[#f9fbff]`}
                 type="password"
                 id="senha"
                 name="senha"
@@ -121,21 +161,37 @@ const Login = () => {
               />
             </div>
 
-            <a href="#" className="text-sm text-[#0053f8] mb-4 inline-block text-center">
+            <a
+              href="#"
+              className="text-sm text-[#0053f8] mb-4 inline-block text-center"
+            >
               Esqueceu a senha?
             </a>
 
-            <Button variant="default" size="lg" className="w-full mb-4" type="submit">
+            <Button
+              variant="default"
+              size="lg"
+              className="w-full mb-4"
+              type="submit"
+            >
               Entrar
             </Button>
-            <Button variant="google" size="google" className="w-full flex items-center justify-center">
+            <Button
+              variant="google"
+              size="google"
+              className="w-full flex items-center justify-center"
+            >
               <GoogleIcon className="h-5 w-5 mr-2" />
               Entrar com o Google
             </Button>
 
             <p className="mt-6 text-sm text-gray-500 text-center">
               Não tem uma conta?{" "}
-              <a href="#" className="text-[#0053f8]" onClick={handleRegisterClick}>
+              <a
+                href="#"
+                className="text-[#0053f8]"
+                onClick={handleRegisterClick}
+              >
                 Cadastre-se aqui
               </a>
             </p>
