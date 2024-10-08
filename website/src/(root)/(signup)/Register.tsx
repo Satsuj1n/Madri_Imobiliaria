@@ -300,7 +300,6 @@ const Register = () => {
                 <option value="locatário">Locatário</option>
                 <option value="proprietário">Proprietário</option>
                 <option value="fiador">Fiador</option>
-                <option value="lead">Lead</option>
               </select>
             </div>
 
