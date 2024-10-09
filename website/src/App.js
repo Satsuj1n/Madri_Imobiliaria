@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./(root)/(home)/page.tsx"; // Ajuste o caminho conforme necessário
 import LoginPage from "./(root)/(login)/Login.tsx"; // Ajuste o caminho conforme necessário
 import RegisterPage from "./(root)/(signup)/Register.tsx"; // Ajuste o caminho conforme necessário
+import ProfilePage from "./(root)/(profile)/Profile.tsx"; // Ajuste o caminho conforme necessário
+
 
 function App() {
   return (
@@ -11,6 +13,7 @@ function App() {
         <Route path="/" element={<LandingPage />} /> {/* Página inicial */}
         <Route path="/login" element={<LoginPage />} /> {/* Página de login */}
         <Route path="/register" element={<RegisterPage />} /> {/* Página de registro */}
+        <Route path="/profile" element={<ProfilePage />} /> {/* Página de perfil */}
       </Routes>
     </Router>
   );

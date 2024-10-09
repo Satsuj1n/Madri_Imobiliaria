@@ -67,7 +67,7 @@ const Navbar = () => {
   };
 
   const handleProfileClick = () => {
-    navigate("/perfil");
+    navigate("/profile"); // Redireciona para a página de perfil
   };
 
   const toggleMenu = () => {
@@ -88,7 +88,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <Logo className="h-8 md:h-10 lg:h-9 ml-2 md:ml-4 lg:ml-6" />
           <a
-            href="#"
+            href="/"
             className="text-[#100A55] font-bold text-xl md:text-xl lg:text-2xl whitespace-nowrap"
             style={{ fontFamily: "Plus Jakarta Sans", lineHeight: "1.2" }}
           >
@@ -149,7 +149,7 @@ const Navbar = () => {
             {dropdownOpen && (
               <div
                 className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50"
-                style={{ marginTop: "165px" }}
+                style={{ marginTop: "165px" }} // Ajuste de posição para que o dropdown fique abaixo
               >
                 <a
                   href="#"
