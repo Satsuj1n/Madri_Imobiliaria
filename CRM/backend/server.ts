@@ -1,13 +1,14 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors"); // Adicionando CORS
-const passport = require("passport");
-const imovelRoutes = require("./routes/imovelRoutes");
-const clienteRoutes = require("./routes/clienteRoutes");
-const condominioRoutes = require("./routes/condominioRoutes");
-const atendimentoRoutes = require("./routes/atendimentoRoutes");
-const authRoutes = require("./routes/authRoutes"); // Rotas de autenticação
+import dotenv from "dotenv";
+dotenv.config();
+import express, { Request, Response } from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import passport from "passport";
+import imovelRoutes from "./routes/imovelRoutes";
+import clienteRoutes from "./routes/clienteRoutes";
+import condominioRoutes from "./routes/condominioRoutes";
+import atendimentoRoutes from "./routes/atendimentoRoutes";
+import authRoutes from "./routes/authRoutes";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,14 +21,12 @@ app.use(cors());
 
 // Inicializar o Passport
 app.use(passport.initialize());
-require("./config/passport")(passport); // Configurar Passport para JWT
+import passportConfig from "./config/passport";
+passportConfig(passport); // Configurar Passport para JWT
 
 // Conectar ao MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI || "")
   .then(() => console.log("Conectado ao MongoDB Atlas com sucesso"))
   .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
 
@@ -47,7 +46,7 @@ app.use("/api/clientes", clienteRoutes);
 app.use("/api/condominios", condominioRoutes);
 
 // Rota principal
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.send("API funcionando");
 });
 

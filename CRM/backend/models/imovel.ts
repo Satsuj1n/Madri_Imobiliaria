@@ -1,13 +1,40 @@
-const mongoose = require("mongoose");
+import mongoose, { Document, Schema } from "mongoose";
 
-const ImovelSchema = new mongoose.Schema({
+export interface Cliente {
+  nome: string;
+  email: string;
+  telefone: string;
+}
+
+export interface ImovelDocument extends Document {
+  titulo: string;
+  descricao?: string;
+  valor: number;
+  localizacao: string;
+  area: number;
+  quarto?: number;
+  banheiro?: number;
+  tipo: "venda" | "aluguel";
+  categoria: "apartamentos" | "casas" | "temporada" | "terrenos" | "comercio-industria";
+  cliente: Cliente;
+  message?: string;
+  status: "pendente" | "aprovado";
+  clientListingId?: string;
+  originLeadId?: string;
+  temperaturaLead?: "baixa" | "media" | "alta";
+  dataCadastro: Date;
+  imagem?: string;
+  imagens?: string[];
+}
+
+const ImovelSchema: Schema = new Schema({
   titulo: { type: String, required: true },
   descricao: { type: String },
   valor: { type: Number, required: true },
   localizacao: { type: String, required: true },
   area: { type: Number, required: true },
-  quarto: { type: Number, required: false },
-  banheiro: { type: Number, required: false },
+  quarto: { type: Number },
+  banheiro: { type: Number },
   tipo: {
     type: String,
     enum: ["venda", "aluguel"],
@@ -36,9 +63,8 @@ const ImovelSchema = new mongoose.Schema({
     enum: ["baixa", "media", "alta"],
   },
   dataCadastro: { type: Date, default: Date.now },
-  imagem: { type: String }, // Campo para uma única imagem
-  // Ou, se você quiser armazenar várias imagens, use um array de strings
-  imagens: [{ type: String }], // Campo para múltiplas imagens
+  imagem: { type: String },
+  imagens: [{ type: String }],
 });
 
-module.exports = mongoose.model("Imovel", ImovelSchema);
+export default mongoose.model<ImovelDocument>("Imovel", ImovelSchema);

@@ -1,8 +1,9 @@
-const Imovel = require("../models/imovel");
-const axios = require("axios");
+import { Request, Response } from "express";
+import Imovel from "../models/imovel";
+import axios from "axios";
 
 // Função para listar todos os imóveis
-exports.getAllImoveis = async (req, res) => {
+export const getAllImoveis = async (req: Request, res: Response) => {
   try {
     const imoveis = await Imovel.find();
     res.json(imoveis);
@@ -12,7 +13,7 @@ exports.getAllImoveis = async (req, res) => {
 };
 
 // Função para criar um novo imóvel
-exports.createImovel = async (req, res) => {
+export const createImovel = async (req: Request, res: Response) => {
   const {
     titulo,
     descricao,
@@ -47,7 +48,7 @@ exports.createImovel = async (req, res) => {
 };
 
 // Função para buscar um imóvel por ID
-exports.getImovelById = async (req, res) => {
+export const getImovelById = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findById(req.params.id);
     if (!imovel)
@@ -59,7 +60,7 @@ exports.getImovelById = async (req, res) => {
 };
 
 // Função para atualizar um imóvel existente
-exports.updateImovel = async (req, res) => {
+export const updateImovel = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -73,7 +74,7 @@ exports.updateImovel = async (req, res) => {
 };
 
 // Função para deletar um imóvel
-exports.deleteImovel = async (req, res) => {
+export const deleteImovel = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findByIdAndDelete(req.params.id);
     if (!imovel)
@@ -85,7 +86,7 @@ exports.deleteImovel = async (req, res) => {
 };
 
 // Função para aprovar um imóvel (somente admins) e enviar o anúncio para OLX/Zap
-exports.aprovarImovel = async (req, res) => {
+export const aprovarImovel = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findByIdAndUpdate(
       req.params.id,
@@ -97,7 +98,7 @@ exports.aprovarImovel = async (req, res) => {
     }
 
     // Dados básicos para envio de leads
-    const leadData = {
+    const leadData: Record<string, any> = {
       LeadName: imovel.cliente.nome,
       LeadEmail: imovel.cliente.email,
       LeadTelephone: imovel.cliente.telefone,
@@ -139,8 +140,8 @@ exports.aprovarImovel = async (req, res) => {
       leadData,
       {
         headers: {
-          "X-API-KEY": process.env.OLX_API_KEY,
-          "X-Agent-Name": process.env.OLX_AGENT_NAME,
+          "X-API-KEY": process.env.OLX_API_KEY || "",
+          "X-Agent-Name": process.env.OLX_AGENT_NAME || "",
           accept: "application/json",
           "Content-Type": "application/json",
         },
@@ -151,7 +152,7 @@ exports.aprovarImovel = async (req, res) => {
       message: "Imóvel aprovado e anúncio enviado para OLX/Zap",
       data: response.data,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error(
       "Erro ao aprovar imóvel ou enviar para OLX/Zap:",
       err.message
@@ -161,3 +162,13 @@ exports.aprovarImovel = async (req, res) => {
       .json({ error: "Erro ao aprovar imóvel ou enviar para OLX/Zap" });
   }
 };
+
+module.exports = {
+  getAllImoveis,
+  createImovel,
+  getImovelById,
+  updateImovel,
+  deleteImovel,
+  aprovarImovel
+};
+

@@ -1,11 +1,13 @@
-const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
-const Cliente = require("../models/cliente");
+import { PassportStatic } from "passport";
+import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from "passport-jwt";
+import Cliente from "../models/cliente";
 
-const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.JWT_SECRET;
+const opts: StrategyOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET || "",
+};
 
-module.exports = (passport) => {
+export default (passport: PassportStatic) => {
   passport.use(
     new JwtStrategy(opts, async (jwt_payload, done) => {
       try {
