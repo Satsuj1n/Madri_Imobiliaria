@@ -65,6 +65,7 @@ export const updateCliente = async (req: Request, res: Response): Promise<Respon
     }
     return res.json(cliente);
   } catch (err: any) {
+    console.error("Erro ao atualizar cliente:", err);  // Loga o erro completo no servidor
     if (err.code === 11000) {
       return res.status(400).json({ error: "cpf/CNPJ ou Código já existente" });
     } else {

@@ -186,10 +186,10 @@ const ProfilePage = () => {
                 required
               >
                 <option value="">Selecione</option>
-                <option value="Locador">Locador</option>
-                <option value="Locatário">Locatário</option>
-                <option value="Proprietário">Proprietário</option>
-                <option value="Fiador">Fiador</option>
+                <option value="locador">Locador</option>
+                <option value="locatário">Locatário</option>
+                <option value="proprietário">Proprietário</option>
+                <option value="fiador">Fiador</option>
               </select>
             </div>
             {/* Botão de Trocar Senha */}
