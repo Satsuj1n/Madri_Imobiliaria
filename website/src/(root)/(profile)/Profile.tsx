@@ -122,14 +122,28 @@ const ProfilePage = () => {
     navigate("/alterar-senha"); // Redireciona para a página de alteração de senha
   };
 
+  const handleGoBack = () => {
+    navigate("/"); // Redireciona para a página de perfil
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar /> {/* Mantém o Navbar com o nome do usuário logado */}
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-4 mt-20">
+        {/* Botão de Voltar */}
+        <div className="mt-[70px]">
+          <button
+            className="text-blue-500 hover:underline text-md"
+            onClick={handleGoBack}
+          >
+            🠔 Voltar
+          </button>
+        </div>
+
+        <h1 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
           Configurações
         </h1>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
           <h2 className="text-xl font-bold text-gray-800 mb-4">
             Informações Pessoais
           </h2>

@@ -92,14 +92,14 @@ const ChangePasswordPage = () => {
 
       console.log("Resposta do servidor: ", response.data);
       setSucesso("Senha alterada com sucesso!");
-      navigate("/profile");
+
+      // Esperar 2 segundos antes de redirecionar para o perfil
+      setTimeout(() => {
+        navigate("/profile");
+      }, 2000); // 2 segundos de atraso antes do redirecionamento
     } catch (err: any) {
       console.error("Erro ao alterar senha: ", err.response?.data || err);
-      setErro(
-        `Erro ao alterar senha. Detalhes: ${
-          err.response?.data?.error || "Erro desconhecido"
-        }`
-      );
+      setErro(`${err.response?.data?.error || "Erro desconhecido"}`);
     }
   };
 
@@ -107,14 +107,28 @@ const ChangePasswordPage = () => {
     navigate("/esqueceu-senha"); // Redireciona para a página de recuperação de senha
   };
 
+  const handleGoBack = () => {
+    navigate("/profile"); // Redireciona para a página de perfil
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar /> {/* Mantém o Navbar com o nome do usuário logado */}
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-4 mt-20">
+        {/* Botão de Voltar */}
+        <div className="mt-[70px]">
+          <button
+            className="text-blue-500 hover:underline text-md"
+            onClick={handleGoBack}
+          >
+            🠔 Voltar
+          </button>
+        </div>
+
+        <h1 className="text-2xl font-semibold text-gray-800 mb-4  text-center">
           Alterar Senha
         </h1>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
           {erro && <p className="text-red-500">{erro}</p>}
           {sucesso && <p className="text-green-500">{sucesso}</p>}
           <form onSubmit={handleSubmit}>
