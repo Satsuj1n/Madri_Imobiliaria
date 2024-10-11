@@ -15,17 +15,13 @@ interface Cliente {
   dataCadastro: string;
 }
 
-const ProfilePage = () => {
+const ChangePasswordPage = () => {
   const navigate = useNavigate();
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [formData, setFormData] = useState({
-    nomeRazaoSocial: "",
-    telefone: "",
-    relacionamento: "",
-    cpfCnpj: "",
-    email: "",
-    isAdmin: false,
-    dataCadastro: "",
+    senhaAtual: "",
+    novaSenha: "",
+    confirmarSenha: "",
   });
 
   const [erro, setErro] = useState<string | null>(null);
@@ -45,29 +41,18 @@ const ProfilePage = () => {
           },
         })
         .then((res) => {
-          const cliente = res.data;
-          setCliente(cliente);
-          setFormData({
-            nomeRazaoSocial: cliente.nomeRazaoSocial,
-            telefone: cliente.telefone,
-            relacionamento: cliente.relacionamento,
-            cpfCnpj: cliente.cpfCnpj,
-            email: cliente.email,
-            isAdmin: cliente.isAdmin,
-            dataCadastro: cliente.dataCadastro,
-          });
+          const cliente: Cliente = res.data;
+          setCliente(cliente); // Armazena os dados do cliente
         })
-        .catch((err) =>
-          console.error("Erro ao carregar dados do cliente:", err)
-        );
+        .catch((err) => {
+          console.error("Erro ao carregar dados do cliente:", err);
+        });
     } else {
       navigate("/login");
     }
   }, [navigate]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -79,25 +64,24 @@ const ProfilePage = () => {
     setErro(null);
     setSucesso(null);
 
+    if (formData.novaSenha !== formData.confirmarSenha) {
+      setErro("As senhas não coincidem.");
+      return;
+    }
+
     const token = localStorage.getItem("token");
 
     try {
-      // Certifique-se de enviar todos os campos como no curl que funcionou
       const updateData = {
-        _id: cliente?._id,
-        nomeRazaoSocial: formData.nomeRazaoSocial,
-        telefone: formData.telefone,
-        relacionamento: formData.relacionamento,
-        cpfCnpj: formData.cpfCnpj, // CPF do cliente
-        email: formData.email, // Email do cliente
-        dataCadastro: formData.dataCadastro, // Data de cadastro
-        isAdmin: formData.isAdmin, // Status de admin
+        senhaAtual: formData.senhaAtual,
+        novaSenha: formData.novaSenha,
       };
 
-      console.log("Dados enviados para atualização: ", updateData);
+      console.log("Dados enviados para alteração de senha: ", updateData);
 
+      // Atualize para a nova rota de alterar senha
       const response = await axios.put(
-        `http://localhost:5000/api/clientes/${cliente?._id}`,
+        `http://localhost:5000/api/clientes/${cliente?._id}/alterar-senha`, // Chamada para a nova rota
         updateData,
         {
           headers: {
@@ -107,19 +91,20 @@ const ProfilePage = () => {
       );
 
       console.log("Resposta do servidor: ", response.data);
-      setSucesso("Perfil atualizado com sucesso!");
+      setSucesso("Senha alterada com sucesso!");
+      navigate("/profile");
     } catch (err: any) {
-      console.error("Erro ao atualizar perfil: ", err.response?.data || err);
+      console.error("Erro ao alterar senha: ", err.response?.data || err);
       setErro(
-        `Erro ao atualizar perfil. Detalhes: ${
+        `Erro ao alterar senha. Detalhes: ${
           err.response?.data?.error || "Erro desconhecido"
         }`
       );
     }
   };
 
-  const handleChangePassword = () => {
-    navigate("/alterar-senha"); // Redireciona para a página de alteração de senha
+  const handleForgotPassword = () => {
+    navigate("/esqueceu-senha"); // Redireciona para a página de recuperação de senha
   };
 
   return (
@@ -127,27 +112,45 @@ const ProfilePage = () => {
       <Navbar /> {/* Mantém o Navbar com o nome do usuário logado */}
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-semibold text-gray-800 mb-4 mt-20">
-          Configurações
+          Alterar Senha
         </h1>
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Informações Pessoais
-          </h2>
           {erro && <p className="text-red-500">{erro}</p>}
           {sucesso && <p className="text-green-500">{sucesso}</p>}
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="nomeRazaoSocial"
+                htmlFor="senhaAtual"
               >
-                Nome
+                Senha Atual
               </label>
               <input
-                id="nomeRazaoSocial"
-                name="nomeRazaoSocial"
-                type="text"
-                value={formData.nomeRazaoSocial}
+                id="senhaAtual"
+                name="senhaAtual"
+                type="password"
+                value={formData.senhaAtual}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded-md"
+                required
+              />
+              {/* Link "Esqueceu sua senha?" */}
+              <div className="text-sm text-blue-500 hover:underline cursor-pointer mt-2">
+                <span onClick={handleForgotPassword}>Esqueceu sua senha?</span>
+              </div>
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="novaSenha"
+              >
+                Nova Senha
+              </label>
+              <input
+                id="novaSenha"
+                name="novaSenha"
+                type="password"
+                value={formData.novaSenha}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border rounded-md"
                 required
@@ -156,56 +159,25 @@ const ProfilePage = () => {
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="telefone"
+                htmlFor="confirmarSenha"
               >
-                Telefone
+                Confirmar Nova Senha
               </label>
               <input
-                id="telefone"
-                name="telefone"
-                type="text"
-                value={formData.telefone}
+                id="confirmarSenha"
+                name="confirmarSenha"
+                type="password"
+                value={formData.confirmarSenha}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border rounded-md"
                 required
               />
             </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="relacionamento"
-              >
-                Relacionamento
-              </label>
-              <select
-                id="relacionamento"
-                name="relacionamento"
-                value={formData.relacionamento}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-                required
-              >
-                <option value="">Selecione</option>
-                <option value="locador">Locador</option>
-                <option value="locatário">Locatário</option>
-                <option value="proprietário">Proprietário</option>
-                <option value="fiador">Fiador</option>
-              </select>
-            </div>
-            {/* Botão de Alterar Senha */}
-            <Button
-              type="button"
-              className="w-full bg-blue-500 text-white py-2 rounded-md mb-4"
-              onClick={handleChangePassword}
-            >
-              Alterar Senha
-            </Button>
-            {/* Botão de Salvar Alterações */}
             <Button
               type="submit"
               className="w-full bg-blue-500 text-white py-2 rounded-md"
             >
-              Salvar Alterações
+              Alterar Senha
             </Button>
           </form>
         </div>
@@ -214,4 +186,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default ChangePasswordPage;

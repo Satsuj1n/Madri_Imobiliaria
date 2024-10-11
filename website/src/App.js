@@ -4,7 +4,7 @@ import LandingPage from "./(root)/(home)/page.tsx"; // Ajuste o caminho conforme
 import LoginPage from "./(root)/(login)/Login.tsx"; // Ajuste o caminho conforme necessário
 import RegisterPage from "./(root)/(signup)/Register.tsx"; // Ajuste o caminho conforme necessário
 import ProfilePage from "./(root)/(profile)/Profile.tsx"; // Ajuste o caminho conforme necessário
-
+import ChangePasswordPage from "./(root)/(trocar-senha)/TrocarSenha.tsx"; // Ajuste o caminho conforme necessário
 
 function App() {
   return (
@@ -12,8 +12,11 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} /> {/* Página inicial */}
         <Route path="/login" element={<LoginPage />} /> {/* Página de login */}
-        <Route path="/register" element={<RegisterPage />} /> {/* Página de registro */}
-        <Route path="/profile" element={<ProfilePage />} /> {/* Página de perfil */}
+        <Route path="/register" element={<RegisterPage />} />{" "}
+        {/* Página de registro */}
+        <Route path="/profile" element={<ProfilePage />} />{" "}
+        {/* Página de perfil */}
+        <Route path="/alterar-senha" element={<ChangePasswordPage />} />
       </Routes>
     </Router>
   );
