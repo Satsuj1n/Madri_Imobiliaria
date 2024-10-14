@@ -29,6 +29,7 @@ const ImovelSchema = new mongoose_1.Schema({
     descricao: { type: String },
     valor: { type: Number, required: true },
     localizacao: { type: String, required: true },
+    cep: { type: Number, required: true }, // CEP como número
     area: { type: Number, required: true },
     quarto: { type: Number },
     banheiro: { type: Number },
@@ -39,7 +40,13 @@ const ImovelSchema = new mongoose_1.Schema({
     },
     categoria: {
         type: String,
-        enum: ["apartamentos", "casas", "temporada", "terrenos", "comercio-industria"],
+        enum: [
+            "apartamentos",
+            "casas",
+            "temporada",
+            "terrenos",
+            "comercio-industria",
+        ],
         required: true,
     },
     cliente: {
@@ -47,7 +54,6 @@ const ImovelSchema = new mongoose_1.Schema({
         email: { type: String, required: true },
         telefone: { type: String, required: true },
     },
-    message: { type: String },
     status: {
         type: String,
         enum: ["pendente", "aprovado"],

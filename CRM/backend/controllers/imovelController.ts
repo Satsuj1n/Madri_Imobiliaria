@@ -1,6 +1,23 @@
 import { Request, Response } from "express";
 import Imovel from "../models/imovel";
+import multer from "multer";
+import path from "path";
 import axios from "axios";
+
+// Configuração do multer para upload de arquivos
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Diretório para armazenar as imagens
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Renomeia o arquivo com timestamp
+  },
+});
+
+const upload = multer({ storage }).fields([
+  { name: "imagemPrincipal", maxCount: 1 },
+  { name: "imagensSecundarias", maxCount: 5 },
+]);
 
 // Função para listar todos os imóveis
 export const getAllImoveis = async (req: Request, res: Response) => {
@@ -13,38 +30,56 @@ export const getAllImoveis = async (req: Request, res: Response) => {
 };
 
 // Função para criar um novo imóvel
-export const createImovel = async (req: Request, res: Response) => {
-  const {
-    titulo,
-    descricao,
-    valor,
-    localizacao,
-    area,
-    tipo,
-    categoria,
-    cliente,
-    message,
-  } = req.body;
+export const createImovel = (req: Request, res: Response) => {
+  upload(req, res, async function (err) {
+    if (err) {
+      return res.status(500).json({ error: "Erro no upload de imagens" });
+    }
 
-  const novoImovel = new Imovel({
-    titulo,
-    descricao,
-    valor,
-    localizacao,
-    area,
-    tipo,
-    categoria,
-    cliente,
-    message,
-    status: "pendente", // Imóvel começa como "pendente"
+    // Verifica se req.files é do tipo objeto com campos como imagemPrincipal e imagensSecundarias
+    const files = req.files as {
+      [fieldname: string]: Express.Multer.File[];
+    };
+
+    const {
+      titulo,
+      descricao,
+      valor,
+      localizacao,
+      cep,
+      area,
+      quarto,
+      banheiro,
+      tipo,
+      categoria,
+    } = req.body;
+
+    const novoImovel = new Imovel({
+      titulo,
+      descricao,
+      valor,
+      localizacao,
+      cep,
+      area,
+      quarto,
+      banheiro,
+      tipo,
+      categoria,
+      imagem: files?.["imagemPrincipal"]
+        ? files["imagemPrincipal"][0].filename
+        : undefined,
+      imagens: files?.["imagensSecundarias"]
+        ? files["imagensSecundarias"].map((file) => file.filename)
+        : [],
+    });
+
+    try {
+      const imovel = await novoImovel.save();
+      res.status(201).json(imovel);
+    } catch (err) {
+      res.status(500).json({ error: "Erro ao criar imóvel" });
+    }
   });
-
-  try {
-    const imovel = await novoImovel.save();
-    res.status(201).json(imovel);
-  } catch (err) {
-    res.status(500).json({ error: "Erro ao criar imóvel" });
-  }
 };
 
 // Função para buscar um imóvel por ID
@@ -169,6 +204,5 @@ module.exports = {
   getImovelById,
   updateImovel,
   deleteImovel,
-  aprovarImovel
+  aprovarImovel,
 };
-

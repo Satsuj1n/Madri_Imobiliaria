@@ -14,7 +14,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.aprovarImovel = exports.deleteImovel = exports.updateImovel = exports.getImovelById = exports.createImovel = exports.getAllImoveis = void 0;
 const imovel_1 = __importDefault(require("../models/imovel"));
+const multer_1 = __importDefault(require("multer"));
+const path_1 = __importDefault(require("path"));
 const axios_1 = __importDefault(require("axios"));
+// Configuração do multer para upload de arquivos
+const storage = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/"); // Diretório para armazenar as imagens
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path_1.default.extname(file.originalname)); // Renomeia o arquivo com timestamp
+    },
+});
+const upload = (0, multer_1.default)({ storage }).fields([
+    { name: "imagemPrincipal", maxCount: 1 },
+    { name: "imagensSecundarias", maxCount: 5 },
+]);
 // Função para listar todos os imóveis
 const getAllImoveis = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -27,28 +42,43 @@ const getAllImoveis = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getAllImoveis = getAllImoveis;
 // Função para criar um novo imóvel
-const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { titulo, descricao, valor, localizacao, area, tipo, categoria, cliente, message, } = req.body;
-    const novoImovel = new imovel_1.default({
-        titulo,
-        descricao,
-        valor,
-        localizacao,
-        area,
-        tipo,
-        categoria,
-        cliente,
-        message,
-        status: "pendente", // Imóvel começa como "pendente"
+const createImovel = (req, res) => {
+    upload(req, res, function (err) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (err) {
+                return res.status(500).json({ error: "Erro no upload de imagens" });
+            }
+            // Verifica se req.files é do tipo objeto com campos como imagemPrincipal e imagensSecundarias
+            const files = req.files;
+            const { titulo, descricao, valor, localizacao, cep, area, quarto, banheiro, tipo, categoria, } = req.body;
+            const novoImovel = new imovel_1.default({
+                titulo,
+                descricao,
+                valor,
+                localizacao,
+                cep,
+                area,
+                quarto,
+                banheiro,
+                tipo,
+                categoria,
+                imagem: (files === null || files === void 0 ? void 0 : files["imagemPrincipal"])
+                    ? files["imagemPrincipal"][0].filename
+                    : undefined,
+                imagens: (files === null || files === void 0 ? void 0 : files["imagensSecundarias"])
+                    ? files["imagensSecundarias"].map((file) => file.filename)
+                    : [],
+            });
+            try {
+                const imovel = yield novoImovel.save();
+                res.status(201).json(imovel);
+            }
+            catch (err) {
+                res.status(500).json({ error: "Erro ao criar imóvel" });
+            }
+        });
     });
-    try {
-        const imovel = yield novoImovel.save();
-        res.status(201).json(imovel);
-    }
-    catch (err) {
-        res.status(500).json({ error: "Erro ao criar imóvel" });
-    }
-});
+};
 exports.createImovel = createImovel;
 // Função para buscar um imóvel por ID
 const getImovelById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -161,5 +191,5 @@ module.exports = {
     getImovelById: exports.getImovelById,
     updateImovel: exports.updateImovel,
     deleteImovel: exports.deleteImovel,
-    aprovarImovel: exports.aprovarImovel
+    aprovarImovel: exports.aprovarImovel,
 };
