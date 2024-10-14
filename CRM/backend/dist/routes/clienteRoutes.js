@@ -36,4 +36,6 @@ router.post("/", (0, asyncHandler_1.asyncHandler)(clienteController.createClient
 router.get("/:id", (0, asyncHandler_1.asyncHandler)(clienteController.getClienteById));
 router.put("/:id", (0, asyncHandler_1.asyncHandler)(clienteController.updateCliente));
 router.delete("/:id", (0, asyncHandler_1.asyncHandler)(clienteController.deleteCliente));
+// Rota para alterar a senha do cliente
+router.put("/:id/alterar-senha", (0, asyncHandler_1.asyncHandler)(clienteController.updateClienteSenha));
 exports.default = router;

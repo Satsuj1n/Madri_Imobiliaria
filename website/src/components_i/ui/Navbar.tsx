@@ -78,6 +78,10 @@ const Navbar = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const handleVenderClick = () => {
+    navigate("/criar-imovel");
+  }
+
   return (
     <nav className="bg-white shadow-md w-full fixed z-50">
       <div
@@ -108,7 +112,7 @@ const Navbar = () => {
           <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
             Comprar
           </a>
-          <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
+          <a href="" onClick={handleVenderClick} className="text-sm md:text-base lg:text-md text-gray-700">
             Vender
           </a>
           <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">

@@ -12,8 +12,8 @@ export interface ImovelDocument extends Document {
   valor: number;
   localizacao: string;
   area: number;
-  quarto?: number;
-  banheiro?: number;
+  quarto: number;
+  banheiro: number;
   tipo: "venda" | "aluguel";
   categoria: "apartamentos" | "casas" | "temporada" | "terrenos" | "comercio-industria";
   cliente: Cliente;

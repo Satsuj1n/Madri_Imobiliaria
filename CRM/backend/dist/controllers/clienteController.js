@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCliente = exports.updateCliente = exports.getClienteById = exports.createCliente = exports.getAllClientes = void 0;
+exports.updateClienteSenha = exports.deleteCliente = exports.updateCliente = exports.getClienteById = exports.createCliente = exports.getAllClientes = void 0;
 const cliente_1 = __importDefault(require("../models/cliente"));
 // Função para buscar todos os clientes
 const getAllClientes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -44,7 +44,9 @@ const createCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             senha,
         });
         yield cliente.save();
-        return res.status(201).json({ message: "Cliente criado com sucesso", cliente });
+        return res
+            .status(201)
+            .json({ message: "Cliente criado com sucesso", cliente });
     }
     catch (err) {
         console.error("Erro ao criar cliente:", err);
@@ -103,3 +105,28 @@ const deleteCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteCliente = deleteCliente;
+const updateClienteSenha = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { senhaAtual, novaSenha } = req.body;
+        // Buscar cliente pelo ID
+        const cliente = yield cliente_1.default.findById(req.params.id);
+        if (!cliente) {
+            return res.status(404).json({ error: "Cliente não encontrado" });
+        }
+        // Verificar se a senha atual está correta
+        const isMatch = yield cliente.comparePassword(senhaAtual);
+        if (!isMatch) {
+            return res.status(400).json({ error: "Senha atual incorreta" });
+        }
+        // Atualizar com a nova senha
+        cliente.senha = novaSenha;
+        // Salvar o cliente com a nova senha
+        yield cliente.save();
+        return res.json({ message: "Senha alterada com sucesso" });
+    }
+    catch (err) {
+        console.error("Erro ao alterar senha:", err);
+        return res.status(500).json({ error: "Erro ao alterar senha" });
+    }
+});
+exports.updateClienteSenha = updateClienteSenha;
