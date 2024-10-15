@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import Imovel from "../models/imovel";
+import Cliente from "../models/cliente";
 import multer from "multer";
 import path from "path";
+import jwt from "jsonwebtoken";
 import axios from "axios";
 
-// Configuração do multer para upload de arquivos
+// Configuração do multer para upload de arquivos (opcional)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/"); // Diretório para armazenar as imagens
@@ -19,70 +21,110 @@ const upload = multer({ storage }).fields([
   { name: "imagensSecundarias", maxCount: 5 },
 ]);
 
-// Função para listar todos os imóveis
-export const getAllImoveis = async (req: Request, res: Response) => {
-  try {
-    const imoveis = await Imovel.find();
-    res.json(imoveis);
-  } catch (err) {
-    res.status(500).json({ error: "Erro ao buscar imóveis" });
-  }
-};
-
 // Função para criar um novo imóvel
 export const createImovel = (req: Request, res: Response) => {
   upload(req, res, async function (err) {
     if (err) {
+      console.log("Erro no upload de imagens:", err);
       return res.status(500).json({ error: "Erro no upload de imagens" });
     }
 
-    // Verifica se req.files é do tipo objeto com campos como imagemPrincipal e imagensSecundarias
-    const files = req.files as {
-      [fieldname: string]: Express.Multer.File[];
-    };
-
-    const {
-      titulo,
-      descricao,
-      valor,
-      localizacao,
-      cep,
-      area,
-      quarto,
-      banheiro,
-      tipo,
-      categoria,
-    } = req.body;
-
-    const novoImovel = new Imovel({
-      titulo,
-      descricao,
-      valor,
-      localizacao,
-      cep,
-      area,
-      quarto,
-      banheiro,
-      tipo,
-      categoria,
-      imagem: files?.["imagemPrincipal"]
-        ? files["imagemPrincipal"][0].filename
-        : undefined,
-      imagens: files?.["imagensSecundarias"]
-        ? files["imagensSecundarias"].map((file) => file.filename)
-        : [],
-    });
-
     try {
+      const token = req.headers.authorization?.split(" ")[1]; // Obtém o token JWT da requisição
+      if (!token) {
+        return res.status(401).json({ error: "Token não fornecido" });
+      }
+
+      // Decodifica o token para pegar o ID do cliente
+      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
+        id: string;
+      };
+
+      const userId = decoded.id; // Recupera o ID do cliente autenticado do payload do token
+      console.log("ID do cliente autenticado:", userId);
+      if (!userId) {
+        return res.status(401).json({ error: "Cliente não autenticado" });
+      }
+
+      // Busca os dados completos do cliente pelo ID do token
+      const cliente = await Cliente.findById(userId);
+      if (!cliente) {
+        console.log("Cliente não encontrado.");
+        return res.status(404).json({ error: "Cliente não encontrado" });
+      }
+
+      // Dados do imóvel recebidos do corpo da requisição
+      const {
+        titulo,
+        descricao,
+        valor,
+        localizacao,
+        cep,
+        area,
+        quarto,
+        banheiro,
+        tipo,
+        categoria,
+      } = req.body;
+
+      // Criar o novo imóvel com os dados do cliente incluídos
+      const files = req.files as {
+        [fieldname: string]: Express.Multer.File[];
+      };
+
+      console.log("Dados do imóvel:", {
+        titulo,
+        descricao,
+        valor,
+        localizacao,
+        cep,
+        area,
+        quarto,
+        banheiro,
+        tipo,
+        categoria,
+      });
+
+      const novoImovel = new Imovel({
+        titulo,
+        descricao,
+        valor,
+        localizacao,
+        cep,
+        area,
+        quarto,
+        banheiro,
+        tipo,
+        categoria,
+        cliente: {
+          nome: cliente.nomeRazaoSocial, // Dados completos do cliente
+          email: cliente.email,
+          telefone: cliente.telefone,
+        },
+        status: "pendente", // Imóvel começa como "pendente"
+        imagem: files?.["imagemPrincipal"]
+          ? files["imagemPrincipal"][0].filename
+          : undefined, // Imagem principal é opcional
+        imagens: files?.["imagensSecundarias"]
+          ? files["imagensSecundarias"].map((file) => file.filename)
+          : [], // Imagens secundárias são opcionais
+      });
+
+      console.log("Novo imóvel a ser criado:", novoImovel);
+
       const imovel = await novoImovel.save();
-      res.status(201).json(imovel);
+      console.log("Imóvel criado com sucesso:", imovel);
+
+      return res.status(201).json(imovel);
     } catch (err) {
-      res.status(500).json({ error: "Erro ao criar imóvel" });
+      console.error("Erro ao criar imóvel:", err);
+      return res.status(500).json({ error: "Erro ao criar imóvel" });
     }
   });
 };
 
-// Função para buscar um imóvel por ID
+// Outras funções do controller permanecem inalteradas
+
 export const getImovelById = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findById(req.params.id);
@@ -94,7 +136,6 @@ export const getImovelById = async (req: Request, res: Response) => {
   }
 };
 
-// Função para atualizar um imóvel existente
 export const updateImovel = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findByIdAndUpdate(req.params.id, req.body, {
@@ -108,7 +149,15 @@ export const updateImovel = async (req: Request, res: Response) => {
   }
 };
 
-// Função para deletar um imóvel
+export const getAllImoveis = async (req: Request, res: Response) => {
+  try {
+    const imoveis = await Imovel.find();
+    res.json(imoveis);
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao buscar imóveis" });
+  }
+};
+
 export const deleteImovel = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findByIdAndDelete(req.params.id);
@@ -120,7 +169,6 @@ export const deleteImovel = async (req: Request, res: Response) => {
   }
 };
 
-// Função para aprovar um imóvel (somente admins) e enviar o anúncio para OLX/Zap
 export const aprovarImovel = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findByIdAndUpdate(
