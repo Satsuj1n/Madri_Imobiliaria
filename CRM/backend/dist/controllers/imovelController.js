@@ -60,7 +60,7 @@ const createImovel = (req, res) => {
                     return res.status(404).json({ error: "Cliente não encontrado" });
                 }
                 // Dados do imóvel recebidos do corpo da requisição
-                const { titulo, descricao, valor, localizacao, cep, area, quarto, banheiro, tipo, categoria, } = req.body;
+                const { titulo, descricao, valor, localizacao, cep, area, quarto, banheiro, tipo, categoria, numero, bairro, regiao, subRegiao, cidadeEstado, finalidade, tipoComplemento, complemento, torreBloco, lazer, areaExterna, areaLote, metrosFrente, metrosFundo, metrosDireito, metrosEsquerdo, zonaUso, coeficienteAproveitamento, } = req.body;
                 // Criar o novo imóvel com os dados do cliente incluídos
                 const files = req.files;
                 console.log("Dados do imóvel:", {
@@ -74,6 +74,24 @@ const createImovel = (req, res) => {
                     banheiro,
                     tipo,
                     categoria,
+                    numero,
+                    bairro,
+                    regiao,
+                    subRegiao,
+                    cidadeEstado,
+                    finalidade,
+                    tipoComplemento,
+                    complemento,
+                    torreBloco,
+                    lazer,
+                    areaExterna,
+                    areaLote,
+                    metrosFrente,
+                    metrosFundo,
+                    metrosDireito,
+                    metrosEsquerdo,
+                    zonaUso,
+                    coeficienteAproveitamento,
                 });
                 const novoImovel = new imovel_1.default({
                     titulo,
@@ -97,7 +115,25 @@ const createImovel = (req, res) => {
                         : undefined, // Imagem principal é opcional
                     imagens: (files === null || files === void 0 ? void 0 : files["imagensSecundarias"])
                         ? files["imagensSecundarias"].map((file) => file.filename)
-                        : [], // Imagens secundárias são opcionais
+                        : [], // Imagens secundárias são opcionais,
+                    numero,
+                    bairro,
+                    regiao,
+                    subRegiao,
+                    cidadeEstado,
+                    finalidade,
+                    tipoComplemento,
+                    complemento,
+                    torreBloco,
+                    lazer,
+                    areaExterna,
+                    areaLote,
+                    metrosFrente,
+                    metrosFundo,
+                    metrosDireito,
+                    metrosEsquerdo,
+                    zonaUso,
+                    coeficienteAproveitamento,
                 });
                 console.log("Novo imóvel a ser criado:", novoImovel);
                 const imovel = yield novoImovel.save();

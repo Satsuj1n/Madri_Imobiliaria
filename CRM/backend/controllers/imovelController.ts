@@ -65,6 +65,24 @@ export const createImovel = (req: Request, res: Response) => {
         banheiro,
         tipo,
         categoria,
+        numero,
+        bairro,
+        regiao,
+        subRegiao,
+        cidadeEstado,
+        finalidade,
+        tipoComplemento,
+        complemento,
+        torreBloco,
+        lazer,
+        areaExterna,
+        areaLote,
+        metrosFrente,
+        metrosFundo,
+        metrosDireito,
+        metrosEsquerdo,
+        zonaUso,
+        coeficienteAproveitamento,
       } = req.body;
 
       // Criar o novo imóvel com os dados do cliente incluídos
@@ -83,6 +101,24 @@ export const createImovel = (req: Request, res: Response) => {
         banheiro,
         tipo,
         categoria,
+        numero,
+        bairro,
+        regiao,
+        subRegiao,
+        cidadeEstado,
+        finalidade,
+        tipoComplemento,
+        complemento,
+        torreBloco,
+        lazer,
+        areaExterna,
+        areaLote,
+        metrosFrente,
+        metrosFundo,
+        metrosDireito,
+        metrosEsquerdo,
+        zonaUso,
+        coeficienteAproveitamento,
       });
 
       const novoImovel = new Imovel({
@@ -107,7 +143,25 @@ export const createImovel = (req: Request, res: Response) => {
           : undefined, // Imagem principal é opcional
         imagens: files?.["imagensSecundarias"]
           ? files["imagensSecundarias"].map((file) => file.filename)
-          : [], // Imagens secundárias são opcionais
+          : [], // Imagens secundárias são opcionais,
+        numero,
+        bairro,
+        regiao,
+        subRegiao,
+        cidadeEstado,
+        finalidade,
+        tipoComplemento,
+        complemento,
+        torreBloco,
+        lazer,
+        areaExterna,
+        areaLote,
+        metrosFrente,
+        metrosFundo,
+        metrosDireito,
+        metrosEsquerdo,
+        zonaUso,
+        coeficienteAproveitamento,
       });
 
       console.log("Novo imóvel a ser criado:", novoImovel);
@@ -191,27 +245,79 @@ export const aprovarImovel = async (req: Request, res: Response) => {
       LeadOrigin: "ImobiliariaSistema",
     };
 
-    // Adicionar parâmetros específicos com base na categoria
+    // Adicionar parâmetros específicos com base na nova categoria
     switch (imovel.categoria) {
-      case "apartamentos":
+      case "andar corrido":
         leadData.BusinessType = ["SALE"];
-        leadData.category = 1000; // Código para apartamentos
+        leadData.category = 2000;
         break;
-      case "casas":
+      case "apartamento":
         leadData.BusinessType = ["SALE"];
-        leadData.category = 1010; // Código para casas
+        leadData.category = 1000;
         break;
-      case "temporada":
-        leadData.BusinessType = ["RENTAL"];
-        leadData.category = 1030; // Código para temporada
-        break;
-      case "terrenos":
+      case "área privativa":
         leadData.BusinessType = ["SALE"];
-        leadData.category = 1040; // Código para terrenos
+        leadData.category = 2010;
         break;
-      case "comercio-industria":
+      case "casa":
         leadData.BusinessType = ["SALE"];
-        leadData.category = 1120; // Código para comércio e indústria
+        leadData.category = 1010;
+        break;
+      case "chácara":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2020;
+        break;
+      case "cobertura":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2030;
+        break;
+      case "fazenda":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2040;
+        break;
+      case "flat":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2050;
+        break;
+      case "galpão":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2060;
+        break;
+      case "garagem":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2070;
+        break;
+      case "kitnet":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2080;
+        break;
+      case "loja":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2090;
+        break;
+      case "lote":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2100;
+        break;
+      case "lote em condomínio":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2110;
+        break;
+      case "prédio":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2120;
+        break;
+      case "sala":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2130;
+        break;
+      case "salão":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2140;
+        break;
+      case "sítio":
+        leadData.BusinessType = ["SALE"];
+        leadData.category = 2150;
         break;
       default:
         return res.status(400).json({ error: "Categoria de imóvel inválida" });

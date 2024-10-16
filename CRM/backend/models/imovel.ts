@@ -16,20 +16,49 @@ export interface ImovelDocument extends Document {
   banheiro: number;
   tipo: "venda" | "aluguel";
   categoria:
-    | "apartamentos"
-    | "casas"
-    | "temporada"
-    | "terrenos"
-    | "comercio-industria";
+    | "andar corrido"
+    | "apartamento"
+    | "área privativa"
+    | "casa"
+    | "chácara"
+    | "cobertura"
+    | "fazenda"
+    | "flat"
+    | "galpão"
+    | "garagem"
+    | "kitnet"
+    | "loja"
+    | "lote"
+    | "lote em condomínio"
+    | "prédio"
+    | "sala"
+    | "salão"
+    | "sítio";
   cliente: Cliente;
   cep: number;
   status: "pendente" | "aprovado";
-  clientListingId?: string;
-  originLeadId?: string;
-  temperaturaLead?: "baixa" | "media" | "alta";
-  dataCadastro: Date;
   imagem?: string;
   imagens?: string[];
+
+  // Novos campos adicionados
+  numero?: string;
+  bairro?: string;
+  regiao?: string;
+  subRegiao?: string;
+  cidadeEstado?: string;
+  finalidade?: string;
+  tipoComplemento?: string;
+  complemento?: string;
+  torreBloco?: string;
+  lazer?: string[]; // Opções de lazer
+  areaExterna?: number;
+  areaLote?: number;
+  metrosFrente?: number;
+  metrosFundo?: number;
+  metrosDireito?: number;
+  metrosEsquerdo?: number;
+  zonaUso?: string;
+  coeficienteAproveitamento?: number;
 }
 
 const ImovelSchema: Schema = new Schema({
@@ -37,7 +66,7 @@ const ImovelSchema: Schema = new Schema({
   descricao: { type: String },
   valor: { type: Number, required: true },
   localizacao: { type: String, required: true },
-  cep: { type: Number, required: true }, // CEP como número
+  cep: { type: Number, required: true },
   area: { type: Number, required: true },
   quarto: { type: Number },
   banheiro: { type: Number },
@@ -49,11 +78,24 @@ const ImovelSchema: Schema = new Schema({
   categoria: {
     type: String,
     enum: [
-      "apartamentos",
-      "casas",
-      "temporada",
-      "terrenos",
-      "comercio-industria",
+      "andar corrido",
+      "apartamento",
+      "área privativa",
+      "casa",
+      "chácara",
+      "cobertura",
+      "fazenda",
+      "flat",
+      "galpão",
+      "garagem",
+      "kitnet",
+      "loja",
+      "lote",
+      "lote em condomínio",
+      "prédio",
+      "sala",
+      "salão",
+      "sítio",
     ],
     required: true,
   },
@@ -67,15 +109,28 @@ const ImovelSchema: Schema = new Schema({
     enum: ["pendente", "aprovado"],
     default: "pendente",
   },
-  clientListingId: { type: String },
-  originLeadId: { type: String },
-  temperaturaLead: {
-    type: String,
-    enum: ["baixa", "media", "alta"],
-  },
-  dataCadastro: { type: Date, default: Date.now },
   imagem: { type: String },
   imagens: [{ type: String }],
+
+  // Novos campos
+  numero: { type: String },
+  bairro: { type: String },
+  regiao: { type: String },
+  subRegiao: { type: String },
+  cidadeEstado: { type: String },
+  finalidade: { type: String },
+  tipoComplemento: { type: String },
+  complemento: { type: String },
+  torreBloco: { type: String },
+  lazer: [{ type: String }], // Array para opções de lazer
+  areaExterna: { type: Number },
+  areaLote: { type: Number },
+  metrosFrente: { type: Number },
+  metrosFundo: { type: Number },
+  metrosDireito: { type: Number },
+  metrosEsquerdo: { type: Number },
+  zonaUso: { type: String },
+  coeficienteAproveitamento: { type: Number },
 });
 
 export default mongoose.model<ImovelDocument>("Imovel", ImovelSchema);

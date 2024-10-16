@@ -44,7 +44,9 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (err) {
         console.error("Erro ao registrar o usuário:", err);
-        return res.status(500).json({ message: "Erro no registro. Por favor, tente novamente." });
+        return res
+            .status(500)
+            .json({ message: "Erro no registro. Por favor, tente novamente." });
     }
 });
 exports.signup = signup;
@@ -68,6 +70,9 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const payload = {
             id: cliente._id,
             isAdmin: cliente.isAdmin,
+            email: cliente.email,
+            nome: cliente.nomeRazaoSocial,
+            telefone: cliente.telefone,
         };
         const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",

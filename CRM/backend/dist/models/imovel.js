@@ -29,7 +29,7 @@ const ImovelSchema = new mongoose_1.Schema({
     descricao: { type: String },
     valor: { type: Number, required: true },
     localizacao: { type: String, required: true },
-    cep: { type: Number, required: true }, // CEP como número
+    cep: { type: Number, required: true },
     area: { type: Number, required: true },
     quarto: { type: Number },
     banheiro: { type: Number },
@@ -59,14 +59,26 @@ const ImovelSchema = new mongoose_1.Schema({
         enum: ["pendente", "aprovado"],
         default: "pendente",
     },
-    clientListingId: { type: String },
-    originLeadId: { type: String },
-    temperaturaLead: {
-        type: String,
-        enum: ["baixa", "media", "alta"],
-    },
-    dataCadastro: { type: Date, default: Date.now },
     imagem: { type: String },
     imagens: [{ type: String }],
+    // Novos campos
+    numero: { type: String },
+    bairro: { type: String },
+    regiao: { type: String },
+    subRegiao: { type: String },
+    cidadeEstado: { type: String },
+    finalidade: { type: String },
+    tipoComplemento: { type: String },
+    complemento: { type: String },
+    torreBloco: { type: String },
+    lazer: [{ type: String }], // Array para opções de lazer
+    areaExterna: { type: Number },
+    areaLote: { type: Number },
+    metrosFrente: { type: Number },
+    metrosFundo: { type: Number },
+    metrosDireito: { type: Number },
+    metrosEsquerdo: { type: Number },
+    zonaUso: { type: String },
+    coeficienteAproveitamento: { type: Number },
 });
 exports.default = mongoose_1.default.model("Imovel", ImovelSchema);

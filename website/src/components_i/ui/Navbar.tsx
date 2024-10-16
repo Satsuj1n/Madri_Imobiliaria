@@ -79,8 +79,8 @@ const Navbar = () => {
   };
 
   const handleVenderClick = () => {
-    navigate("/criar-imovel");
-  }
+    navigate("/criar-imovel/1");
+  };
 
   return (
     <nav className="bg-white shadow-md w-full fixed z-50">
@@ -112,7 +112,11 @@ const Navbar = () => {
           <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
             Comprar
           </a>
-          <a href="" onClick={handleVenderClick} className="text-sm md:text-base lg:text-md text-gray-700">
+          <a
+            href=""
+            onClick={handleVenderClick}
+            className="text-sm md:text-base lg:text-md text-gray-700"
+          >
             Vender
           </a>
           <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
