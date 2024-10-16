@@ -9,8 +9,8 @@ export interface Cliente {
 export interface ImovelDocument extends Document {
   titulo: string;
   descricao?: string;
-  valor: number;
   localizacao: string;
+  cep: number;
   area: number;
   quarto: number;
   banheiro: number;
@@ -35,12 +35,15 @@ export interface ImovelDocument extends Document {
     | "salão"
     | "sítio";
   cliente: Cliente;
-  cep: number;
   status: "pendente" | "aprovado";
   imagem?: string;
   imagens?: string[];
+  IPTUAnual?: number;
+  IPTUMensal?: number;
+  aluguelValor?: number; // Preço de aluguel se "aluguel" for selecionado
+  valor?: number; // Preço de venda se "venda" for selecionado
 
-  // Novos campos adicionados
+  // Novos campos adicionais
   numero?: string;
   bairro?: string;
   regiao?: string;
@@ -50,7 +53,7 @@ export interface ImovelDocument extends Document {
   tipoComplemento?: string;
   complemento?: string;
   torreBloco?: string;
-  lazer?: string[]; // Opções de lazer
+  lazer?: string[];
   areaExterna?: number;
   areaLote?: number;
   metrosFrente?: number;
@@ -64,7 +67,6 @@ export interface ImovelDocument extends Document {
 const ImovelSchema: Schema = new Schema({
   titulo: { type: String, required: true },
   descricao: { type: String },
-  valor: { type: Number, required: true },
   localizacao: { type: String, required: true },
   cep: { type: Number, required: true },
   area: { type: Number, required: true },
@@ -112,7 +114,12 @@ const ImovelSchema: Schema = new Schema({
   imagem: { type: String },
   imagens: [{ type: String }],
 
-  // Novos campos
+  IPTUAnual: { type: Number }, // IPTU anual opcional
+  IPTUMensal: { type: Number }, // IPTU mensal opcional
+  aluguelValor: { type: Number }, // Preço de aluguel, aplicável se tipo="aluguel"
+  valor: { type: Number }, // Preço de venda, aplicável se tipo="venda"
+
+  // Novos campos adicionais
   numero: { type: String },
   bairro: { type: String },
   regiao: { type: String },
@@ -122,7 +129,7 @@ const ImovelSchema: Schema = new Schema({
   tipoComplemento: { type: String },
   complemento: { type: String },
   torreBloco: { type: String },
-  lazer: [{ type: String }], // Array para opções de lazer
+  lazer: [{ type: String }],
   areaExterna: { type: Number },
   areaLote: { type: Number },
   metrosFrente: { type: Number },

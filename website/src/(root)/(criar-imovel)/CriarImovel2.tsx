@@ -20,7 +20,8 @@ const CriarImovel2 = () => {
     cidadeEstado: cidadeEstado || "",
     titulo: "",
     descricao: "",
-    valor: "",
+    valor: "", // Preço de venda se "venda" for selecionado
+    aluguelValor: "", // Preço de aluguel se "aluguel" for selecionado
     finalidade: "",
     tipoImovel: "",
     complemento: "",
@@ -36,6 +37,8 @@ const CriarImovel2 = () => {
     metrosEsquerdo: "",
     zonaUso: "",
     coeficienteAproveitamento: "",
+    IPTUAnual: "",
+    IPTUMensal: "",
   });
 
   const handleChange = (
@@ -84,9 +87,9 @@ const CriarImovel2 = () => {
   // Função para definir o rótulo do campo Valor dinamicamente
   const getValorLabel = () => {
     if (propertyInfo.finalidade === "venda") {
-      return "Valor Total*";
+      return "Valor Total (R$)*";
     } else if (propertyInfo.finalidade === "aluguel") {
-      return "Valor Mensal*";
+      return "Valor do Aluguel (R$)*";
     } else {
       return "Valor*";
     }
@@ -135,16 +138,46 @@ const CriarImovel2 = () => {
               <label>{getValorLabel()}</label>
               <input
                 type="number"
-                name="valor"
-                value={propertyInfo.valor}
+                name={propertyInfo.finalidade === "venda" ? "valor" : "aluguelValor"}
+                value={
+                  propertyInfo.finalidade === "venda"
+                    ? propertyInfo.valor
+                    : propertyInfo.aluguelValor
+                }
                 onChange={handleChange}
                 placeholder={
                   propertyInfo.finalidade === "venda"
                     ? "Valor total do imóvel"
-                    : "Valor mensal"
+                    : "Valor do aluguel"
                 }
                 className="border p-2 w-full rounded"
                 required
+              />
+            </div>
+
+            {/* IPTU Anual */}
+            <div>
+              <label>IPTU Anual (R$)</label>
+              <input
+                type="number"
+                name="IPTUAnual"
+                value={propertyInfo.IPTUAnual}
+                onChange={handleChange}
+                placeholder="Digite o IPTU anual"
+                className="border p-2 w-full rounded"
+              />
+            </div>
+
+            {/* IPTU Mensal */}
+            <div>
+              <label>IPTU Mensal (R$)</label>
+              <input
+                type="number"
+                name="IPTUMensal"
+                value={propertyInfo.IPTUMensal}
+                onChange={handleChange}
+                placeholder="Digite o IPTU mensal"
+                className="border p-2 w-full rounded"
               />
             </div>
 

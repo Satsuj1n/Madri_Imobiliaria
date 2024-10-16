@@ -30,34 +30,30 @@ export const createImovel = (req: Request, res: Response) => {
     }
 
     try {
-      const token = req.headers.authorization?.split(" ")[1]; // Obtém o token JWT da requisição
+      const token = req.headers.authorization?.split(" ")[1];
       if (!token) {
         return res.status(401).json({ error: "Token não fornecido" });
       }
 
-      // Decodifica o token para pegar o ID do cliente
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
         id: string;
       };
 
-      const userId = decoded.id; // Recupera o ID do cliente autenticado do payload do token
+      const userId = decoded.id;
       console.log("ID do cliente autenticado:", userId);
       if (!userId) {
         return res.status(401).json({ error: "Cliente não autenticado" });
       }
 
-      // Busca os dados completos do cliente pelo ID do token
       const cliente = await Cliente.findById(userId);
       if (!cliente) {
         console.log("Cliente não encontrado.");
         return res.status(404).json({ error: "Cliente não encontrado" });
       }
 
-      // Dados do imóvel recebidos do corpo da requisição
       const {
         titulo,
         descricao,
-        valor,
         localizacao,
         cep,
         area,
@@ -83,9 +79,12 @@ export const createImovel = (req: Request, res: Response) => {
         metrosEsquerdo,
         zonaUso,
         coeficienteAproveitamento,
+        IPTUAnual,
+        IPTUMensal,
+        aluguelValor,
+        valor,
       } = req.body;
 
-      // Criar o novo imóvel com os dados do cliente incluídos
       const files = req.files as {
         [fieldname: string]: Express.Multer.File[];
       };
@@ -93,7 +92,6 @@ export const createImovel = (req: Request, res: Response) => {
       console.log("Dados do imóvel:", {
         titulo,
         descricao,
-        valor,
         localizacao,
         cep,
         area,
@@ -119,12 +117,15 @@ export const createImovel = (req: Request, res: Response) => {
         metrosEsquerdo,
         zonaUso,
         coeficienteAproveitamento,
+        IPTUAnual,
+        IPTUMensal,
+        aluguelValor,
+        valor,
       });
 
       const novoImovel = new Imovel({
         titulo,
         descricao,
-        valor,
         localizacao,
         cep,
         area,
@@ -133,17 +134,17 @@ export const createImovel = (req: Request, res: Response) => {
         tipo,
         categoria,
         cliente: {
-          nome: cliente.nomeRazaoSocial, // Dados completos do cliente
+          nome: cliente.nomeRazaoSocial,
           email: cliente.email,
           telefone: cliente.telefone,
         },
-        status: "pendente", // Imóvel começa como "pendente"
+        status: "pendente",
         imagem: files?.["imagemPrincipal"]
           ? files["imagemPrincipal"][0].filename
-          : undefined, // Imagem principal é opcional
+          : undefined,
         imagens: files?.["imagensSecundarias"]
           ? files["imagensSecundarias"].map((file) => file.filename)
-          : [], // Imagens secundárias são opcionais,
+          : [],
         numero,
         bairro,
         regiao,
@@ -162,6 +163,10 @@ export const createImovel = (req: Request, res: Response) => {
         metrosEsquerdo,
         zonaUso,
         coeficienteAproveitamento,
+        IPTUAnual,
+        IPTUMensal,
+        aluguelValor: tipo === "aluguel" ? aluguelValor : undefined,
+        valor: tipo === "venda" ? valor : undefined,
       });
 
       console.log("Novo imóvel a ser criado:", novoImovel);
@@ -176,7 +181,6 @@ export const createImovel = (req: Request, res: Response) => {
     }
   });
 };
-
 // Outras funções do controller permanecem inalteradas
 
 export const getImovelById = async (req: Request, res: Response) => {
