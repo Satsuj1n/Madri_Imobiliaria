@@ -96,7 +96,7 @@ const CriarImovel1 = () => {
 
         {error && <p className="text-red-500 text-center">{error}</p>}
 
-        <form>
+        <div>
           <div className="grid grid-cols-2 gap-4">
             {/* CEP */}
             <div>
@@ -218,7 +218,7 @@ const CriarImovel1 = () => {
               Próximo
             </Button>
           </div>
-        </form>
+        </div>
       </div>
       <Footer />
     </>

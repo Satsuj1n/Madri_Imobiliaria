@@ -7,24 +7,32 @@ import { Button } from "../../components_i/ui/Button";
 const CriarImovel2 = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { cep, localizacao, numero, bairro, regiao, subRegiao, cidadeEstado } =
-    location.state || {};
+  const {
+    cep,
+    endereco,
+    numero,
+    bairro,
+    regiao,
+    subRegiao,
+    cidadeEstado,
+    complemento,
+  } = location.state || {};
 
   const [propertyInfo, setPropertyInfo] = useState({
     cep: cep || "",
-    localizacao: localizacao || "",
+    endereco: endereco || "",
     numero: numero || "",
     bairro: bairro || "",
     regiao: regiao || "",
     subRegiao: subRegiao || "",
     cidadeEstado: cidadeEstado || "",
+    complemento: complemento || "",
     titulo: "",
     descricao: "",
     valor: "", // Preço de venda se "venda" for selecionado
     aluguelValor: "", // Preço de aluguel se "aluguel" for selecionado
     finalidade: "",
     tipoImovel: "",
-    complemento: "",
     torreBloco: "",
     area: "",
     quarto: "",
@@ -80,8 +88,9 @@ const CriarImovel2 = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate("/criar-imovel/1");
+  const handleBack = (e: React.MouseEvent) => {
+    e.preventDefault(); // Impede que o botão "Voltar" dispare o envio do formulário
+    navigate("/criar-imovel/1", { state: propertyInfo });
   };
 
   // Função para definir o rótulo do campo Valor dinamicamente
@@ -138,7 +147,9 @@ const CriarImovel2 = () => {
               <label>{getValorLabel()}</label>
               <input
                 type="number"
-                name={propertyInfo.finalidade === "venda" ? "valor" : "aluguelValor"}
+                name={
+                  propertyInfo.finalidade === "venda" ? "valor" : "aluguelValor"
+                }
                 value={
                   propertyInfo.finalidade === "venda"
                     ? propertyInfo.valor
