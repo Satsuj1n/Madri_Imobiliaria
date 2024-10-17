@@ -14,7 +14,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware para analisar o corpo das requisições em JSON
-app.use(express.json());
+// Middleware para aumentar o limite de tamanho de upload
+app.use(express.json({ limit: "10mb" })); // Para requisições JSON
+app.use(express.urlencoded({ limit: "10mb", extended: true })); // Para requisições URL-encoded
 
 // Middleware para habilitar CORS e permitir comunicações cross-origin
 app.use(cors());

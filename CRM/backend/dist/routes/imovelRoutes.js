@@ -36,13 +36,27 @@ const path_1 = __importDefault(require("path"));
 // Configuração do multer para upload de arquivos
 const storage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads/"); // Diretório para armazenar as imagens
+        cb(null, "../uploads"); // Diretório para armazenar as imagens
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path_1.default.extname(file.originalname)); // Renomeia o arquivo com timestamp
     },
 });
-const upload = (0, multer_1.default)({ storage }).fields([
+const upload = (0, multer_1.default)({
+    storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // Limite de 5MB por arquivo
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith("image/")) {
+            cb(null, true); // Nenhum erro, arquivo permitido
+        }
+        else {
+            cb(null, false); // Arquivo não permitido, mas nenhum erro lançado
+            return cb(new Error("Formato de arquivo inválido. Apenas imagens são permitidas."));
+        }
+    },
+}).fields([
     { name: "imagemPrincipal", maxCount: 1 },
     { name: "imagensSecundarias", maxCount: 5 },
 ]);
@@ -51,11 +65,16 @@ const router = express_1.default.Router();
 router.post("/", auth_1.default, (req, res, next) => {
     upload(req, res, (err) => {
         if (err) {
+            console.log("Erro no multer:", err);
             return res.status(500).json({ error: "Erro no upload de imagens" });
         }
+        console.log("Arquivos enviados com sucesso:", req.files);
         next();
     });
-}, (0, asyncHandler_1.asyncHandler)((req, res) => imovelController.createImovel(req, res)));
+}, (0, asyncHandler_1.asyncHandler)((req, res) => {
+    console.log("Controlador createImovel chamado");
+    return imovelController.createImovel(req, res);
+}));
 // Rota para buscar um imóvel específico por ID
 router.get("/:id", (0, asyncHandler_1.asyncHandler)((req, res) => imovelController.getImovelById(req, res)));
 // Rota para atualizar um imóvel existente com upload de imagens

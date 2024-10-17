@@ -18,7 +18,38 @@ const CriarImovel2 = () => {
     complemento,
   } = location.state || {};
 
-  const [propertyInfo, setPropertyInfo] = useState({
+  const [propertyInfo, setPropertyInfo] = useState<{
+    cep: string;
+    endereco: string;
+    numero: string;
+    bairro: string;
+    regiao: string;
+    subRegiao: string;
+    cidadeEstado: string;
+    complemento: string;
+    titulo: string;
+    descricao: string;
+    valor: string;
+    aluguelValor: string;
+    finalidade: string;
+    tipoImovel: string;
+    torreBloco: string;
+    area: string;
+    quarto: string;
+    banheiro: string;
+    areaExterna: string;
+    areaLote: string;
+    metrosFrente: string;
+    metrosFundo: string;
+    metrosDireito: string;
+    metrosEsquerdo: string;
+    zonaUso: string;
+    coeficienteAproveitamento: string;
+    IPTUAnual: string;
+    IPTUMensal: string;
+    imagemPrincipal: File | null;
+    imagensSecundarias: File[];
+  }>({
     cep: cep || "",
     endereco: endereco || "",
     numero: numero || "",
@@ -77,24 +108,40 @@ const CriarImovel2 = () => {
     // Adiciona todos os campos do propertyInfo ao FormData
     Object.keys(propertyInfo).forEach((key) => {
       if (propertyInfo[key as keyof typeof propertyInfo]) {
-        formData.append(key, propertyInfo[key as keyof typeof propertyInfo]);
+        const value = propertyInfo[key as keyof typeof propertyInfo];
+        if (value !== null && value !== undefined) {
+          if (typeof value === "string" || value instanceof Blob) {
+            formData.append(key, value);
+          }
+        }
       }
     });
 
     // Adicionar imagem principal ao FormData
     if (propertyInfo.imagemPrincipal) {
+      console.log(
+        "Imagem principal sendo enviada:",
+        propertyInfo.imagemPrincipal
+      );
       formData.append("imagemPrincipal", propertyInfo.imagemPrincipal);
     }
 
     // Adicionar imagens secundárias ao FormData
     if (
-      propertyInfo.imagensSecundarias &&
       propertyInfo.imagensSecundarias.length > 0
     ) {
-      Array.from(propertyInfo.imagensSecundarias).forEach((image) => {
+      console.log(
+        "Imagens secundárias sendo enviadas:",
+        propertyInfo.imagensSecundarias
+      );
+      propertyInfo.imagensSecundarias.forEach((image) => {
+        console.log(`Imagem Secundária`, image);
         formData.append("imagensSecundarias", image);
       });
     }
+
+    // Verificar os dados enviados
+    console.log("Dados enviados no formulário:", propertyInfo);
 
     try {
       const response = await fetch("http://localhost:5000/api/imoveis", {
@@ -106,9 +153,12 @@ const CriarImovel2 = () => {
       });
 
       if (response.ok) {
+        const responseData = await response.json();
+        console.log("Resposta do servidor:", responseData);
         navigate("/"); // Redireciona para a home após a criação
       } else {
-        console.error("Erro ao criar imóvel", await response.json());
+        const errorData = await response.json();
+        console.error("Erro ao criar imóvel:", errorData);
       }
     } catch (error) {
       console.error("Erro ao criar imóvel:", error);
@@ -403,6 +453,41 @@ const CriarImovel2 = () => {
                 value={propertyInfo.coeficienteAproveitamento}
                 onChange={handleChange}
                 placeholder="Coeficiente de aproveitamento"
+                className="border p-2 w-full rounded"
+              />
+            </div>
+            {/* Input para a imagem principal */}
+            <div className="mt-4">
+              <label>Imagem Principal</label>
+              <input
+                type="file"
+                name="imagemPrincipal"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null;
+                  setPropertyInfo({ ...propertyInfo, imagemPrincipal: file });
+                }}
+                className="border p-2 w-full rounded"
+              />
+            </div>
+
+            {/* Input para as imagens secundárias */}
+            <div className="mt-4">
+              <label>Imagens Secundárias</label>
+              <input
+                type="file"
+                name="imagensSecundarias"
+                accept="image/*"
+                multiple
+                onChange={(e) => {
+                  const files = e.target.files
+                    ? Array.from(e.target.files)
+                    : [];
+                  setPropertyInfo({
+                    ...propertyInfo,
+                    imagensSecundarias: files,
+                  });
+                }}
                 className="border p-2 w-full rounded"
               />
             </div>

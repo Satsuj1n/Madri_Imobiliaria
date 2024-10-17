@@ -4,19 +4,40 @@ import Cliente from "../models/cliente";
 import multer from "multer";
 import path from "path";
 import jwt from "jsonwebtoken";
+import fs from "fs";
 import axios from "axios";
 
 // Configuração do multer para upload de arquivos (opcional)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Diretório para armazenar as imagens
+    const uploadDir = path.join(__dirname, "..", "..", "uploads");
+
+    // Verificar se a pasta 'uploads' existe, se não, criá-la
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    cb(null, uploadDir); // Caminho absoluto para a pasta uploads
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); // Renomeia o arquivo com timestamp
   },
 });
 
-const upload = multer({ storage }).fields([
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5MB por arquivo
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true); // Permite o upload se for uma imagem
+    } else {
+      cb(null, false); // Rejeita o arquivo se não for uma imagem
+      return cb(
+        new Error("Formato de arquivo inválido. Apenas imagens são permitidas.")
+      );
+    }
+  },
+}).fields([
   { name: "imagemPrincipal", maxCount: 1 },
   { name: "imagensSecundarias", maxCount: 5 },
 ]);
@@ -30,6 +51,7 @@ export const createImovel = (req: Request, res: Response) => {
     }
 
     try {
+      console.log("Início da criação do imóvel...");
       const token = req.headers.authorization?.split(" ")[1];
       if (!token) {
         return res.status(401).json({ error: "Token não fornecido" });
@@ -50,6 +72,8 @@ export const createImovel = (req: Request, res: Response) => {
         console.log("Cliente não encontrado.");
         return res.status(404).json({ error: "Cliente não encontrado" });
       }
+
+      console.log("Cliente autenticado:", cliente);
 
       const {
         titulo,
@@ -85,9 +109,19 @@ export const createImovel = (req: Request, res: Response) => {
         valor,
       } = req.body;
 
+      console.log("Dados recebidos do formulário:", req.body);
+
       const files = req.files as {
         [fieldname: string]: Express.Multer.File[];
       };
+      const imagemPrincipal = files?.imagemPrincipal
+        ? files["imagemPrincipal"][0].filename
+        : undefined;
+      const imagensSecundarias = files?.imagensSecundarias
+        ? files["imagensSecundarias"].map((file) => file.filename)
+        : [];
+
+      console.log("Arquivos recebidos:", files);
 
       console.log("Dados do imóvel:", {
         titulo,
@@ -121,6 +155,8 @@ export const createImovel = (req: Request, res: Response) => {
         IPTUMensal,
         aluguelValor,
         valor,
+        imagemPrincipal,
+        imagensSecundarias,
       });
 
       const novoImovel = new Imovel({
@@ -139,10 +175,10 @@ export const createImovel = (req: Request, res: Response) => {
           telefone: cliente.telefone,
         },
         status: "pendente",
-        imagem: files?.["imagemPrincipal"]
+        imagemPrincipal: files?.["imagemPrincipal"]
           ? files["imagemPrincipal"][0].filename
           : undefined,
-        imagens: files?.["imagensSecundarias"]
+        imagensSecundarias: files?.["imagensSecundarias"]
           ? files["imagensSecundarias"].map((file) => file.filename)
           : [],
         numero,
@@ -363,4 +399,5 @@ module.exports = {
   updateImovel,
   deleteImovel,
   aprovarImovel,
+  upload,
 };

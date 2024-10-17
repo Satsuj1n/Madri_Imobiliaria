@@ -71,8 +71,8 @@ const ImovelSchema = new mongoose_1.Schema({
         enum: ["pendente", "aprovado"],
         default: "pendente",
     },
-    imagem: { type: String },
-    imagens: [{ type: String }],
+    imagemPrincipal: { type: String },
+    imagensSecundarias: [{ type: String }],
     IPTUAnual: { type: Number }, // IPTU anual opcional
     IPTUMensal: { type: Number }, // IPTU mensal opcional
     aluguelValor: { type: Number }, // Preço de aluguel, aplicável se tipo="aluguel"
