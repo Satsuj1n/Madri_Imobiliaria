@@ -52,7 +52,6 @@ export interface ImovelDocument extends Document {
   lazer?: string[];
   areaExterna?: number;
   areaInterna?: number;
-  areaLote?: number;
   metrosFrente?: number;
   metrosFundo?: number;
   metrosDireito?: number;
@@ -126,8 +125,7 @@ const ImovelSchema: Schema = new Schema({
   torreBloco: { type: String },
   lazer: [{ type: String }],
   areaExterna: { type: Number },
-  areaInterna: { type: Number },
-  areaLote: { type: Number },
+  areaInterna: { type: Number},
   metrosFrente: { type: Number },
   metrosFundo: { type: Number },
   metrosDireito: { type: Number },

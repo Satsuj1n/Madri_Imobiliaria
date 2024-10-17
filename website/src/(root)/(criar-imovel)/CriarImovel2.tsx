@@ -347,26 +347,13 @@ const CriarImovel2 = () => {
 
             {/* Área Interna */}
             <div>
-              <label>Área Interna (m²)*</label>
+              <label>Área Interna (m²)</label>
               <input
                 type="number"
                 name="areaInterna"
                 value={propertyInfo.areaInterna}
                 onChange={handleChange}
                 placeholder="Área interna"
-                className="border p-2 w-full rounded"
-              />
-            </div>
-
-            {/* Área do lote */}
-            <div>
-              <label>Área do Lote (m²)</label>
-              <input
-                type="number"
-                name="areaLote"
-                value={propertyInfo.areaLote}
-                onChange={handleChange}
-                placeholder="Área total do lote"
                 className="border p-2 w-full rounded"
               />
             </div>
