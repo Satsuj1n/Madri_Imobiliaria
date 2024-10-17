@@ -47,6 +47,8 @@ const CriarImovel2 = () => {
     coeficienteAproveitamento: "",
     IPTUAnual: "",
     IPTUMensal: "",
+    imagemPrincipal: null, // Para imagem principal
+    imagensSecundarias: [], // Para imagens secundárias
   });
 
   const handleChange = (
@@ -61,19 +63,44 @@ const CriarImovel2 = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
+      console.error("Token não encontrado!");
       return;
     }
 
+    // Corrigir a duplicação do "Bearer" no cabeçalho da requisição
+    const formattedToken = token.startsWith("Bearer ")
+      ? token
+      : `Bearer ${token}`;
+
     const formData = new FormData();
+
+    // Adiciona todos os campos do propertyInfo ao FormData
     Object.keys(propertyInfo).forEach((key) => {
-      formData.append(key, propertyInfo[key as keyof typeof propertyInfo]);
+      if (propertyInfo[key as keyof typeof propertyInfo]) {
+        formData.append(key, propertyInfo[key as keyof typeof propertyInfo]);
+      }
     });
+
+    // Adicionar imagem principal ao FormData
+    if (propertyInfo.imagemPrincipal) {
+      formData.append("imagemPrincipal", propertyInfo.imagemPrincipal);
+    }
+
+    // Adicionar imagens secundárias ao FormData
+    if (
+      propertyInfo.imagensSecundarias &&
+      propertyInfo.imagensSecundarias.length > 0
+    ) {
+      Array.from(propertyInfo.imagensSecundarias).forEach((image) => {
+        formData.append("imagensSecundarias", image);
+      });
+    }
 
     try {
       const response = await fetch("http://localhost:5000/api/imoveis", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: formattedToken, // Enviar o token formatado corretamente
         },
         body: formData,
       });
@@ -81,7 +108,7 @@ const CriarImovel2 = () => {
       if (response.ok) {
         navigate("/"); // Redireciona para a home após a criação
       } else {
-        console.error("Erro ao criar imóvel");
+        console.error("Erro ao criar imóvel", await response.json());
       }
     } catch (error) {
       console.error("Erro ao criar imóvel:", error);

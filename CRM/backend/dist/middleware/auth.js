@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 // Middleware para autenticar usando JWT sem sessão
 const auth = (req, res, next) => {
+    console.log("Token recebido:", req.headers.authorization);
     passport_1.default.authenticate("jwt", { session: false }, (err, user) => {
         if (err || !user) {
             return res.status(401).json({ message: "Unauthorized" });

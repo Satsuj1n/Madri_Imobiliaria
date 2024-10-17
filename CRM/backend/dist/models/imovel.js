@@ -27,7 +27,6 @@ const mongoose_1 = __importStar(require("mongoose"));
 const ImovelSchema = new mongoose_1.Schema({
     titulo: { type: String, required: true },
     descricao: { type: String },
-    valor: { type: Number, required: true },
     localizacao: { type: String, required: true },
     cep: { type: Number, required: true },
     area: { type: Number, required: true },
@@ -41,11 +40,24 @@ const ImovelSchema = new mongoose_1.Schema({
     categoria: {
         type: String,
         enum: [
-            "apartamentos",
-            "casas",
-            "temporada",
-            "terrenos",
-            "comercio-industria",
+            "andar corrido",
+            "apartamento",
+            "área privativa",
+            "casa",
+            "chácara",
+            "cobertura",
+            "fazenda",
+            "flat",
+            "galpão",
+            "garagem",
+            "kitnet",
+            "loja",
+            "lote",
+            "lote em condomínio",
+            "prédio",
+            "sala",
+            "salão",
+            "sítio",
         ],
         required: true,
     },
@@ -61,7 +73,11 @@ const ImovelSchema = new mongoose_1.Schema({
     },
     imagem: { type: String },
     imagens: [{ type: String }],
-    // Novos campos
+    IPTUAnual: { type: Number }, // IPTU anual opcional
+    IPTUMensal: { type: Number }, // IPTU mensal opcional
+    aluguelValor: { type: Number }, // Preço de aluguel, aplicável se tipo="aluguel"
+    valor: { type: Number }, // Preço de venda, aplicável se tipo="venda"
+    // Novos campos adicionais
     numero: { type: String },
     bairro: { type: String },
     regiao: { type: String },
@@ -71,7 +87,7 @@ const ImovelSchema = new mongoose_1.Schema({
     tipoComplemento: { type: String },
     complemento: { type: String },
     torreBloco: { type: String },
-    lazer: [{ type: String }], // Array para opções de lazer
+    lazer: [{ type: String }],
     areaExterna: { type: Number },
     areaLote: { type: Number },
     metrosFrente: { type: Number },
