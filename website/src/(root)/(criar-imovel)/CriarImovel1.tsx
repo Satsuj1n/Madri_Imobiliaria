@@ -79,6 +79,19 @@ const CriarImovel1 = () => {
   };
 
   const handleNext = () => {
+    if (
+      !propertyInfo.cep ||
+      !propertyInfo.endereco ||
+      !propertyInfo.numero ||
+      !propertyInfo.bairro ||
+      !propertyInfo.regiao ||
+      !propertyInfo.cidadeEstado
+    ) {
+      setError("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    setError(null);
     navigate("/criar-imovel/2", { state: propertyInfo });
   };
 
@@ -106,7 +119,7 @@ const CriarImovel1 = () => {
                 name="cep"
                 value={propertyInfo.cep}
                 onChange={handleCepChange}
-                placeholder="Digite o CEP"
+                placeholder="Digite o CEP (apenas números)"
                 className="border p-2 w-full rounded"
                 maxLength={8} // Limita a 8 caracteres
                 required

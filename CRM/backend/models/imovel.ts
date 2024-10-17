@@ -8,6 +8,7 @@ export interface Cliente {
 
 export interface ImovelDocument extends Document {
   titulo: string;
+  situacao?: string;
   descricao?: string;
   endereco: string;
   cep: number;
@@ -40,19 +41,17 @@ export interface ImovelDocument extends Document {
   IPTUMensal?: number;
   aluguelValor?: number; // Preço de aluguel se "aluguel" for selecionado
   valor?: number; // Preço de venda se "venda" for selecionado
-
-  // Novos campos adicionais
   numero?: string;
   bairro?: string;
   regiao?: string;
   subRegiao?: string;
   cidadeEstado?: string;
-  finalidade?: string;
   tipoComplemento?: string;
   complemento?: string;
   torreBloco?: string;
   lazer?: string[];
   areaExterna?: number;
+  areaInterna?: number;
   areaLote?: number;
   metrosFrente?: number;
   metrosFundo?: number;
@@ -64,6 +63,7 @@ export interface ImovelDocument extends Document {
 
 const ImovelSchema: Schema = new Schema({
   titulo: { type: String, required: true },
+  situacao: { type: String, enum: ["disponivel", "ocupado"] },
   descricao: { type: String },
   endereco: { type: String, required: true },
   cep: { type: Number, required: true },
@@ -121,12 +121,12 @@ const ImovelSchema: Schema = new Schema({
   regiao: { type: String },
   subRegiao: { type: String },
   cidadeEstado: { type: String },
-  finalidade: { type: String },
   tipoComplemento: { type: String },
   complemento: { type: String },
   torreBloco: { type: String },
   lazer: [{ type: String }],
   areaExterna: { type: Number },
+  areaInterna: { type: Number },
   areaLote: { type: Number },
   metrosFrente: { type: Number },
   metrosFundo: { type: Number },

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
 import { Button } from "../../components_i/ui/Button";
+import { Checkbox } from "../../components_i/ui/Checkbox";
 
 const CriarImovel2 = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const CriarImovel2 = () => {
     quarto: string;
     banheiro: string;
     areaExterna: string;
+    areaInterna: string;
     areaLote: string;
     metrosFrente: string;
     metrosFundo: string;
@@ -47,6 +49,7 @@ const CriarImovel2 = () => {
     coeficienteAproveitamento: string;
     IPTUAnual: string;
     IPTUMensal: string;
+    lazer: string[];
   }>({
     cep: cep || "",
     endereco: endereco || "",
@@ -67,6 +70,7 @@ const CriarImovel2 = () => {
     quarto: "",
     banheiro: "",
     areaExterna: "",
+    areaInterna: "",
     areaLote: "",
     metrosFrente: "",
     metrosFundo: "",
@@ -76,6 +80,7 @@ const CriarImovel2 = () => {
     coeficienteAproveitamento: "",
     IPTUAnual: "",
     IPTUMensal: "",
+    lazer: [],
   });
 
   const handleChange = (
@@ -83,6 +88,15 @@ const CriarImovel2 = () => {
   ) => {
     const { name, value } = e.target;
     setPropertyInfo({ ...propertyInfo, [name]: value });
+  };
+
+  // Função para lidar com a mudança do checkbox
+  const handleLazerChange = (lazerOption: string, isChecked: boolean) => {
+    const updatedLazer = isChecked
+      ? [...propertyInfo.lazer, lazerOption] // Adiciona se marcado
+      : propertyInfo.lazer.filter((item) => item !== lazerOption); // Remove se desmarcado
+
+    setPropertyInfo({ ...propertyInfo, lazer: updatedLazer });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -153,6 +167,21 @@ const CriarImovel2 = () => {
         <form onSubmit={handleSubmit}>
           {/* Informações do imóvel */}
           <div className="grid grid-cols-2 gap-4">
+            {/* Finalidade */}
+            <div>
+              <label>Finalidade(Tipo)*</label>
+              <select
+                name="tipo"
+                value={propertyInfo.tipo}
+                onChange={handleChange}
+                className="border p-2 w-full rounded"
+                required
+              >
+                <option value="">Selecione a finalidade</option>
+                <option value="venda">Venda</option>
+                <option value="aluguel">Aluguel</option>
+              </select>
+            </div>
             {/* Título */}
             <div>
               <label>Título do Imóvel*</label>
@@ -229,25 +258,9 @@ const CriarImovel2 = () => {
               />
             </div>
 
-            {/* Finalidade */}
+            {/* Categoria de Imóvel */}
             <div>
-              <label>Finalidade*</label>
-              <select
-                name="tipo"
-                value={propertyInfo.tipo}
-                onChange={handleChange}
-                className="border p-2 w-full rounded"
-                required
-              >
-                <option value="">Selecione a finalidade</option>
-                <option value="venda">Venda</option>
-                <option value="aluguel">Aluguel</option>
-              </select>
-            </div>
-
-            {/* Tipo de Imóvel */}
-            <div>
-              <label>Tipo de Imóvel*</label>
+              <label>Categoria do Imóvel*</label>
               <select
                 name="categoria"
                 value={propertyInfo.categoria}
@@ -332,6 +345,19 @@ const CriarImovel2 = () => {
               />
             </div>
 
+            {/* Área Interna */}
+            <div>
+              <label>Área Interna (m²)*</label>
+              <input
+                type="number"
+                name="areaInterna"
+                value={propertyInfo.areaInterna}
+                onChange={handleChange}
+                placeholder="Área interna"
+                className="border p-2 w-full rounded"
+              />
+            </div>
+
             {/* Área do lote */}
             <div>
               <label>Área do Lote (m²)</label>
@@ -347,7 +373,7 @@ const CriarImovel2 = () => {
 
             {/* Medidas do terreno */}
             <div>
-              <label>M. Frente</label>
+              <label>Metros Frente</label>
               <input
                 type="number"
                 name="metrosFrente"
@@ -358,7 +384,7 @@ const CriarImovel2 = () => {
               />
             </div>
             <div>
-              <label>M. Fundo</label>
+              <label>Metros Fundo</label>
               <input
                 type="number"
                 name="metrosFundo"
@@ -369,7 +395,7 @@ const CriarImovel2 = () => {
               />
             </div>
             <div>
-              <label>M. Direito</label>
+              <label>Metros Direito</label>
               <input
                 type="number"
                 name="metrosDireito"
@@ -380,7 +406,7 @@ const CriarImovel2 = () => {
               />
             </div>
             <div>
-              <label>M. Esquerdo</label>
+              <label>Metros Esquerdo</label>
               <input
                 type="number"
                 name="metrosEsquerdo"
@@ -415,6 +441,46 @@ const CriarImovel2 = () => {
                 placeholder="Coeficiente de aproveitamento"
                 className="border p-2 w-full rounded"
               />
+            </div>
+          </div>
+          {/* Lazer - Checkbox com as opções */}
+          <div className="text-center mt-4">
+            <div className="text-2xl ">
+              <label>Lazer</label>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4 text-nowrap">
+              {[
+                "Academia",
+                "Churrasqueira",
+                "Hidromassagem",
+                "Home cinema",
+                "Piscina",
+                "Playground",
+                "Quadra poliesportiva",
+                "Quadra de tênis",
+                "Sala de massagem",
+                "Salão de festas",
+                "Salão de jogos",
+                "Sauna",
+                "Wifi",
+                "Espaço gourmet",
+                "Garage Band",
+                "Quadra de squash",
+                "Quadra de beach tênis",
+              ].map((option) => (
+                <div key={option} className="flex items-center mt-1">
+                  <Checkbox
+                    id={option}
+                    checked={propertyInfo.lazer.includes(option)}
+                    onCheckedChange={(checked) =>
+                      handleLazerChange(option, checked === true)
+                    }
+                  />
+                  <label htmlFor={option} className="ml-2">
+                    {option}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
 
