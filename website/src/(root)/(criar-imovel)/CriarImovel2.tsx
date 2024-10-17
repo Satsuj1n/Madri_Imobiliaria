@@ -4,6 +4,7 @@ import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
 import { Button } from "../../components_i/ui/Button";
 import { Checkbox } from "../../components_i/ui/Checkbox";
+import { ProgressBar } from "components_i/ui/ProgressBar";
 
 const CriarImovel2 = () => {
   const navigate = useNavigate();
@@ -162,8 +163,9 @@ const CriarImovel2 = () => {
       <Navbar />
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center mt-24">
-          Criar Imóvel - Parte 2
+          Criar Imóvel
         </h1>
+        <ProgressBar step={2} />
         <form onSubmit={handleSubmit}>
           {/* Informações do imóvel */}
           <div className="grid grid-cols-2 gap-4">

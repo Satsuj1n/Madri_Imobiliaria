@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
 import { Button } from "../../components_i/ui/Button";
+import { ProgressBar } from "components_i/ui/ProgressBar";
 
 const CriarImovel1 = () => {
   const navigate = useNavigate();
@@ -104,9 +105,9 @@ const CriarImovel1 = () => {
       <Navbar />
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center mt-24">
-          Adicionar Endereço
+          Criar Imóvel
         </h1>
-
+        <ProgressBar step={1} />
         {error && <p className="text-red-500 text-center">{error}</p>}
 
         <div>
