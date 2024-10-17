@@ -103,7 +103,7 @@ const CriarImovel1 = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 mb-60">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center mt-24">
           Criar Imóvel
         </h1>
