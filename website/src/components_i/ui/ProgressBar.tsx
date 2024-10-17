@@ -59,7 +59,7 @@ const ProgressBar = ({ step }: { step: number }) => {
               step >= 2 ? "text-[#100A55]" : "text-[#100a5591]"
             }`}
           >
-            Informações do Imóvel
+            Informações
           </span>
         </div>
       </div>
