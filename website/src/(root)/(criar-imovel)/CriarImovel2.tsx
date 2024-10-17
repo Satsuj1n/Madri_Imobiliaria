@@ -31,8 +31,8 @@ const CriarImovel2 = () => {
     descricao: string;
     valor: string;
     aluguelValor: string;
-    finalidade: string;
-    tipoImovel: string;
+    tipo: string;
+    categoria: string;
     torreBloco: string;
     area: string;
     quarto: string;
@@ -47,8 +47,6 @@ const CriarImovel2 = () => {
     coeficienteAproveitamento: string;
     IPTUAnual: string;
     IPTUMensal: string;
-    imagemPrincipal: File | null;
-    imagensSecundarias: File[];
   }>({
     cep: cep || "",
     endereco: endereco || "",
@@ -62,8 +60,8 @@ const CriarImovel2 = () => {
     descricao: "",
     valor: "", // Preço de venda se "venda" for selecionado
     aluguelValor: "", // Preço de aluguel se "aluguel" for selecionado
-    finalidade: "",
-    tipoImovel: "",
+    tipo: "",
+    categoria: "",
     torreBloco: "",
     area: "",
     quarto: "",
@@ -78,8 +76,6 @@ const CriarImovel2 = () => {
     coeficienteAproveitamento: "",
     IPTUAnual: "",
     IPTUMensal: "",
-    imagemPrincipal: null, // Para imagem principal
-    imagensSecundarias: [], // Para imagens secundárias
   });
 
   const handleChange = (
@@ -98,58 +94,24 @@ const CriarImovel2 = () => {
       return;
     }
 
-    // Corrigir a duplicação do "Bearer" no cabeçalho da requisição
     const formattedToken = token.startsWith("Bearer ")
       ? token
       : `Bearer ${token}`;
 
-    const formData = new FormData();
-
-    // Adiciona todos os campos do propertyInfo ao FormData
-    Object.keys(propertyInfo).forEach((key) => {
-      if (propertyInfo[key as keyof typeof propertyInfo]) {
-        const value = propertyInfo[key as keyof typeof propertyInfo];
-        if (value !== null && value !== undefined) {
-          if (typeof value === "string" || value instanceof Blob) {
-            formData.append(key, value);
-          }
-        }
-      }
-    });
-
-    // Adicionar imagem principal ao FormData
-    if (propertyInfo.imagemPrincipal) {
-      console.log(
-        "Imagem principal sendo enviada:",
-        propertyInfo.imagemPrincipal
-      );
-      formData.append("imagemPrincipal", propertyInfo.imagemPrincipal);
-    }
-
-    // Adicionar imagens secundárias ao FormData
-    if (
-      propertyInfo.imagensSecundarias.length > 0
-    ) {
-      console.log(
-        "Imagens secundárias sendo enviadas:",
-        propertyInfo.imagensSecundarias
-      );
-      propertyInfo.imagensSecundarias.forEach((image) => {
-        console.log(`Imagem Secundária`, image);
-        formData.append("imagensSecundarias", image);
-      });
-    }
+    // Usar um objeto simples em vez de FormData, já que não estamos lidando com arquivos
+    const data: { [key: string]: string | string[] } = { ...propertyInfo };
 
     // Verificar os dados enviados
-    console.log("Dados enviados no formulário:", propertyInfo);
+    console.log("Dados enviados no formulário:", data);
 
     try {
       const response = await fetch("http://localhost:5000/api/imoveis", {
         method: "POST",
         headers: {
-          Authorization: formattedToken, // Enviar o token formatado corretamente
+          "Content-Type": "application/json",
+          Authorization: formattedToken,
         },
-        body: formData,
+        body: JSON.stringify(data), // Enviar os dados como JSON
       });
 
       if (response.ok) {
@@ -172,9 +134,9 @@ const CriarImovel2 = () => {
 
   // Função para definir o rótulo do campo Valor dinamicamente
   const getValorLabel = () => {
-    if (propertyInfo.finalidade === "venda") {
+    if (propertyInfo.tipo === "venda") {
       return "Valor Total (R$)*";
-    } else if (propertyInfo.finalidade === "aluguel") {
+    } else if (propertyInfo.tipo === "aluguel") {
       return "Valor do Aluguel (R$)*";
     } else {
       return "Valor*";
@@ -224,17 +186,15 @@ const CriarImovel2 = () => {
               <label>{getValorLabel()}</label>
               <input
                 type="number"
-                name={
-                  propertyInfo.finalidade === "venda" ? "valor" : "aluguelValor"
-                }
+                name={propertyInfo.tipo === "venda" ? "valor" : "aluguelValor"}
                 value={
-                  propertyInfo.finalidade === "venda"
+                  propertyInfo.tipo === "venda"
                     ? propertyInfo.valor
                     : propertyInfo.aluguelValor
                 }
                 onChange={handleChange}
                 placeholder={
-                  propertyInfo.finalidade === "venda"
+                  propertyInfo.tipo === "venda"
                     ? "Valor total do imóvel"
                     : "Valor do aluguel"
                 }
@@ -273,8 +233,8 @@ const CriarImovel2 = () => {
             <div>
               <label>Finalidade*</label>
               <select
-                name="finalidade"
-                value={propertyInfo.finalidade}
+                name="tipo"
+                value={propertyInfo.tipo}
                 onChange={handleChange}
                 className="border p-2 w-full rounded"
                 required
@@ -289,8 +249,8 @@ const CriarImovel2 = () => {
             <div>
               <label>Tipo de Imóvel*</label>
               <select
-                name="tipoImovel"
-                value={propertyInfo.tipoImovel}
+                name="categoria"
+                value={propertyInfo.categoria}
                 onChange={handleChange}
                 className="border p-2 w-full rounded"
                 required
@@ -453,41 +413,6 @@ const CriarImovel2 = () => {
                 value={propertyInfo.coeficienteAproveitamento}
                 onChange={handleChange}
                 placeholder="Coeficiente de aproveitamento"
-                className="border p-2 w-full rounded"
-              />
-            </div>
-            {/* Input para a imagem principal */}
-            <div className="mt-4">
-              <label>Imagem Principal</label>
-              <input
-                type="file"
-                name="imagemPrincipal"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0] || null;
-                  setPropertyInfo({ ...propertyInfo, imagemPrincipal: file });
-                }}
-                className="border p-2 w-full rounded"
-              />
-            </div>
-
-            {/* Input para as imagens secundárias */}
-            <div className="mt-4">
-              <label>Imagens Secundárias</label>
-              <input
-                type="file"
-                name="imagensSecundarias"
-                accept="image/*"
-                multiple
-                onChange={(e) => {
-                  const files = e.target.files
-                    ? Array.from(e.target.files)
-                    : [];
-                  setPropertyInfo({
-                    ...propertyInfo,
-                    imagensSecundarias: files,
-                  });
-                }}
                 className="border p-2 w-full rounded"
               />
             </div>

@@ -1,221 +1,151 @@
 import { Request, Response } from "express";
 import Imovel from "../models/imovel";
 import Cliente from "../models/cliente";
-import multer from "multer";
-import path from "path";
 import jwt from "jsonwebtoken";
-import fs from "fs";
 import axios from "axios";
 
-// Configuração do multer para upload de arquivos (opcional)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, "..", "..", "uploads");
-
-    // Verificar se a pasta 'uploads' existe, se não, criá-la
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    cb(null, uploadDir); // Caminho absoluto para a pasta uploads
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Renomeia o arquivo com timestamp
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5MB por arquivo
-  fileFilter: (_req, file, cb) => {
-    if (file.mimetype.startsWith("image/")) {
-      cb(null, true); // Permite o upload se for uma imagem
-    } else {
-      cb(null, false); // Rejeita o arquivo se não for uma imagem
-      return cb(
-        new Error("Formato de arquivo inválido. Apenas imagens são permitidas.")
-      );
-    }
-  },
-}).fields([
-  { name: "imagemPrincipal", maxCount: 1 },
-  { name: "imagensSecundarias", maxCount: 5 },
-]);
-
 // Função para criar um novo imóvel
-export const createImovel = (req: Request, res: Response) => {
-  upload(req, res, async function (err) {
-    if (err) {
-      console.log("Erro no upload de imagens:", err);
-      return res.status(500).json({ error: "Erro no upload de imagens" });
+export const createImovel = async (req: Request, res: Response) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ error: "Token não fornecido" });
     }
 
-    try {
-      console.log("Início da criação do imóvel...");
-      const token = req.headers.authorization?.split(" ")[1];
-      if (!token) {
-        return res.status(401).json({ error: "Token não fornecido" });
-      }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
+      id: string;
+    };
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
-        id: string;
-      };
-
-      const userId = decoded.id;
-      console.log("ID do cliente autenticado:", userId);
-      if (!userId) {
-        return res.status(401).json({ error: "Cliente não autenticado" });
-      }
-
-      const cliente = await Cliente.findById(userId);
-      if (!cliente) {
-        console.log("Cliente não encontrado.");
-        return res.status(404).json({ error: "Cliente não encontrado" });
-      }
-
-      console.log("Cliente autenticado:", cliente);
-
-      const {
-        titulo,
-        descricao,
-        localizacao,
-        cep,
-        area,
-        quarto,
-        banheiro,
-        tipo,
-        categoria,
-        numero,
-        bairro,
-        regiao,
-        subRegiao,
-        cidadeEstado,
-        finalidade,
-        tipoComplemento,
-        complemento,
-        torreBloco,
-        lazer,
-        areaExterna,
-        areaLote,
-        metrosFrente,
-        metrosFundo,
-        metrosDireito,
-        metrosEsquerdo,
-        zonaUso,
-        coeficienteAproveitamento,
-        IPTUAnual,
-        IPTUMensal,
-        aluguelValor,
-        valor,
-      } = req.body;
-
-      console.log("Dados recebidos do formulário:", req.body);
-
-      const files = req.files as {
-        [fieldname: string]: Express.Multer.File[];
-      };
-      const imagemPrincipal = files?.imagemPrincipal
-        ? files["imagemPrincipal"][0].filename
-        : undefined;
-      const imagensSecundarias = files?.imagensSecundarias
-        ? files["imagensSecundarias"].map((file) => file.filename)
-        : [];
-
-      console.log("Arquivos recebidos:", files);
-
-      console.log("Dados do imóvel:", {
-        titulo,
-        descricao,
-        localizacao,
-        cep,
-        area,
-        quarto,
-        banheiro,
-        tipo,
-        categoria,
-        numero,
-        bairro,
-        regiao,
-        subRegiao,
-        cidadeEstado,
-        finalidade,
-        tipoComplemento,
-        complemento,
-        torreBloco,
-        lazer,
-        areaExterna,
-        areaLote,
-        metrosFrente,
-        metrosFundo,
-        metrosDireito,
-        metrosEsquerdo,
-        zonaUso,
-        coeficienteAproveitamento,
-        IPTUAnual,
-        IPTUMensal,
-        aluguelValor,
-        valor,
-        imagemPrincipal,
-        imagensSecundarias,
-      });
-
-      const novoImovel = new Imovel({
-        titulo,
-        descricao,
-        localizacao,
-        cep,
-        area,
-        quarto,
-        banheiro,
-        tipo,
-        categoria,
-        cliente: {
-          nome: cliente.nomeRazaoSocial,
-          email: cliente.email,
-          telefone: cliente.telefone,
-        },
-        status: "pendente",
-        imagemPrincipal: files?.["imagemPrincipal"]
-          ? files["imagemPrincipal"][0].filename
-          : undefined,
-        imagensSecundarias: files?.["imagensSecundarias"]
-          ? files["imagensSecundarias"].map((file) => file.filename)
-          : [],
-        numero,
-        bairro,
-        regiao,
-        subRegiao,
-        cidadeEstado,
-        finalidade,
-        tipoComplemento,
-        complemento,
-        torreBloco,
-        lazer,
-        areaExterna,
-        areaLote,
-        metrosFrente,
-        metrosFundo,
-        metrosDireito,
-        metrosEsquerdo,
-        zonaUso,
-        coeficienteAproveitamento,
-        IPTUAnual,
-        IPTUMensal,
-        aluguelValor: tipo === "aluguel" ? aluguelValor : undefined,
-        valor: tipo === "venda" ? valor : undefined,
-      });
-
-      console.log("Novo imóvel a ser criado:", novoImovel);
-
-      const imovel = await novoImovel.save();
-      console.log("Imóvel criado com sucesso:", imovel);
-
-      return res.status(201).json(imovel);
-    } catch (err) {
-      console.error("Erro ao criar imóvel:", err);
-      return res.status(500).json({ error: "Erro ao criar imóvel" });
+    const userId = decoded.id;
+    console.log("ID do cliente autenticado:", userId);
+    if (!userId) {
+      return res.status(401).json({ error: "Cliente não autenticado" });
     }
-  });
+
+    const cliente = await Cliente.findById(userId);
+    if (!cliente) {
+      console.log("Cliente não encontrado.");
+      return res.status(404).json({ error: "Cliente não encontrado" });
+    }
+
+    const {
+      titulo,
+      descricao,
+      endereco,
+      cep,
+      area,
+      quarto,
+      banheiro,
+      tipo,
+      categoria,
+      numero,
+      bairro,
+      regiao,
+      subRegiao,
+      cidadeEstado,
+      finalidade,
+      tipoComplemento,
+      complemento,
+      torreBloco,
+      lazer,
+      areaExterna,
+      areaLote,
+      metrosFrente,
+      metrosFundo,
+      metrosDireito,
+      metrosEsquerdo,
+      zonaUso,
+      coeficienteAproveitamento,
+      IPTUAnual,
+      IPTUMensal,
+      aluguelValor,
+      valor,
+    } = req.body;
+
+    console.log("Dados do imóvel:", {
+      titulo,
+      descricao,
+      endereco,
+      cep,
+      area,
+      quarto,
+      banheiro,
+      tipo,
+      categoria,
+      numero,
+      bairro,
+      regiao,
+      subRegiao,
+      cidadeEstado,
+      finalidade,
+      tipoComplemento,
+      complemento,
+      torreBloco,
+      lazer,
+      areaExterna,
+      areaLote,
+      metrosFrente,
+      metrosFundo,
+      metrosDireito,
+      metrosEsquerdo,
+      zonaUso,
+      coeficienteAproveitamento,
+      IPTUAnual,
+      IPTUMensal,
+      aluguelValor,
+      valor,
+    });
+
+    const novoImovel = new Imovel({
+      titulo,
+      descricao,
+      endereco,
+      cep,
+      area,
+      quarto,
+      banheiro,
+      tipo,
+      categoria,
+      cliente: {
+        nome: cliente.nomeRazaoSocial,
+        email: cliente.email,
+        telefone: cliente.telefone,
+      },
+      status: "pendente",
+      numero,
+      bairro,
+      regiao,
+      subRegiao,
+      cidadeEstado,
+      finalidade,
+      tipoComplemento,
+      complemento,
+      torreBloco,
+      lazer,
+      areaExterna,
+      areaLote,
+      metrosFrente,
+      metrosFundo,
+      metrosDireito,
+      metrosEsquerdo,
+      zonaUso,
+      coeficienteAproveitamento,
+      IPTUAnual,
+      IPTUMensal,
+      aluguelValor: tipo === "aluguel" ? aluguelValor : undefined,
+      valor: tipo === "venda" ? valor : undefined,
+    });
+
+    console.log("Novo imóvel a ser criado:", novoImovel);
+
+    const imovel = await novoImovel.save();
+    console.log("Imóvel criado com sucesso:", imovel);
+
+    return res.status(201).json(imovel);
+  } catch (err) {
+    console.error("Erro ao criar imóvel:", err);
+    return res.status(500).json({ error: "Erro ao criar imóvel" });
+  }
 };
 // Outras funções do controller permanecem inalteradas
 
@@ -399,5 +329,4 @@ module.exports = {
   updateImovel,
   deleteImovel,
   aprovarImovel,
-  upload,
 };

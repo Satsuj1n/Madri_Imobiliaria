@@ -27,7 +27,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const ImovelSchema = new mongoose_1.Schema({
     titulo: { type: String, required: true },
     descricao: { type: String },
-    localizacao: { type: String, required: true },
+    endereco: { type: String, required: true },
     cep: { type: Number, required: true },
     area: { type: Number, required: true },
     quarto: { type: Number },
@@ -71,8 +71,6 @@ const ImovelSchema = new mongoose_1.Schema({
         enum: ["pendente", "aprovado"],
         default: "pendente",
     },
-    imagemPrincipal: { type: String },
-    imagensSecundarias: [{ type: String }],
     IPTUAnual: { type: Number }, // IPTU anual opcional
     IPTUMensal: { type: Number }, // IPTU mensal opcional
     aluguelValor: { type: Number }, // Preço de aluguel, aplicável se tipo="aluguel"

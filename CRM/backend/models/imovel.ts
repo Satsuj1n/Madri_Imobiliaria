@@ -9,7 +9,7 @@ export interface Cliente {
 export interface ImovelDocument extends Document {
   titulo: string;
   descricao?: string;
-  localizacao: string;
+  endereco: string;
   cep: number;
   area: number;
   quarto: number;
@@ -36,8 +36,6 @@ export interface ImovelDocument extends Document {
     | "sítio";
   cliente: Cliente;
   status: "pendente" | "aprovado";
-  imagemPrincipal?: string;
-  imagensSecundarias?: string[];
   IPTUAnual?: number;
   IPTUMensal?: number;
   aluguelValor?: number; // Preço de aluguel se "aluguel" for selecionado
@@ -67,7 +65,7 @@ export interface ImovelDocument extends Document {
 const ImovelSchema: Schema = new Schema({
   titulo: { type: String, required: true },
   descricao: { type: String },
-  localizacao: { type: String, required: true },
+  endereco: { type: String, required: true },
   cep: { type: Number, required: true },
   area: { type: Number, required: true },
   quarto: { type: Number },
@@ -111,8 +109,6 @@ const ImovelSchema: Schema = new Schema({
     enum: ["pendente", "aprovado"],
     default: "pendente",
   },
-  imagemPrincipal: { type: String },
-  imagensSecundarias: [{ type: String }],
 
   IPTUAnual: { type: Number }, // IPTU anual opcional
   IPTUMensal: { type: Number }, // IPTU mensal opcional
