@@ -72,11 +72,11 @@ const ImovelSchema = new mongoose_1.Schema({
         enum: ["pendente", "aprovado"],
         default: "pendente",
     },
-    IPTUAnual: { type: Number }, // IPTU anual opcional
-    IPTUMensal: { type: Number }, // IPTU mensal opcional
-    aluguelValor: { type: Number }, // Preço de aluguel, aplicável se tipo="aluguel"
-    valor: { type: Number }, // Preço de venda, aplicável se tipo="venda"
-    // Novos campos adicionais
+    IPTUAnual: { type: Number },
+    IPTUMensal: { type: Number },
+    aluguelValor: { type: Number },
+    valor: { type: Number },
+    // Novos campos
     numero: { type: String },
     bairro: { type: String },
     regiao: { type: String },
@@ -94,5 +94,8 @@ const ImovelSchema = new mongoose_1.Schema({
     metrosEsquerdo: { type: Number },
     zonaUso: { type: String },
     coeficienteAproveitamento: { type: Number },
+    // Campos para imagens
+    imagemPrincipal: { type: String }, // URL da imagem principal
+    imagens: { type: [String], default: [] }, // Array de URLs de imagens adicionais
 });
 exports.default = mongoose_1.default.model("Imovel", ImovelSchema);

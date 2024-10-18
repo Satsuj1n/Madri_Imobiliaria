@@ -17,6 +17,7 @@ const imovel_1 = __importDefault(require("../models/imovel"));
 const cliente_1 = __importDefault(require("../models/cliente"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const axios_1 = __importDefault(require("axios"));
+const s3Service_1 = require("../utils/s3Service"); // Adjust the path as necessary
 // Função para criar um novo imóvel
 const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -36,8 +37,9 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             console.log("Cliente não encontrado.");
             return res.status(404).json({ error: "Cliente não encontrado" });
         }
+        // Pega o restante das informações do corpo da requisição
         const { titulo, descricao, endereco, cep, area, quarto, banheiro, tipo, categoria, numero, bairro, regiao, subRegiao, cidadeEstado, finalidade, tipoComplemento, complemento, torreBloco, lazer, areaExterna, areaInterna, areaLote, metrosFrente, metrosFundo, metrosDireito, metrosEsquerdo, zonaUso, coeficienteAproveitamento, IPTUAnual, IPTUMensal, aluguelValor, valor, } = req.body;
-        console.log("Dados do imóvel:", {
+        console.log("Dados do imóvel recebidos:", {
             titulo,
             descricao,
             endereco,
@@ -71,6 +73,21 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             aluguelValor,
             valor,
         });
+        // Aqui você adiciona a lógica para lidar com o upload das imagens
+        let imagemPrincipalUrl = "";
+        let outrasImagensUrls = [];
+        if (req.files && Array.isArray(req.files)) {
+            const files = req.files;
+            for (const file of files) {
+                const s3Result = yield (0, s3Service_1.uploadFileToS3)(file); // Função para subir imagem ao S3
+                if (file.fieldname === "imagemPrincipal") {
+                    imagemPrincipalUrl = s3Result; // Salva o URL da imagem principal diretamente
+                }
+                else if (file.fieldname === "outrasImagens") {
+                    outrasImagensUrls.push(s3Result); // Adiciona o URL das outras imagens
+                }
+            }
+        }
         const novoImovel = new imovel_1.default({
             titulo,
             descricao,
@@ -110,6 +127,8 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             IPTUMensal,
             aluguelValor: tipo === "aluguel" ? aluguelValor : undefined,
             valor: tipo === "venda" ? valor : undefined,
+            imagemPrincipal: imagemPrincipalUrl, // Armazena o URL da imagem principal
+            outrasImagens: outrasImagensUrls, // Armazena os URLs das outras imagens
         });
         console.log("Novo imóvel a ser criado:", novoImovel);
         const imovel = yield novoImovel.save();

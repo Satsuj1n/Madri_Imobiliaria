@@ -58,6 +58,9 @@ export interface ImovelDocument extends Document {
   metrosEsquerdo?: number;
   zonaUso?: string;
   coeficienteAproveitamento?: number;
+
+  imagemPrincipal?: string; // URL da imagem principal
+  imagens?: string[]; // Array com URLs das imagens adicionais
 }
 
 const ImovelSchema: Schema = new Schema({
@@ -109,12 +112,12 @@ const ImovelSchema: Schema = new Schema({
     default: "pendente",
   },
 
-  IPTUAnual: { type: Number }, // IPTU anual opcional
-  IPTUMensal: { type: Number }, // IPTU mensal opcional
-  aluguelValor: { type: Number }, // Preço de aluguel, aplicável se tipo="aluguel"
-  valor: { type: Number }, // Preço de venda, aplicável se tipo="venda"
+  IPTUAnual: { type: Number },
+  IPTUMensal: { type: Number },
+  aluguelValor: { type: Number },
+  valor: { type: Number },
 
-  // Novos campos adicionais
+  // Novos campos
   numero: { type: String },
   bairro: { type: String },
   regiao: { type: String },
@@ -125,13 +128,17 @@ const ImovelSchema: Schema = new Schema({
   torreBloco: { type: String },
   lazer: [{ type: String }],
   areaExterna: { type: Number },
-  areaInterna: { type: Number},
+  areaInterna: { type: Number },
   metrosFrente: { type: Number },
   metrosFundo: { type: Number },
   metrosDireito: { type: Number },
   metrosEsquerdo: { type: Number },
   zonaUso: { type: String },
   coeficienteAproveitamento: { type: Number },
+
+  // Campos para imagens
+  imagemPrincipal: { type: String }, // URL da imagem principal
+  imagens: { type: [String], default: [] }, // Array de URLs de imagens adicionais
 });
 
 export default mongoose.model<ImovelDocument>("Imovel", ImovelSchema);

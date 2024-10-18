@@ -3,6 +3,7 @@ import Imovel from "../models/imovel";
 import Cliente from "../models/cliente";
 import jwt from "jsonwebtoken";
 import axios from "axios";
+import { uploadFileToS3 } from "../utils/s3Service"; // Adjust the path as necessary
 
 // Função para criar um novo imóvel
 export const createImovel = async (req: Request, res: Response) => {
@@ -28,6 +29,7 @@ export const createImovel = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Cliente não encontrado" });
     }
 
+    // Pega o restante das informações do corpo da requisição
     const {
       titulo,
       descricao,
@@ -63,7 +65,7 @@ export const createImovel = async (req: Request, res: Response) => {
       valor,
     } = req.body;
 
-    console.log("Dados do imóvel:", {
+    console.log("Dados do imóvel recebidos:", {
       titulo,
       descricao,
       endereco,
@@ -97,6 +99,23 @@ export const createImovel = async (req: Request, res: Response) => {
       aluguelValor,
       valor,
     });
+
+    // Aqui você adiciona a lógica para lidar com o upload das imagens
+    let imagemPrincipalUrl = "";
+    let outrasImagensUrls: string[] = [];
+
+    if (req.files && Array.isArray(req.files)) {
+      const files = req.files as Express.Multer.File[];
+
+      for (const file of files) {
+        const s3Result = await uploadFileToS3(file); // Função para subir imagem ao S3
+        if (file.fieldname === "imagemPrincipal") {
+          imagemPrincipalUrl = s3Result; // Salva o URL da imagem principal diretamente
+        } else if (file.fieldname === "outrasImagens") {
+          outrasImagensUrls.push(s3Result); // Adiciona o URL das outras imagens
+        }
+      }
+    }
 
     const novoImovel = new Imovel({
       titulo,
@@ -137,6 +156,8 @@ export const createImovel = async (req: Request, res: Response) => {
       IPTUMensal,
       aluguelValor: tipo === "aluguel" ? aluguelValor : undefined,
       valor: tipo === "venda" ? valor : undefined,
+      imagemPrincipal: imagemPrincipalUrl, // Armazena o URL da imagem principal
+      outrasImagens: outrasImagensUrls, // Armazena os URLs das outras imagens
     });
 
     console.log("Novo imóvel a ser criado:", novoImovel);
@@ -150,6 +171,7 @@ export const createImovel = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Erro ao criar imóvel" });
   }
 };
+
 // Outras funções do controller permanecem inalteradas
 
 export const getImovelById = async (req: Request, res: Response) => {
