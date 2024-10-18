@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const ImovelSchema = new mongoose_1.Schema({
     titulo: { type: String, required: true },
+    situacao: { type: String, enum: ["disponivel", "ocupado"] },
     descricao: { type: String },
     endereco: { type: String, required: true },
     cep: { type: Number, required: true },
@@ -81,13 +82,12 @@ const ImovelSchema = new mongoose_1.Schema({
     regiao: { type: String },
     subRegiao: { type: String },
     cidadeEstado: { type: String },
-    finalidade: { type: String },
     tipoComplemento: { type: String },
     complemento: { type: String },
     torreBloco: { type: String },
     lazer: [{ type: String }],
     areaExterna: { type: Number },
-    areaLote: { type: Number },
+    areaInterna: { type: Number },
     metrosFrente: { type: Number },
     metrosFundo: { type: Number },
     metrosDireito: { type: Number },

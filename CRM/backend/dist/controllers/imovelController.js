@@ -36,7 +36,7 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             console.log("Cliente não encontrado.");
             return res.status(404).json({ error: "Cliente não encontrado" });
         }
-        const { titulo, descricao, endereco, cep, area, quarto, banheiro, tipo, categoria, numero, bairro, regiao, subRegiao, cidadeEstado, finalidade, tipoComplemento, complemento, torreBloco, lazer, areaExterna, areaLote, metrosFrente, metrosFundo, metrosDireito, metrosEsquerdo, zonaUso, coeficienteAproveitamento, IPTUAnual, IPTUMensal, aluguelValor, valor, } = req.body;
+        const { titulo, descricao, endereco, cep, area, quarto, banheiro, tipo, categoria, numero, bairro, regiao, subRegiao, cidadeEstado, finalidade, tipoComplemento, complemento, torreBloco, lazer, areaExterna, areaInterna, areaLote, metrosFrente, metrosFundo, metrosDireito, metrosEsquerdo, zonaUso, coeficienteAproveitamento, IPTUAnual, IPTUMensal, aluguelValor, valor, } = req.body;
         console.log("Dados do imóvel:", {
             titulo,
             descricao,
@@ -58,6 +58,7 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             torreBloco,
             lazer,
             areaExterna,
+            areaInterna,
             areaLote,
             metrosFrente,
             metrosFundo,
@@ -97,6 +98,7 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             torreBloco,
             lazer,
             areaExterna,
+            areaInterna,
             areaLote,
             metrosFrente,
             metrosFundo,
