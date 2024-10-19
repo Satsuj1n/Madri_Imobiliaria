@@ -60,7 +60,7 @@ export interface ImovelDocument extends Document {
   coeficienteAproveitamento?: number;
 
   imagemPrincipal?: string; // URL da imagem principal
-  imagens?: string[]; // Array com URLs das imagens adicionais
+  outrasImagens?: string[]; // Array com URLs das imagens adicionais
 }
 
 const ImovelSchema: Schema = new Schema({
@@ -138,7 +138,7 @@ const ImovelSchema: Schema = new Schema({
 
   // Campos para imagens
   imagemPrincipal: { type: String }, // URL da imagem principal
-  imagens: { type: [String], default: [] }, // Array de URLs de imagens adicionais
+  outrasImagens: { type: [String] }, // Array de URLs de imagens adicionais
 });
 
 export default mongoose.model<ImovelDocument>("Imovel", ImovelSchema);

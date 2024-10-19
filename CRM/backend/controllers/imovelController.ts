@@ -218,6 +218,57 @@ export const deleteImovel = async (req: Request, res: Response) => {
   }
 };
 
+export const adicionarImagens = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const imovel = await Imovel.findById(id);
+
+    if (!imovel) {
+      return res.status(404).json({ error: "Imóvel não encontrado" });
+    }
+
+    let imagemPrincipalUrl = "";
+    let outrasImagensUrls: string[] = [];
+
+    // Processa o upload das imagens
+    if (req.files) {
+      const files = req.files as {
+        [fieldname: string]: Express.Multer.File[];
+      };
+
+      // Verifica a imagem principal
+      if (files.imagemPrincipal && files.imagemPrincipal[0]) {
+        imagemPrincipalUrl = await uploadFileToS3(files.imagemPrincipal[0]);
+      }
+
+      // Verifica outras imagens
+      if (files.outrasImagens) {
+        for (const file of files.outrasImagens) {
+          const s3Result = await uploadFileToS3(file);
+          outrasImagensUrls.push(s3Result);
+        }
+      }
+    }
+
+    // Atualiza o imóvel com os URLs das imagens
+    imovel.imagemPrincipal = imagemPrincipalUrl || imovel.imagemPrincipal;
+    imovel.outrasImagens = [
+      ...(imovel.outrasImagens || []),
+      ...outrasImagensUrls,
+    ];
+
+    await imovel.save();
+
+    return res.status(200).json({
+      message: "Imagens adicionadas com sucesso",
+      imovel,
+    });
+  } catch (err) {
+    console.error("Erro ao adicionar imagens:", err);
+    return res.status(500).json({ error: "Erro ao adicionar imagens" });
+  }
+};
+
 export const aprovarImovel = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findByIdAndUpdate(
@@ -348,6 +399,7 @@ export const aprovarImovel = async (req: Request, res: Response) => {
 };
 
 module.exports = {
+  adicionarImagens,
   getAllImoveis,
   createImovel,
   getImovelById,

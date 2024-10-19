@@ -3,8 +3,11 @@ import * as imovelController from "../controllers/imovelController";
 import checkAdmin from "../middleware/checkAdmin";
 import auth from "../middleware/auth";
 import { asyncHandler } from "../utils/asyncHandler";
+import multer from "multer";
 
 // Configuração do multer para upload de arquivos
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -25,7 +28,22 @@ router.get(
   )
 );
 
-// Rota para atualizar um imóvel existente com upload de imagens
+// Nova rota para upload de imagens após o imóvel ser criado
+router.put(
+  "/:id",
+  auth,
+  upload.fields([
+    { name: "imagemPrincipal", maxCount: 1 },
+    { name: "outrasImagens", maxCount: 10 }, // Ajuste o limite conforme necessário
+  ]),
+  asyncHandler((req: Request, res: Response) => {
+    console.log("Recebendo requisição para upload de imagens...");
+    console.log("Arquivos recebidos:", req.files); // Verifica os arquivos recebidos
+    console.log("Dados do corpo da requisição:", req.body); // Verifica o corpo da requisição
+    imovelController.adicionarImagens(req, res);
+  })
+);
+
 // Rota para atualizar um imóvel existente
 router.put(
   "/:id",

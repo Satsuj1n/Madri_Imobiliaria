@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.aprovarImovel = exports.deleteImovel = exports.getAllImoveis = exports.updateImovel = exports.getImovelById = exports.createImovel = void 0;
+exports.aprovarImovel = exports.adicionarImagens = exports.deleteImovel = exports.getAllImoveis = exports.updateImovel = exports.getImovelById = exports.createImovel = void 0;
 const imovel_1 = __importDefault(require("../models/imovel"));
 const cliente_1 = __importDefault(require("../models/cliente"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -190,6 +190,48 @@ const deleteImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.deleteImovel = deleteImovel;
+const adicionarImagens = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const imovel = yield imovel_1.default.findById(id);
+        if (!imovel) {
+            return res.status(404).json({ error: "Imóvel não encontrado" });
+        }
+        let imagemPrincipalUrl = "";
+        let outrasImagensUrls = [];
+        // Processa o upload das imagens
+        if (req.files) {
+            const files = req.files;
+            // Verifica a imagem principal
+            if (files.imagemPrincipal && files.imagemPrincipal[0]) {
+                imagemPrincipalUrl = yield (0, s3Service_1.uploadFileToS3)(files.imagemPrincipal[0]);
+            }
+            // Verifica outras imagens
+            if (files.outrasImagens) {
+                for (const file of files.outrasImagens) {
+                    const s3Result = yield (0, s3Service_1.uploadFileToS3)(file);
+                    outrasImagensUrls.push(s3Result);
+                }
+            }
+        }
+        // Atualiza o imóvel com os URLs das imagens
+        imovel.imagemPrincipal = imagemPrincipalUrl || imovel.imagemPrincipal;
+        imovel.outrasImagens = [
+            ...(imovel.outrasImagens || []),
+            ...outrasImagensUrls,
+        ];
+        yield imovel.save();
+        return res.status(200).json({
+            message: "Imagens adicionadas com sucesso",
+            imovel,
+        });
+    }
+    catch (err) {
+        console.error("Erro ao adicionar imagens:", err);
+        return res.status(500).json({ error: "Erro ao adicionar imagens" });
+    }
+});
+exports.adicionarImagens = adicionarImagens;
 const aprovarImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const imovel = yield imovel_1.default.findByIdAndUpdate(req.params.id, { status: "aprovado" }, { new: true });
@@ -306,6 +348,7 @@ const aprovarImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.aprovarImovel = aprovarImovel;
 module.exports = {
+    adicionarImagens: exports.adicionarImagens,
     getAllImoveis: exports.getAllImoveis,
     createImovel: exports.createImovel,
     getImovelById: exports.getImovelById,

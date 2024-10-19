@@ -132,7 +132,7 @@ const CriarImovel2 = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Resposta do servidor:", responseData);
-        navigate("/"); // Redireciona para a home após a criação
+        navigate("/criar-imovel/3", { state: { imovelId: responseData._id } });
       } else {
         const errorData = await response.json();
         console.error("Erro ao criar imóvel:", errorData);

@@ -96,6 +96,6 @@ const ImovelSchema = new mongoose_1.Schema({
     coeficienteAproveitamento: { type: Number },
     // Campos para imagens
     imagemPrincipal: { type: String }, // URL da imagem principal
-    imagens: { type: [String], default: [] }, // Array de URLs de imagens adicionais
+    outrasImagens: { type: [String] }, // Array de URLs de imagens adicionais
 });
 exports.default = mongoose_1.default.model("Imovel", ImovelSchema);
