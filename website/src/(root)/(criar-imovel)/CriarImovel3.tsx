@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
 import { Button } from "../../components_i/ui/Button";
+import { ProgressBar } from "components_i/ui/ProgressBar"; // Importando a barra de progresso
 
 const AdicionarImagens = () => {
   const navigate = useNavigate();
@@ -21,9 +22,15 @@ const AdicionarImagens = () => {
       if (isPrincipal) {
         setImagemPrincipal(files[0]); // Define a imagem principal
       } else {
-        setOutrasImagens(Array.from(files)); // Define as outras imagens
+        const newImages = Array.from(files).slice(0, 10); // Limita a 10 imagens
+        setOutrasImagens((prev) => [...prev, ...newImages]); // Adiciona novas imagens ao array
       }
     }
+  };
+
+  const handleBack = (e: React.MouseEvent) => {
+    e.preventDefault(); // Impede que o botão "Voltar" dispare o envio do formulário
+    navigate("/criar-imovel/2");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,13 +51,11 @@ const AdicionarImagens = () => {
 
     if (imagemPrincipal) {
       formData.append("imagemPrincipal", imagemPrincipal);
-      console.log("Imagem principal adicionada:", imagemPrincipal);
     }
 
     if (outrasImagens.length > 0) {
-      outrasImagens.forEach((imagem, index) => {
+      outrasImagens.forEach((imagem) => {
         formData.append("outrasImagens", imagem);
-        console.log(`Imagem adicional ${index + 1} adicionada:`, imagem);
       });
     }
 
@@ -82,36 +87,90 @@ const AdicionarImagens = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 mb-80">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center mt-24">
           Adicionar Imagens ao Imóvel
         </h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label>Imagem Principal</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageChange(e, true)}
-              className="border p-2 w-full rounded"
-            />
+
+        {/* Inclui a barra de progresso */}
+        <ProgressBar step={3} />
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center justify-center"
+        >
+          {/* Estilizando o box de upload com mais arredondado e com visualização */}
+          <div className="mb-4 w-full max-w-md text-center">
+            <label className="block text-lg font-medium mb-2">
+              Imagem Principal
+            </label>
+            <div className="border-2 border-dashed border-blue-500 rounded-lg p-4 cursor-pointer relative">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageChange(e, true)}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+              <span className="text-gray-500">
+                {imagemPrincipal
+                  ? "Imagem selecionada"
+                  : "Clique aqui para selecionar a imagem principal"}
+              </span>
+            </div>
+
+            {/* Pré-visualização da imagem principal */}
+            {imagemPrincipal && (
+              <div className="mt-4">
+                <img
+                  src={URL.createObjectURL(imagemPrincipal)}
+                  alt="Imagem Principal"
+                  className="rounded-lg w-64 h-64 object-cover mx-auto"
+                />
+              </div>
+            )}
           </div>
-          <div className="mb-4">
-            <label>Outras Imagens</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={(e) => handleImageChange(e, false)}
-              className="border p-2 w-full rounded"
-            />
+
+          {/* Outras imagens */}
+          <div className="mb-4 w-full max-w-md text-center">
+            <label className="block text-lg font-medium mb-2">
+              Outras Imagens (Máximo de 10)
+            </label>
+            <div className="border-2 border-dashed border-blue-500 rounded-lg p-4 cursor-pointer relative">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => handleImageChange(e, false)}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+              <span className="text-gray-500">
+                {outrasImagens.length > 0
+                  ? `${outrasImagens.length} imagens selecionadas`
+                  : "Clique aqui para selecionar várias imagens"}
+              </span>
+            </div>
+
+            {/* Pré-visualização das outras imagens */}
+            {outrasImagens.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 mt-4">
+                {outrasImagens.map((imagem, index) => (
+                  <img
+                    key={index}
+                    src={URL.createObjectURL(imagem)}
+                    alt={`Outras Imagens ${index + 1}`}
+                    className="rounded-lg w-32 h-32 object-cover"
+                  />
+                ))}
+              </div>
+            )}
           </div>
-          <div className="mt-8 flex justify-between">
-            <Button variant="default" onClick={() => navigate("/")}>
-              Cancelar
+
+          <div className="mt-8 flex justify-between w-full max-w-md">
+            <Button variant="default" onClick={handleBack}>
+              Voltar
             </Button>
             <Button variant="default" type="submit">
-              Enviar Imagens
+              Criar Imóvel
             </Button>
           </div>
         </form>

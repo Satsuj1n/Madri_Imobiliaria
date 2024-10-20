@@ -106,6 +106,8 @@ const CriarImovel2 = () => {
 
     if (!token) {
       console.error("Token não encontrado!");
+      alert("Você não está autenticado. Faça login novamente.");
+      navigate("/login"); // Redireciona para a página de login
       return;
     }
 
@@ -118,6 +120,7 @@ const CriarImovel2 = () => {
 
     // Verificar os dados enviados
     console.log("Dados enviados no formulário:", data);
+    console.log("Token formatado:", formattedToken);
 
     try {
       const response = await fetch("http://localhost:5000/api/imoveis", {
@@ -133,12 +136,22 @@ const CriarImovel2 = () => {
         const responseData = await response.json();
         console.log("Resposta do servidor:", responseData);
         navigate("/criar-imovel/3", { state: { imovelId: responseData._id } });
+      } else if (response.status === 401) {
+        // Caso o token tenha expirado ou não seja válido
+        console.error(
+          "Token inválido ou expirado. Redirecionando para o login."
+        );
+        alert("Sessão expirada. Por favor, faça login novamente.");
+        localStorage.removeItem("token"); // Remove o token inválido
+        navigate("/login"); // Redireciona para a página de login
       } else {
         const errorData = await response.json();
         console.error("Erro ao criar imóvel:", errorData);
+        alert("Erro ao criar imóvel. Verifique os dados e tente novamente.");
       }
     } catch (error) {
       console.error("Erro ao criar imóvel:", error);
+      alert("Erro ao criar imóvel. Tente novamente mais tarde.");
     }
   };
 
@@ -478,7 +491,7 @@ const CriarImovel2 = () => {
               Voltar
             </Button>
             <Button variant="default" type="submit">
-              Criar Imóvel
+              Próximo
             </Button>
           </div>
         </form>
