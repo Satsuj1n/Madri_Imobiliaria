@@ -40,6 +40,7 @@ const router = express_1.default.Router();
 router.post("/", auth_1.default, (0, asyncHandler_1.asyncHandler)((req, res) => imovelController.createImovel(req, res)));
 // Rota para buscar um imóvel específico por ID
 router.get("/:id", (0, asyncHandler_1.asyncHandler)((req, res) => imovelController.getImovelById(req, res)));
+router.get("/", (0, asyncHandler_1.asyncHandler)((req, res) => imovelController.getAllImoveis(req, res)));
 // Nova rota para upload de imagens após o imóvel ser criado
 router.put("/:id", auth_1.default, upload.fields([
     { name: "imagemPrincipal", maxCount: 1 },

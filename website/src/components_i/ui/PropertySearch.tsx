@@ -11,7 +11,7 @@ const PropertySearch = () => {
   return (
     <div className="flex flex-col items-center md:items-start relative z-10 ">
       {/* Versão Desktop */}
-      <div className="hidden md:flex bg-white p-6 rounded-lg shadow-md w-full md:w-[980px] justify-between items-center mt-24">
+      <div className="hidden md:flex bg-white p-6 rounded-lg shadow-md w-full md:w-[980px] justify-between items-center mt-6">
         {/* Bloco de Localização */}
         <div className="flex items-center space-x-4">
           <div>

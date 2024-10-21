@@ -4,50 +4,58 @@ import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
 
 interface HouseCardProps {
-  price: string;
-  name: string;
-  location: string;
-  city: string; // Separate city prop
-  beds: number;
-  baths: number;
-  size: string;
-  image: string;
+  aluguelValor: string;
+  titulo: string;
+  endereco: string;
+  numero: string;
+  bairro: string;
+  cidadeEstado: string;
+  quarto: number;
+  banheiro: number;
+  area: number;
+  imagemPrincipal: string;
 }
 
 const HouseCard: React.FC<HouseCardProps> = ({
-  price,
-  name,
-  location,
-  city,
-  beds,
-  baths,
-  size,
-  image,
+  aluguelValor,
+  titulo,
+  endereco,
+  numero,
+  bairro,
+  cidadeEstado,
+  quarto,
+  banheiro,
+  area,
+  imagemPrincipal,
 }) => {
   return (
-    <div className={`border rounded-lg shadow-md bg-white `}>
+    <div className={`border rounded-lg shadow-md bg-white`}>
       {/* Imagem da Casa */}
       <img
-        src={image}
-        alt={name}
+        src={imagemPrincipal}
+        alt={titulo}
         className="rounded-t-lg w-full h-[200px] object-cover"
       />
 
       <div className="p-6">
         {/* Preço */}
         <div className="text-[#0053f8] font-bold text-2xl">
-          {price}
-          <span className="text-[#000929] text-base font-normal opacity-50"></span>
+          R$ {aluguelValor}
+          <span className="text-[#000929] text-base font-normal opacity-50">
+            / mês
+          </span>
         </div>
 
         {/* Nome da Propriedade */}
-        <h4 className="text-[#000929] font-bold text-xl mt-2 whitespace-nowrap">{name}</h4>
+        <h4 className="text-[#000929] font-bold text-xl mt-2 whitespace-nowrap">
+          {titulo}
+        </h4>
 
         {/* Localização */}
         <p className="text-[#6C727F] font-normal text-sm mt-1">
-          {location}
+          {endereco}, {numero}, {bairro}
           <br />
-          {city} {/* Always show the city and state on a separate line */}
+          {cidadeEstado}
         </p>
 
         {/* Linha separadora */}
@@ -58,19 +66,19 @@ const HouseCard: React.FC<HouseCardProps> = ({
           <div className="flex items-center">
             <BedIcon />
             <span className="text-[#6C727F] ml-2 font-normal text-sm">
-              {beds}
+              {quarto}
             </span>
           </div>
           <div className="flex items-center">
             <BathIcon />
             <span className="text-[#6C727F] ml-2 font-normal text-sm">
-              {baths}
+              {banheiro}
             </span>
           </div>
           <div className="flex items-center">
             <SizeIcon />
             <span className="text-[#6C727F] ml-2 font-normal text-sm">
-              {size}
+              {area} m²
             </span>
           </div>
         </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import HouseCard from "./HouseCard";
 import SegmentedControl from "./SegmentedControl";
 import SearchBar from "./SearchBar";
@@ -43,64 +42,76 @@ const PropertyListing = () => {
       {/* Properties Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-8 w-full max-w-[1120px] px-4 mb-14">
         <HouseCard
-          price="R$2.095/mês"
-          name="Residencial Teresina"
-          location="Rua Barroso"
-          city="Teresina, PI"
-          beds={3}
-          baths={2}
-          size="85m²"
-          image="https://i.imgur.com/ZFqP0Aw.jpeg"
+          aluguelValor="R$2.095/mês"
+          titulo="Residencial Teresina"
+          endereco="Rua Barroso, 123, Centro"
+          cidadeEstado="Teresina, PI"
+          quarto={3}
+          banheiro={2}
+          area={85}
+          numero="123"
+          bairro="Centro"
+          imagemPrincipal="image1.jpg"
         />
         <HouseCard
-          price="R$2.700/mês"
-          name="Condomínio São Cristóvão"
-          location="Avenida João XXIII"
-          city="Teresina, PI"
-          beds={4}
-          baths={2}
-          size="120m²"
-          image="https://cdn.imoview.com.br/torreurbanismo/Imoveis/327/rpg0w-whatsapp-image-2024-05-07-at-173749-1715115323.jpeg?1715115323"
+          aluguelValor="R$2.700/mês"
+          titulo="Condomínio São Cristóvão"
+          endereco="Avenida João XXIII, 456, Zona Leste"
+          cidadeEstado="Teresina, PI"
+          quarto={4}
+          banheiro={2}
+          area={120}
+          numero="456"
+          bairro="Zona Leste"
+          imagemPrincipal="image2.jpg"
         />
         <HouseCard
-          price="R$4.550/mês"
-          name="Casa Luxuosa no Ininga"
-          location="Rua Francisco de Almeida Neto, Ininga"
-          city="Teresina, PI"
-          beds={4}
-          baths={3}
-          size="150m²"
-          image="https://media.istockphoto.com/id/1294620492/pt/foto/3d-rendering-of-modern-house-in-luxurious-style-in-evening.jpg?s=2048x2048&w=is&k=20&c=PrTyjFn5YVUAXl9_-_5uYYkMyB_PgxunMXRtWSpe3os="
+          aluguelValor="R$4.550/mês"
+          titulo="Casa Luxuosa no Ininga"
+          endereco="Rua Francisco de Almeida Neto, Ininga, 789"
+          cidadeEstado="Teresina, PI"
+          quarto={4}
+          banheiro={3}
+          area={150}
+          numero="789"
+          bairro="Ininga"
+          imagemPrincipal="image3.jpg"
         />
         <HouseCard
-          price="R$2.400/mês"
-          name="Residencial Poti Velho"
-          location="Rua Santa Maria da Codipi, Poti Velho"
-          city="Teresina, PI"
-          beds={3}
-          baths={2}
-          size="95m²"
-          image="https://i.imgur.com/Z18jPaq.png"
+          aluguelValor="R$2.400/mês"
+          titulo="Residencial Poti Velho"
+          endereco="Rua Santa Maria da Codipi, 321, Poti Velho"
+          cidadeEstado="Teresina, PI"
+          quarto={3}
+          banheiro={2}
+          area={95}
+          numero="321"
+          bairro="Poti Velho"
+          imagemPrincipal="image4.jpg"
         />
         <HouseCard
-          price="R$1.500/mês"
-          name="Apartamento Bairro Vermelha"
-          location="Rua Olavo Bilac, Bairro Vermelha"
-          city="Teresina, PI"
-          beds={2}
-          baths={2}
-          size="70m²"
-          image="https://cdn.imoview.com.br/torreurbanismo/Imoveis/672/r2el2-whatsapp-image-2024-09-03-at-105811-1725373790.jpeg?1725373790"
+          aluguelValor="R$1.500/mês"
+          titulo="Apartamento Bairro Vermelha"
+          endereco="Rua Olavo Bilac, 987, Bairro Vermelha"
+          cidadeEstado="Teresina, PI"
+          quarto={2}
+          banheiro={2}
+          area={70}
+          numero="987"
+          bairro="Bairro Vermelha"
+          imagemPrincipal="image5.jpg"
         />
         <HouseCard
-          price="R$1.600/mês"
-          name="Condomínio Parque Piauí"
-          location="Rua das Flores, Bairro Parque Piauí"
-          city="Teresina, PI"
-          beds={4}
-          baths={2}
-          size="80m²"
-          image="https://i.imgur.com/9bs7CpV.png"
+          aluguelValor="R$1.600/mês"
+          titulo="Condomínio Parque Piauí"
+          endereco="Rua das Flores, 654, Bairro Parque Piauí"
+          cidadeEstado="Teresina, PI"
+          quarto={4}
+          banheiro={2}
+          area={80}
+          numero="654"
+          bairro="Parque Piauí"
+          imagemPrincipal="image6.jpg"
         />
       </div>
       <div className="mb-28">

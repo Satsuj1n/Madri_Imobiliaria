@@ -28,6 +28,13 @@ router.get(
   )
 );
 
+router.get(
+  "/",
+  asyncHandler((req: Request, res: Response) =>
+    imovelController.getAllImoveis(req, res)
+  )
+);
+
 // Nova rota para upload de imagens após o imóvel ser criado
 router.put(
   "/:id",
