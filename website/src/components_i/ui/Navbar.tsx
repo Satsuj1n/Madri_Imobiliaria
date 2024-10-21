@@ -82,6 +82,10 @@ const Navbar = () => {
     navigate("/criar-imovel/1");
   };
 
+  const handleAluguelClick = () => {
+    navigate("/aluguel");
+  };
+
   return (
     <nav className="bg-white shadow-md w-full fixed z-50">
       <div
@@ -106,7 +110,11 @@ const Navbar = () => {
             isOpen ? "hidden" : ""
           }`}
         >
-          <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
+          <a
+            href=""
+            onClick={handleAluguelClick}
+            className="text-sm md:text-base lg:text-md text-gray-700"
+          >
             Alugar
           </a>
           <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">

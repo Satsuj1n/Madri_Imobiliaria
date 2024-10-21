@@ -8,6 +8,7 @@ import ChangePasswordPage from "./(root)/(trocar-senha)/TrocarSenha"; // Ajuste 
 import CriarImovel1 from "./(root)/(criar-imovel)/CriarImovel1"; // Página 1 para criar imóvel
 import CriarImovel2 from "./(root)/(criar-imovel)/CriarImovel2"; // Página 2 para criar imóvel
 import CriarImovel3 from "./(root)/(criar-imovel)/CriarImovel3"; // Página 3 para criar imóvel
+import ImoveisAluguel from "./(root)/(aluguel)/ImoveisAluguel"; // Página de aluguel
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         {/* Parte 2 - Criar Imóvel */}
         <Route path="/criar-imovel/3" element={<CriarImovel3 />} />{" "}
         {/* Parte 3 - Criar Imóvel */}
+        <Route path="/aluguel" element={<ImoveisAluguel />} />{" "}
       </Routes>
     </Router>
   );
