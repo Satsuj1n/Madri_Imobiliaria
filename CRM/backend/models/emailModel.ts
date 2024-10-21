@@ -14,8 +14,8 @@ export default class EmailModel {
       port: 465,
       secure: true,
       auth: {
-        user: "", // inserir email do cliente
-        pass: "", // inserir senha do email do cliente
+        user: "suporte@madriimobiliaria.com", 
+        pass: "d*4g%7XqPb>L3uB=", 
       },
       tls: {
         rejectUnauthorized: false,
@@ -25,7 +25,7 @@ export default class EmailModel {
 
   async enviarEmail(descricaoTXT: string): Promise<void> {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: "", // inserir email do cliente
+      from: "suporte@madriimobiliaria.com", 
       to: this.destinatario,
       subject: this.assunto,
       text: descricaoTXT,
@@ -41,7 +41,7 @@ export default class EmailModel {
 
   async enviarEmailHTML(descricaoHTML: string): Promise<void> {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: "", // inserir email do cliente
+      from: "suporte@madriimobiliaria.com",
       to: this.destinatario,
       subject: this.assunto,
       html: descricaoHTML,
@@ -57,7 +57,7 @@ export default class EmailModel {
 
   async enviarEmailComAnexo(descricaoTXT: string, pathAnexo: string, nomeArquivo: string): Promise<void> {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: "", // inserir email do cliente
+      from: "suporte@madriimobiliaria.com",
       to: this.destinatario,
       subject: this.assunto,
       text: descricaoTXT,
