@@ -20,6 +20,7 @@ const opts = {
 };
 exports.default = (passport) => {
     passport.use(new passport_jwt_1.Strategy(opts, (jwt_payload, done) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("JWT Payload:", jwt_payload);
         try {
             const cliente = yield cliente_1.default.findById(jwt_payload.id);
             if (cliente) {

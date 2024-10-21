@@ -17,7 +17,9 @@ const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
 // Middleware para analisar o corpo das requisições em JSON
-app.use(express_1.default.json());
+// Middleware para aumentar o limite de tamanho de upload
+app.use(express_1.default.json({ limit: "10mb" })); // Para requisições JSON
+app.use(express_1.default.urlencoded({ limit: "10mb", extended: true })); // Para requisições URL-encoded
 // Middleware para habilitar CORS e permitir comunicações cross-origin
 app.use((0, cors_1.default)());
 // Inicializar o Passport

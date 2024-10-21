@@ -8,30 +8,67 @@ export interface Cliente {
 
 export interface ImovelDocument extends Document {
   titulo: string;
+  situacao?: string;
   descricao?: string;
-  valor: number;
-  localizacao: string;
+  endereco: string;
+  cep: number;
   area: number;
-  quarto?: number;
-  banheiro?: number;
+  quarto: number;
+  banheiro: number;
   tipo: "venda" | "aluguel";
-  categoria: "apartamentos" | "casas" | "temporada" | "terrenos" | "comercio-industria";
+  categoria:
+    | "andar corrido"
+    | "apartamento"
+    | "área privativa"
+    | "casa"
+    | "chácara"
+    | "cobertura"
+    | "fazenda"
+    | "flat"
+    | "galpão"
+    | "garagem"
+    | "kitnet"
+    | "loja"
+    | "lote"
+    | "lote em condomínio"
+    | "prédio"
+    | "sala"
+    | "salão"
+    | "sítio";
   cliente: Cliente;
-  message?: string;
   status: "pendente" | "aprovado";
-  clientListingId?: string;
-  originLeadId?: string;
-  temperaturaLead?: "baixa" | "media" | "alta";
-  dataCadastro: Date;
-  imagem?: string;
-  imagens?: string[];
+  IPTUAnual?: number;
+  IPTUMensal?: number;
+  aluguelValor?: number; // Preço de aluguel se "aluguel" for selecionado
+  valor?: number; // Preço de venda se "venda" for selecionado
+  numero?: string;
+  bairro?: string;
+  regiao?: string;
+  subRegiao?: string;
+  cidadeEstado?: string;
+  tipoComplemento?: string;
+  complemento?: string;
+  torreBloco?: string;
+  lazer?: string[];
+  areaExterna?: number;
+  areaInterna?: number;
+  metrosFrente?: number;
+  metrosFundo?: number;
+  metrosDireito?: number;
+  metrosEsquerdo?: number;
+  zonaUso?: string;
+  coeficienteAproveitamento?: number;
+
+  imagemPrincipal?: string; // URL da imagem principal
+  outrasImagens?: string[]; // Array com URLs das imagens adicionais
 }
 
 const ImovelSchema: Schema = new Schema({
   titulo: { type: String, required: true },
+  situacao: { type: String, enum: ["disponivel", "ocupado"] },
   descricao: { type: String },
-  valor: { type: Number, required: true },
-  localizacao: { type: String, required: true },
+  endereco: { type: String, required: true },
+  cep: { type: Number, required: true },
   area: { type: Number, required: true },
   quarto: { type: Number },
   banheiro: { type: Number },
@@ -42,7 +79,26 @@ const ImovelSchema: Schema = new Schema({
   },
   categoria: {
     type: String,
-    enum: ["apartamentos", "casas", "temporada", "terrenos", "comercio-industria"],
+    enum: [
+      "andar corrido",
+      "apartamento",
+      "área privativa",
+      "casa",
+      "chácara",
+      "cobertura",
+      "fazenda",
+      "flat",
+      "galpão",
+      "garagem",
+      "kitnet",
+      "loja",
+      "lote",
+      "lote em condomínio",
+      "prédio",
+      "sala",
+      "salão",
+      "sítio",
+    ],
     required: true,
   },
   cliente: {
@@ -50,21 +106,39 @@ const ImovelSchema: Schema = new Schema({
     email: { type: String, required: true },
     telefone: { type: String, required: true },
   },
-  message: { type: String },
   status: {
     type: String,
     enum: ["pendente", "aprovado"],
     default: "pendente",
   },
-  clientListingId: { type: String },
-  originLeadId: { type: String },
-  temperaturaLead: {
-    type: String,
-    enum: ["baixa", "media", "alta"],
-  },
-  dataCadastro: { type: Date, default: Date.now },
-  imagem: { type: String },
-  imagens: [{ type: String }],
+
+  IPTUAnual: { type: Number },
+  IPTUMensal: { type: Number },
+  aluguelValor: { type: Number },
+  valor: { type: Number },
+
+  // Novos campos
+  numero: { type: String },
+  bairro: { type: String },
+  regiao: { type: String },
+  subRegiao: { type: String },
+  cidadeEstado: { type: String },
+  tipoComplemento: { type: String },
+  complemento: { type: String },
+  torreBloco: { type: String },
+  lazer: [{ type: String }],
+  areaExterna: { type: Number },
+  areaInterna: { type: Number },
+  metrosFrente: { type: Number },
+  metrosFundo: { type: Number },
+  metrosDireito: { type: Number },
+  metrosEsquerdo: { type: Number },
+  zonaUso: { type: String },
+  coeficienteAproveitamento: { type: Number },
+
+  // Campos para imagens
+  imagemPrincipal: { type: String }, // URL da imagem principal
+  outrasImagens: { type: [String] }, // Array de URLs de imagens adicionais
 });
 
 export default mongoose.model<ImovelDocument>("Imovel", ImovelSchema);

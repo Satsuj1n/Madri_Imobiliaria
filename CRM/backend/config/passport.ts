@@ -1,5 +1,9 @@
 import { PassportStatic } from "passport";
-import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from "passport-jwt";
+import {
+  Strategy as JwtStrategy,
+  ExtractJwt,
+  StrategyOptions,
+} from "passport-jwt";
 import Cliente from "../models/cliente";
 
 const opts: StrategyOptions = {
@@ -10,6 +14,7 @@ const opts: StrategyOptions = {
 export default (passport: PassportStatic) => {
   passport.use(
     new JwtStrategy(opts, async (jwt_payload, done) => {
+      console.log("JWT Payload:", jwt_payload);
       try {
         const cliente = await Cliente.findById(jwt_payload.id);
         if (cliente) {

@@ -3,10 +3,17 @@ import Cliente from "../models/cliente";
 import jwt from "jsonwebtoken";
 
 // Função de Registro com bcrypt habilitado no modelo
-export const signup = async (req: Request, res: Response): Promise<Response> => {
-  const { email, senha, nomeRazaoSocial, cpfCnpj, telefone, relacionamento } = req.body;
+export const signup = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { email, senha, nomeRazaoSocial, cpfCnpj, telefone, relacionamento } =
+    req.body;
 
-  console.log("Recebendo requisição de signup com os seguintes dados:", req.body);
+  console.log(
+    "Recebendo requisição de signup com os seguintes dados:",
+    req.body
+  );
 
   try {
     // Verificar se o usuário já existe
@@ -27,7 +34,10 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
       isAdmin: false,
     });
 
-    console.log("Cliente criado com sucesso, prestes a salvar no banco de dados:", cliente);
+    console.log(
+      "Cliente criado com sucesso, prestes a salvar no banco de dados:",
+      cliente
+    );
 
     // Salvar o cliente no banco de dados
     await cliente.save();
@@ -37,7 +47,9 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
     return res.status(201).json({ message: "Usuário registrado com sucesso" });
   } catch (err) {
     console.error("Erro ao registrar o usuário:", err);
-    return res.status(500).json({ message: "Erro no registro. Por favor, tente novamente." });
+    return res
+      .status(500)
+      .json({ message: "Erro no registro. Por favor, tente novamente." });
   }
 };
 
@@ -65,6 +77,9 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
     const payload = {
       id: cliente._id,
       isAdmin: cliente.isAdmin,
+      email: cliente.email,
+      nome: cliente.nomeRazaoSocial,
+      telefone: cliente.telefone,
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
