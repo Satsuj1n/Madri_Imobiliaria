@@ -4,12 +4,14 @@ import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
 import { Button } from "../../components_i/ui/Button";
 import { ProgressBar } from "components_i/ui/ProgressBar"; // Importando a barra de progresso
+import { ReactComponent as LoadingIcon } from "../../assets/icons/loading.svg"; // Importando o ícone de carregamento
 
 const AdicionarImagens = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { imovelId } = location.state || {};
 
+  const [loading, setLoading] = useState(false);
   const [imagemPrincipal, setImagemPrincipal] = useState<File | null>(null);
   const [outrasImagens, setOutrasImagens] = useState<File[]>([]);
 
@@ -28,6 +30,16 @@ const AdicionarImagens = () => {
     }
   };
 
+  const removePrincipalImage = () => {
+    setImagemPrincipal(null);
+  };
+
+  const removeImage = (indexToRemove: number) => {
+    setOutrasImagens((prev) =>
+      prev.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault(); // Impede que o botão "Voltar" dispare o envio do formulário
     navigate("/criar-imovel/2");
@@ -35,10 +47,12 @@ const AdicionarImagens = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Inicia o carregamento
     const token = localStorage.getItem("token");
 
     if (!token) {
       console.error("Token não encontrado!");
+      setLoading(false); // Para o carregamento caso ocorra um erro
       return;
     }
 
@@ -81,13 +95,15 @@ const AdicionarImagens = () => {
       }
     } catch (error) {
       console.error("Erro ao adicionar imagens:", error);
+    } finally {
+      setLoading(false); // Para o carregamento após a conclusão
     }
   };
 
   return (
     <>
       <Navbar />
-      <div className="container mx-auto p-4 mb-80">
+      <div className="container mx-auto p-4 mb-56">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center mt-24">
           Adicionar Imagens ao Imóvel
         </h1>
@@ -95,85 +111,126 @@ const AdicionarImagens = () => {
         {/* Inclui a barra de progresso */}
         <ProgressBar step={3} />
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col items-center justify-center"
-        >
-          {/* Estilizando o box de upload com mais arredondado e com visualização */}
-          <div className="mb-4 w-full max-w-md text-center">
-            <label className="block text-lg font-medium mb-2">
-              Imagem Principal
-            </label>
-            <div className="border-2 border-dashed border-blue-500 rounded-lg p-4 cursor-pointer relative">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleImageChange(e, true)}
-                className="absolute inset-0 opacity-0 cursor-pointer"
-              />
-              <span className="text-gray-500">
-                {imagemPrincipal
-                  ? "Imagem selecionada"
-                  : "Clique aqui para selecionar a imagem principal"}
-              </span>
-            </div>
+        {/* Exibe o SVG de carregamento centralizado quando estiver no estado de carregamento */}
+        {loading && (
+          <div className="flex justify-center items-center mt-12">
+            <LoadingIcon className="w-32 h-32" />
+          </div>
+        )}
 
-            {/* Pré-visualização da imagem principal */}
-            {imagemPrincipal && (
-              <div className="mt-4">
-                <img
-                  src={URL.createObjectURL(imagemPrincipal)}
-                  alt="Imagem Principal"
-                  className="rounded-lg w-64 h-64 object-cover mx-auto"
+        {/* Exibe o formulário apenas se não estiver carregando */}
+        {!loading && (
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col items-center justify-center"
+          >
+            {/* Estilizando o box de upload com mais arredondado e com visualização */}
+            <div className="mb-4 w-full max-w-md text-center">
+              <label className="block text-lg font-medium mb-2">
+                Imagem Principal
+              </label>
+              <div className="border-2 border-dashed border-blue-500 rounded-lg p-4 cursor-pointer relative">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageChange(e, true)}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
                 />
+                <span className="text-gray-500">
+                  {imagemPrincipal
+                    ? "Imagem selecionada"
+                    : "Clique aqui para selecionar a imagem principal"}
+                </span>
               </div>
-            )}
-          </div>
 
-          {/* Outras imagens */}
-          <div className="mb-4 w-full max-w-md text-center">
-            <label className="block text-lg font-medium mb-2">
-              Outras Imagens (Máximo de 10)
-            </label>
-            <div className="border-2 border-dashed border-blue-500 rounded-lg p-4 cursor-pointer relative">
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => handleImageChange(e, false)}
-                className="absolute inset-0 opacity-0 cursor-pointer"
-              />
-              <span className="text-gray-500">
-                {outrasImagens.length > 0
-                  ? `${outrasImagens.length} imagens selecionadas`
-                  : "Clique aqui para selecionar várias imagens"}
-              </span>
+              {/* Pré-visualização da imagem principal */}
+              {imagemPrincipal && (
+                <div className="mt-4 relative">
+                  {/* Botão para remover a imagem principal */}
+                  <button
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center z-10"
+                    onClick={removePrincipalImage}
+                    type="button"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "16px", // Ajustando o tamanho do X
+                      lineHeight: "1", // Remove espaço extra
+                    }}
+                  >
+                    <span style={{ marginBottom: "2px" }}>&times;</span>
+                  </button>
+                  <img
+                    src={URL.createObjectURL(imagemPrincipal)}
+                    alt="Imagem Principal"
+                    className="rounded-lg w-64 h-64 object-cover mx-auto"
+                  />
+                </div>
+              )}
             </div>
 
-            {/* Pré-visualização das outras imagens */}
-            {outrasImagens.length > 0 && (
-              <div className="grid grid-cols-3 gap-2 mt-4">
-                {outrasImagens.map((imagem, index) => (
-                  <img
-                    key={index}
-                    src={URL.createObjectURL(imagem)}
-                    alt={`Outras Imagens ${index + 1}`}
-                    className="rounded-lg w-32 h-32 object-cover"
-                  />
-                ))}
+            {/* Outras imagens */}
+            <div className="mb-4 w-full max-w-md text-center">
+              <label className="block text-lg font-medium mb-2">
+                Outras Imagens (Máximo de 10)
+              </label>
+              <div className="border-2 border-dashed border-blue-500 rounded-lg p-4 cursor-pointer relative">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => handleImageChange(e, false)}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+                <span className="text-gray-500">
+                  {outrasImagens.length > 0
+                    ? `${outrasImagens.length} imagens selecionadas`
+                    : "Clique aqui para selecionar várias imagens"}
+                </span>
               </div>
-            )}
-          </div>
 
-          <div className="mt-8 flex justify-between w-full max-w-md">
-            <Button variant="default" onClick={handleBack}>
-              Voltar
-            </Button>
-            <Button variant="default" type="submit">
-              Criar Imóvel
-            </Button>
-          </div>
-        </form>
+              {/* Pré-visualização das outras imagens */}
+              {outrasImagens.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mt-4 relative">
+                  {outrasImagens.map((imagem, index) => (
+                    <div key={index} className="relative">
+                      {/* Botão para remover imagem */}
+                      <button
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center z-10"
+                        onClick={() => removeImage(index)}
+                        type="button"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "16px", // Ajustando o tamanho do X
+                          lineHeight: "1", // Remove espaço extra
+                        }}
+                      >
+                        <span style={{ marginBottom: "2px" }}>&times;</span>
+                      </button>
+                      <img
+                        src={URL.createObjectURL(imagem)}
+                        alt={`Outras Imagens ${index + 1}`}
+                        className="rounded-lg w-32 h-32 object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-8 flex justify-between w-full max-w-md">
+              <Button variant="default" onClick={handleBack} disabled={loading}>
+                Voltar
+              </Button>
+              <Button variant="default" type="submit" disabled={loading}>
+                Enviar Imagens
+              </Button>
+            </div>
+          </form>
+        )}
       </div>
       <Footer />
     </>
