@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components_i/ui/Navbar";
-import HouseCard from "../../components_i/ui/HouseCard";
 import BrowseProperties from "components_i/ui/BrowseProperties";
 import { Button } from "components_i/ui/Button";
 import PropertyListing from "components_i/ui/PropertyListing";

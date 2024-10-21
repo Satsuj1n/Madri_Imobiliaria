@@ -2,11 +2,43 @@ import React, { useState } from "react";
 import { Button } from "./Button";
 import { ReactComponent as DownArrowIcon } from "../../assets/icons/DownArrowIcon.svg"; // Substitua pelo seu ícone de seta para baixo
 
-const PropertySearch = () => {
-  const [localizacao, setLocalizacao] = useState("Nova York, EUA");
+const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
+  const [localizacao, setLocalizacao] = useState("");
   const [dataMudanca, setDataMudanca] = useState("");
   const [faixaPreco, setFaixaPreco] = useState("$500–$2,500");
-  const [tipoPropriedade, setTipoPropriedade] = useState("Casas");
+  const [tipoPropriedade, setTipoPropriedade] = useState("casa");
+
+  // As categorias de propriedades conforme o seu banco de dados
+  const categorias = [
+    "andar corrido",
+    "apartamento",
+    "área privativa",
+    "casa",
+    "chácara",
+    "cobertura",
+    "fazenda",
+    "flat",
+    "galpão",
+    "garagem",
+    "kitnet",
+    "loja",
+    "lote",
+    "lote em condomínio",
+    "prédio",
+    "sala",
+    "salão",
+    "sítio",
+  ];
+
+  // Função para enviar os filtros ao componente pai
+  const handleSearch = () => {
+    onSearch({
+      localizacao,
+      dataMudanca,
+      faixaPreco,
+      tipoPropriedade,
+    });
+  };
 
   return (
     <div className="flex flex-col items-center md:items-start relative z-10 ">
@@ -21,6 +53,7 @@ const PropertySearch = () => {
               onChange={(e) => setLocalizacao(e.target.value)}
               className="font-bold text-[18px] border-none outline-none"
               type="text"
+              placeholder="Digite a localização"
             />
           </div>
         </div>
@@ -54,9 +87,9 @@ const PropertySearch = () => {
                 onChange={(e) => setFaixaPreco(e.target.value)}
                 className="font-bold text-[18px] border-none outline-none bg-white appearance-none p-2"
               >
-                <option value="$500–$2,500">$500–$2,500</option>
-                <option value="$2,500–$5,000">$2,500–$5,000</option>
-                <option value="$5,000+">$5,000+</option>
+                <option value="R$0–R$2,500">R$0–R$2,500</option>
+                <option value="R$2,500–R$5,000">R$2,500–R$5,000</option>
+                <option value="R$5,000+">R$5,000+</option>
               </select>
               {/* Ícone da seta para baixo */}
               <DownArrowIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500" />
@@ -77,9 +110,12 @@ const PropertySearch = () => {
                 onChange={(e) => setTipoPropriedade(e.target.value)}
                 className="font-bold text-[18px] border-none outline-none bg-white appearance-none p-2"
               >
-                <option value="Casas">Casas</option>
-                <option value="Apartamentos">Apartamentos</option>
-                <option value="Condomínios">Condomínios</option>
+                {/* Mapeia as categorias definidas no banco de dados */}
+                {categorias.map((categoria) => (
+                  <option key={categoria} value={categoria}>
+                    {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+                  </option>
+                ))}
               </select>
               {/* Ícone da seta para baixo */}
               <DownArrowIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500" />
@@ -88,7 +124,7 @@ const PropertySearch = () => {
         </div>
 
         {/* Botão de Busca */}
-        <Button variant="large" size="large">
+        <Button variant="large" size="large" onClick={handleSearch}>
           Buscar
         </Button>
       </div>
@@ -128,14 +164,22 @@ const PropertySearch = () => {
             onChange={(e) => setTipoPropriedade(e.target.value)}
             className="p-6 border rounded-md w-full appearance-none"
           >
-            <option value="Casas">Casas</option>
-            <option value="Apartamentos">Apartamentos</option>
-            <option value="Condomínios">Condomínios</option>
+            {/* Mapeia as categorias definidas no banco de dados */}
+            {categorias.map((categoria) => (
+              <option key={categoria} value={categoria}>
+                {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+              </option>
+            ))}
           </select>
           {/* Ícone da seta para baixo no mobile */}
           <DownArrowIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-500" />
         </div>
-        <Button variant="default" size="md" className="w-full">
+        <Button
+          variant="default"
+          size="md"
+          className="w-full"
+          onClick={handleSearch}
+        >
           Buscar
         </Button>
       </div>
