@@ -88,6 +88,7 @@ const AdicionarImagens = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Imagens adicionadas:", responseData);
+        sessionStorage.setItem("message", "Imóvel Criado com Sucesso");
         navigate("/"); // Redireciona para a home após o upload
       } else {
         const errorData = await response.json();

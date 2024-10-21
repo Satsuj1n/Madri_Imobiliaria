@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components_i/ui/Navbar";
 import HouseCard from "../../components_i/ui/HouseCard";
 import BrowseProperties from "components_i/ui/BrowseProperties";
@@ -7,6 +7,24 @@ import PropertyListing from "components_i/ui/PropertyListing";
 import Footer from "components_i/ui/Footer";
 
 const LandingPage = () => {
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Verifica se há uma mensagem no sessionStorage
+    const successMessage = sessionStorage.getItem("message");
+    if (successMessage) {
+      setMessage(successMessage);
+
+      // Remove a mensagem do sessionStorage após exibir
+      sessionStorage.removeItem("message");
+
+      // Remove a mensagem da tela após 3 segundos
+      setTimeout(() => {
+        setMessage(null);
+      }, 4000);
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -185,6 +203,24 @@ const LandingPage = () => {
         </div>
         <Footer />
       </div>
+      {/* Exibe a mensagem de sucesso no canto inferior direito */}
+      {message && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            backgroundColor: "#0053f8",
+            fontWeight: "bold",
+            color: "white",
+            padding: "10px 20px",
+            borderRadius: "8px",
+            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          {message}
+        </div>
+      )}
     </>
   );
 };
