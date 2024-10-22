@@ -89,16 +89,19 @@ const ImoveisAluguel: FC = () => {
         matchesCategory
       );
 
-      // Filtra pela data de mudança se estiver preenchido, e compara com as datas de disponibilidade
-      const matchesDate = filters.dataMudanca
-        ? new Date(filters.dataMudanca) >=
-            new Date(imovel.dataInicioDisponivel || "") &&
-          new Date(filters.dataMudanca) <=
-            new Date(imovel.dataFimDisponivel || "")
-        : true; // Se não for preenchido, passa todos os imóveis
+      // Corrigindo a lógica de comparação de datas de entrada e saída
+      const matchesDate =
+        filters.dataEntrada && filters.dataSaida
+          ? imovel.dataInicioDisponivel && imovel.dataFimDisponivel
+            ? new Date(filters.dataEntrada) >=
+                new Date(imovel.dataInicioDisponivel.substring(0, 10)) &&
+              new Date(filters.dataSaida) <=
+                new Date(imovel.dataFimDisponivel.substring(0, 10))
+            : true // Se os dados de disponibilidade estiverem indefinidos, considera que passa no filtro
+          : true; // Se as datas não forem preenchidas, passa todos os imóveis
 
       console.log(
-        `Imóvel: ${imovel.titulo}, Data: ${filters.dataMudanca}, Passou no filtro de data?`,
+        `Imóvel: ${imovel.titulo}, Data de Entrada: ${filters.dataEntrada}, Data de Saída: ${filters.dataSaida}, Passou no filtro de data?`,
         matchesDate
       );
 
@@ -130,15 +133,14 @@ const ImoveisAluguel: FC = () => {
   // Função chamada quando o usuário realiza a busca com os filtros
   const handleSearch = (newFilters: any) => {
     console.log("Filtros recebidos:", newFilters);
-    
+
     // Se a categoria não estiver selecionada (valor vazio), considera que não foi aplicado o filtro de categoria
     const categoria = newFilters.tipoPropriedade || "";
-  
+
     setFilters({ ...newFilters, categoria });
     const filtrados = applyFilters(imoveis, { ...newFilters, categoria });
     setFilteredImoveis(filtrados);
   };
-  
 
   return (
     <>

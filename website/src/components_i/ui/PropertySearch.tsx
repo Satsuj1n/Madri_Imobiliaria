@@ -4,9 +4,10 @@ import { ReactComponent as DownArrowIcon } from "../../assets/icons/DownArrowIco
 
 const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
   const [localizacao, setLocalizacao] = useState("");
-  const [dataMudanca, setDataMudanca] = useState("");
-  const [faixaPreco, setFaixaPreco] = useState("$500–$2,500");
-  const [tipoPropriedade, setTipoPropriedade] = useState("casa");
+  const [dataEntrada, setDataEntrada] = useState("");
+  const [dataSaida, setDataSaida] = useState("");
+  const [faixaPreco, setFaixaPreco] = useState("R$0–R$2,500");
+  const [tipoPropriedade, setTipoPropriedade] = useState("");
 
   // As categorias de propriedades conforme o seu banco de dados
   const categorias = [
@@ -34,24 +35,25 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
   const handleSearch = () => {
     onSearch({
       localizacao,
-      dataMudanca,
+      dataEntrada,
+      dataSaida,
       faixaPreco,
       tipoPropriedade,
     });
   };
 
   return (
-    <div className="flex flex-col items-center md:items-start relative z-10 ">
+    <div className="flex flex-col items-center md:items-start relative z-10">
       {/* Versão Desktop */}
-      <div className="hidden md:flex bg-white p-6 rounded-lg shadow-md w-full md:w-[980px] justify-between items-center mt-6">
+      <div className="hidden md:flex bg-white p-4 rounded-lg shadow-md w-full md:w-[980px] justify-between items-center mt-4">
         {/* Bloco de Localização */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
           <div>
-            <p className="text-gray-500 text-[16px]">Localização</p>
+            <p className="text-gray-500 text-[14px]">Localização</p>
             <input
               value={localizacao}
               onChange={(e) => setLocalizacao(e.target.value)}
-              className="font-bold text-[18px] border-none outline-none"
+              className="font-bold text-[16px] border-none outline-none"
               type="text"
               placeholder="Digite a localização"
             />
@@ -59,33 +61,49 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
         </div>
 
         {/* Divisor */}
-        <div className="border-l border-gray-300 h-12"></div>
+        <div className="border-l border-gray-300 h-10"></div>
 
-        {/* Bloco de Data */}
-        <div className="flex items-center space-x-4">
+        {/* Bloco de Data de Entrada */}
+        <div className="flex items-center space-x-2">
           <div>
-            <p className="text-gray-500 text-[16px]">Quando</p>
+            <p className="text-gray-500 text-[14px] ml-1">Data de Entrada</p>
             <input
-              value={dataMudanca}
-              onChange={(e) => setDataMudanca(e.target.value)}
-              className="font-bold text-[18px] border-none outline-none"
+              value={dataEntrada}
+              onChange={(e) => setDataEntrada(e.target.value)}
+              className="font-bold text-[16px] border-none outline-none"
               type="date"
             />
           </div>
         </div>
 
         {/* Divisor */}
-        <div className="border-l border-gray-300 h-12"></div>
+        <div className="border-l border-gray-300 h-10"></div>
+
+        {/* Bloco de Data de Saída */}
+        <div className="flex items-center space-x-2">
+          <div>
+            <p className="text-gray-500 text-[14px] ml-1">Data de Saída</p>
+            <input
+              value={dataSaida}
+              onChange={(e) => setDataSaida(e.target.value)}
+              className="font-bold text-[16px] border-none outline-none"
+              type="date"
+            />
+          </div>
+        </div>
+
+        {/* Divisor */}
+        <div className="border-l border-gray-300 h-10"></div>
 
         {/* Bloco de Preço */}
-        <div className="flex items-center space-x-4 relative">
+        <div className="flex items-center space-x-2 relative">
           <div>
-            <p className="text-gray-500 text-[16px]">Preço</p>
+            <p className="text-gray-500 text-[14px] ml-1">Preço</p>
             <div className="relative">
               <select
                 value={faixaPreco}
                 onChange={(e) => setFaixaPreco(e.target.value)}
-                className="font-bold text-[18px] border-none outline-none bg-white appearance-none p-2"
+                className="font-bold text-[16px] border-none outline-none bg-white appearance-none p-1"
               >
                 <option value="R$0–R$2,500">R$0–R$2,500</option>
                 <option value="R$2,500–R$5,000">R$2,500–R$5,000</option>
@@ -98,28 +116,26 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
         </div>
 
         {/* Divisor */}
-        <div className="border-l border-gray-300 h-12"></div>
+        <div className="border-l border-gray-300 h-10"></div>
 
         {/* Bloco de Tipo de Propriedade */}
-        <div className="flex items-center space-x-4 relative">
+        <div className="flex items-center space-x-2 relative">
           <div>
-            <p className="text-gray-500 text-[16px]">Tipo de Propriedade</p>
+            <p className="text-gray-500 text-[14px] ml-1">Tipo de Propriedade</p>
             <div className="relative">
               <select
                 value={tipoPropriedade}
                 onChange={(e) => setTipoPropriedade(e.target.value)}
-                className="font-bold text-[18px] border-none outline-none bg-white appearance-none p-2"
+                className="font-bold text-[16px] border-none outline-none bg-white appearance-none p-1"
               >
                 <option value="">Todas</option>{" "}
-                {/* Opção vazia */}
-                {/* Mapeia as categorias definidas no banco de dados */}
+                {/* Opção vazia para remover o filtro */}
                 {categorias.map((categoria) => (
                   <option key={categoria} value={categoria}>
                     {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
                   </option>
                 ))}
               </select>
-
               {/* Ícone da seta para baixo */}
               <DownArrowIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500" />
             </div>
@@ -143,9 +159,16 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
         />
         <input
           type="date"
-          placeholder="Data de Mudança"
-          value={dataMudanca}
-          onChange={(e) => setDataMudanca(e.target.value)}
+          placeholder="Data de Entrada"
+          value={dataEntrada}
+          onChange={(e) => setDataEntrada(e.target.value)}
+          className="mb-4 p-2 border rounded-md w-full"
+        />
+        <input
+          type="date"
+          placeholder="Data de Saída"
+          value={dataSaida}
+          onChange={(e) => setDataSaida(e.target.value)}
           className="mb-4 p-2 border rounded-md w-full"
         />
         <div className="relative w-full mb-4">
@@ -154,9 +177,9 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
             onChange={(e) => setFaixaPreco(e.target.value)}
             className="p-6 border rounded-md w-full appearance-none"
           >
-            <option value="$500–$2,500">$500–$2,500</option>
-            <option value="$2,500–$5,000">$2,500–$5,000</option>
-            <option value="$5,000+">$5,000+</option>
+            <option value="R$0–R$2,500">R$0–R$2,500</option>
+            <option value="R$2,500–R$5,000">R$2,500–R$5,000</option>
+            <option value="R$5,000+">R$5,000+</option>
           </select>
           {/* Ícone da seta para baixo no mobile */}
           <DownArrowIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-500" />
@@ -167,7 +190,8 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
             onChange={(e) => setTipoPropriedade(e.target.value)}
             className="p-6 border rounded-md w-full appearance-none"
           >
-            {/* Mapeia as categorias definidas no banco de dados */}
+            <option value="">Todas</option>{" "}
+            {/* Opção vazia para remover o filtro */}
             {categorias.map((categoria) => (
               <option key={categoria} value={categoria}>
                 {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
