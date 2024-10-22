@@ -14,6 +14,7 @@ interface HouseCardProps {
   banheiro: number;
   area: number;
   imagemPrincipal: string;
+  tipo: string; // Adicionada nova prop para indicar o tipo do imóvel (aluguel ou venda)
 }
 
 const HouseCard: React.FC<HouseCardProps> = ({
@@ -27,6 +28,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
   banheiro,
   area,
   imagemPrincipal,
+  tipo, // Recebendo a prop tipo
 }) => {
   return (
     <div className={`border rounded-lg shadow-md bg-white`}>
@@ -41,9 +43,12 @@ const HouseCard: React.FC<HouseCardProps> = ({
         {/* Preço */}
         <div className="text-[#0053f8] font-bold text-2xl">
           {aluguelValor}
-          <span className="text-[#000929] text-base font-normal opacity-50">
-            / mês
-          </span>
+          {tipo === "aluguel" && ( // Exibe "/mês" apenas se for aluguel
+            <span className="text-[#000929] text-base font-normal opacity-50">
+              {" "}
+              / mês
+            </span>
+          )}
         </div>
 
         {/* Nome da Propriedade */}

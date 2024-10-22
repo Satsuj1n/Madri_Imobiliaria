@@ -52,6 +52,7 @@ const PropertyListing = () => {
           numero="123"
           bairro="Centro"
           imagemPrincipal="image1.jpg"
+          tipo="aluguel"
         />
         <HouseCard
           aluguelValor="R$2.700/mês"
@@ -64,6 +65,7 @@ const PropertyListing = () => {
           numero="456"
           bairro="Zona Leste"
           imagemPrincipal="image2.jpg"
+          tipo="aluguel"
         />
         <HouseCard
           aluguelValor="R$4.550/mês"
@@ -76,6 +78,7 @@ const PropertyListing = () => {
           numero="789"
           bairro="Ininga"
           imagemPrincipal="image3.jpg"
+          tipo="aluguel"
         />
         <HouseCard
           aluguelValor="R$2.400/mês"
@@ -88,6 +91,7 @@ const PropertyListing = () => {
           numero="321"
           bairro="Poti Velho"
           imagemPrincipal="image4.jpg"
+          tipo="aluguel"
         />
         <HouseCard
           aluguelValor="R$1.500/mês"
@@ -100,6 +104,7 @@ const PropertyListing = () => {
           numero="987"
           bairro="Bairro Vermelha"
           imagemPrincipal="image5.jpg"
+          tipo="aluguel"
         />
         <HouseCard
           aluguelValor="R$1.600/mês"
@@ -112,6 +117,7 @@ const PropertyListing = () => {
           numero="654"
           bairro="Parque Piauí"
           imagemPrincipal="image6.jpg"
+          tipo="aluguel"
         />
       </div>
       <div className="mb-28">

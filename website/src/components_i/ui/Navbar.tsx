@@ -59,6 +59,10 @@ const Navbar = () => {
     navigate("/register");
   };
 
+  const handleCompraClick = () => {
+    navigate("/venda");
+  };
+
   const handleLogoutClick = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
@@ -117,7 +121,11 @@ const Navbar = () => {
           >
             Alugar
           </a>
-          <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
+          <a
+            href="#"
+            onClick={handleCompraClick}
+            className="text-sm md:text-base lg:text-md text-gray-700"
+          >
             Comprar
           </a>
           <a

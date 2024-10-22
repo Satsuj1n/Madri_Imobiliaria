@@ -10,7 +10,7 @@ interface Imovel {
   tipo: string;
   titulo: string;
   descricao: string;
-  aluguelValor: number;
+  valor: number;
   endereco: string;
   numero: string;
   bairro: string;
@@ -19,21 +19,17 @@ interface Imovel {
   banheiro: number;
   area: number;
   imagemPrincipal: string;
-  categoria: string; // Alterado para "categoria"
-  dataInicioDisponivel?: string;
-  dataFimDisponivel?: string;
+  categoria: string;
 }
 
-const ImoveisAluguel: FC = () => {
+const ImoveisVenda: FC = () => {
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Estado para controlar o carregamento
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Para armazenar imóveis filtrados
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filters, setFilters] = useState({
     localizacao: "",
-    faixaPreco: "R$0–R$2,500",
+    faixaPreco: "R$0–R$100.000",
     categoria: "", // Filtro para categoria
-    dataMudanca: "", // Adiciona o filtro de data de mudança
   });
 
   // Função para buscar todos os imóveis
@@ -52,19 +48,23 @@ const ImoveisAluguel: FC = () => {
   const applyFilters = (imoveis: Imovel[], filters: any) => {
     console.log("Aplicando filtros:", filters);
 
-    return imoveis.filter((imovel) => {
+    const filteredResults = imoveis.filter((imovel) => {
       // Filtra sempre pelo preço
-      const withinPriceRange =
-        filters.faixaPreco === "R$0–R$2,500"
-          ? imovel.aluguelValor >= 0 && imovel.aluguelValor <= 2500
-          : filters.faixaPreco === "R$2,500–R$5,000"
-          ? imovel.aluguelValor > 2500 && imovel.aluguelValor <= 5000
-          : filters.faixaPreco === "R$5,000+"
-          ? imovel.aluguelValor > 5000
-          : true; // Considera todos se não houver faixa de preço especificada
+      const withinPriceRange = (() => {
+        switch (filters.faixaPreco) {
+          case "R$0–R$100.000":
+            return imovel.valor >= 0 && imovel.valor <= 100000;
+          case "R$100.000–R$500.000":
+            return imovel.valor > 100000 && imovel.valor <= 500000;
+          case "R$500.000+":
+            return imovel.valor > 500000;
+          default:
+            return true; // Considera todos se não houver faixa de preço especificada
+        }
+      })();
 
       console.log(
-        `Imóvel: ${imovel.titulo}, Valor: ${imovel.aluguelValor}, Passou no filtro de preço?`,
+        `Imóvel: ${imovel.titulo}, Valor: ${imovel.valor}, Passou no filtro de preço?`,
         withinPriceRange
       );
 
@@ -93,27 +93,11 @@ const ImoveisAluguel: FC = () => {
         matchesCategory
       );
 
-      // Corrigindo a lógica de comparação de datas de entrada e saída
-      const matchesDate =
-        filters.dataEntrada && filters.dataSaida
-          ? imovel.dataInicioDisponivel && imovel.dataFimDisponivel
-            ? new Date(filters.dataEntrada) >=
-                new Date(imovel.dataInicioDisponivel.substring(0, 10)) &&
-              new Date(filters.dataSaida) <=
-                new Date(imovel.dataFimDisponivel.substring(0, 10))
-            : true // Se os dados de disponibilidade estiverem indefinidos, considera que passa no filtro
-          : true; // Se as datas não forem preenchidas, passa todos os imóveis
-
-      console.log(
-        `Imóvel: ${imovel.titulo}, Data de Entrada: ${filters.dataEntrada}, Data de Saída: ${filters.dataSaida}, Passou no filtro de data?`,
-        matchesDate
-      );
-
       // Retorna apenas os imóveis que passam em todos os filtros
-      return (
-        withinPriceRange && matchesLocation && matchesCategory && matchesDate
-      );
+      return withinPriceRange && matchesLocation && matchesCategory;
     });
+
+    return filteredResults;
   };
 
   useEffect(() => {
@@ -121,13 +105,13 @@ const ImoveisAluguel: FC = () => {
     const fetchImoveis = async () => {
       const todosImoveis = await getAllImoveis();
 
-      // Filtrar apenas os imóveis com o tipo 'aluguel'
-      const imoveisAluguel = todosImoveis.filter(
-        (imovel: Imovel) => imovel.tipo === "aluguel"
+      // Filtrar apenas os imóveis com o tipo 'venda'
+      const imoveisVenda = todosImoveis.filter(
+        (imovel: Imovel) => imovel.tipo === "venda"
       );
 
-      setImoveis(imoveisAluguel); // Atualiza o estado com os imóveis de aluguel
-      setFilteredImoveis(imoveisAluguel); // Inicializa imóveis filtrados
+      setImoveis(imoveisVenda); // Atualiza o estado com os imóveis de venda
+      setFilteredImoveis(imoveisVenda); // Inicializa imóveis filtrados
       setLoading(false); // Finaliza o carregamento
     };
 
@@ -152,14 +136,18 @@ const ImoveisAluguel: FC = () => {
       <div className="bg-gradient-to-b from-white to-[#e7ecfd] min-h-screen">
         <div className="container mx-auto p-4">
           <h1 className="text-2xl font-semibold text-gray-800 text-center mt-24">
-            Imóveis para Aluguel
+            Imóveis para Venda
           </h1>
           <div className="flex items-center justify-center">
             {/* Passa a função de handleSearch para o PropertySearch */}
-            <PropertySearch onSearch={handleSearch} mostrarDatas={true} precoOptions={["R$0–R$2,500", "R$2,500–R$5,000", "R$5,000+"]}/>
+            <PropertySearch
+              onSearch={handleSearch}
+              mostrarDatas={false}
+              precoOptions={["R$0–R$100.000", "R$100.000–R$500.000", "R$500.000+"]}
+            />
           </div>
 
-          {/* Lista de imóveis de aluguel */}
+          {/* Lista de imóveis de venda */}
           <div className="container mx-auto py-8">
             {loading ? (
               // Exibe o ícone de carregamento enquanto os dados estão sendo buscados
@@ -171,7 +159,7 @@ const ImoveisAluguel: FC = () => {
                 {filteredImoveis.map((imovel) => (
                   <HouseCard
                     key={imovel._id}
-                    aluguelValor={`R$ ${imovel.aluguelValor}`}
+                    aluguelValor={`R$ ${imovel.valor}`}
                     titulo={imovel.titulo}
                     bairro={imovel.bairro}
                     numero={imovel.numero}
@@ -188,7 +176,7 @@ const ImoveisAluguel: FC = () => {
             ) : (
               // Mensagem quando não há imóveis disponíveis
               <p className="text-gray-500 text-center">
-                Nenhum imóvel disponível para aluguel no momento.
+                Nenhum imóvel disponível para venda no momento.
               </p>
             )}
           </div>
@@ -199,4 +187,4 @@ const ImoveisAluguel: FC = () => {
   );
 };
 
-export default ImoveisAluguel;
+export default ImoveisVenda;
