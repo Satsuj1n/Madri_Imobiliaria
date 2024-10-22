@@ -128,7 +128,7 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
                 onChange={(e) => setTipoPropriedade(e.target.value)}
                 className="font-bold text-[16px] border-none outline-none bg-white appearance-none p-1"
               >
-                <option value="">Todas</option>{" "}
+                <option value="">Todos</option>{" "}
                 {/* Opção vazia para remover o filtro */}
                 {categorias.map((categoria) => (
                   <option key={categoria} value={categoria}>
@@ -149,61 +149,66 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
       </div>
 
       {/* Versão Mobile */}
-      <div className="flex md:hidden flex-col items-start bg-white p-4 rounded-lg shadow-md w-full">
+      <div className="flex md:hidden flex-col items-start bg-white p-4 rounded-lg shadow-md w-full md:w-[980px] mx-12 mt-4">
+        <label className="mb-2 text-gray-500 text-[14px]">Localização</label>
         <input
           type="text"
-          placeholder="Localização"
+          placeholder="Digite a Localização"
           value={localizacao}
           onChange={(e) => setLocalizacao(e.target.value)}
-          className="mb-4 p-2 border rounded-md w-full"
+          className="mb-4 p-6 border rounded-md w-full"
         />
+        <label className="mb-2 text-gray-500 text-[14px]">Data de Entrada</label>
         <input
           type="date"
           placeholder="Data de Entrada"
           value={dataEntrada}
           onChange={(e) => setDataEntrada(e.target.value)}
-          className="mb-4 p-2 border rounded-md w-full"
+          className="mb-4 p-6 border rounded-md w-full"
         />
+        <label className="mb-2 text-gray-500 text-[14px]">Data de Saída</label>
         <input
           type="date"
           placeholder="Data de Saída"
           value={dataSaida}
           onChange={(e) => setDataSaida(e.target.value)}
-          className="mb-4 p-2 border rounded-md w-full"
+          className="mb-4 p-6 border rounded-md w-full"
         />
+        <label className="mb-2 text-gray-500 text-[14px]">Preço</label>
         <div className="relative w-full mb-4">
           <select
-            value={faixaPreco}
-            onChange={(e) => setFaixaPreco(e.target.value)}
-            className="p-6 border rounded-md w-full appearance-none"
+        value={faixaPreco}
+        onChange={(e) => setFaixaPreco(e.target.value)}
+        className="p-6 border rounded-md w-full appearance-none"
           >
-            <option value="R$0–R$2,500">R$0–R$2,500</option>
-            <option value="R$2,500–R$5,000">R$2,500–R$5,000</option>
-            <option value="R$5,000+">R$5,000+</option>
+        <option value="R$0–R$2,500">R$0–R$2,500</option>
+        <option value="R$2,500–R$5,000">R$2,500–R$5,000</option>
+        <option value="R$5,000+">R$5,000+</option>
           </select>
           {/* Ícone da seta para baixo no mobile */}
           <DownArrowIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-500" />
         </div>
+        <label className="mb-2 text-gray-500 text-[14px]">Tipo de Propriedade</label>
         <div className="relative w-full mb-4">
           <select
-            value={tipoPropriedade}
-            onChange={(e) => setTipoPropriedade(e.target.value)}
-            className="p-6 border rounded-md w-full appearance-none"
+        value={tipoPropriedade}
+        onChange={(e) => setTipoPropriedade(e.target.value)}
+        className="p-6 border rounded-md w-full appearance-none"
           >
-            <option value="">Todas</option>{" "}
-            {/* Opção vazia para remover o filtro */}
-            {categorias.map((categoria) => (
-              <option key={categoria} value={categoria}>
-                {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-              </option>
-            ))}
+        <option value="">Todas</option>{" "}
+        {/* Opção vazia para remover o filtro */}
+        {categorias.map((categoria) => (
+          <option key={categoria} value={categoria}>
+            {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+          </option>
+        ))}
           </select>
           {/* Ícone da seta para baixo no mobile */}
           <DownArrowIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-500" />
         </div>
         <Button
           variant="default"
-          size="md"
+          size="large"
           className="w-full"
           onClick={handleSearch}
         >
