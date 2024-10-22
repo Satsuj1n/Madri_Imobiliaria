@@ -29,7 +29,7 @@ export const createImovel = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Cliente não encontrado" });
     }
 
-    // Pega o restante das informações do corpo da requisição
+    // Pega o restante das informações do corpo da requisição, incluindo as novas datas
     const {
       titulo,
       descricao,
@@ -63,6 +63,8 @@ export const createImovel = async (req: Request, res: Response) => {
       IPTUMensal,
       aluguelValor,
       valor,
+      dataDisponivelInicio, // Novo campo
+      dataDisponivelFim, // Novo campo
     } = req.body;
 
     console.log("Dados do imóvel recebidos:", {
@@ -98,6 +100,8 @@ export const createImovel = async (req: Request, res: Response) => {
       IPTUMensal,
       aluguelValor,
       valor,
+      dataDisponivelInicio,
+      dataDisponivelFim,
     });
 
     // Aqui você adiciona a lógica para lidar com o upload das imagens
@@ -158,6 +162,14 @@ export const createImovel = async (req: Request, res: Response) => {
       valor: tipo === "venda" ? valor : undefined,
       imagemPrincipal: imagemPrincipalUrl, // Armazena o URL da imagem principal
       outrasImagens: outrasImagensUrls, // Armazena os URLs das outras imagens
+
+      // Inclui os novos campos de data
+      dataDisponivelInicio: dataDisponivelInicio
+        ? new Date(dataDisponivelInicio)
+        : undefined,
+      dataDisponivelFim: dataDisponivelFim
+        ? new Date(dataDisponivelFim)
+        : undefined,
     });
 
     console.log("Novo imóvel a ser criado:", novoImovel);

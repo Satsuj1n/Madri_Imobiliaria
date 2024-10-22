@@ -51,6 +51,8 @@ const CriarImovel2 = () => {
     IPTUAnual: string;
     IPTUMensal: string;
     lazer: string[];
+    dataDisponivelInicio: string;
+    dataDisponivelFim: string;
   }>({
     cep: cep || "",
     endereco: endereco || "",
@@ -82,6 +84,8 @@ const CriarImovel2 = () => {
     IPTUAnual: "",
     IPTUMensal: "",
     lazer: [],
+    dataDisponivelInicio: "",
+    dataDisponivelFim: "",
   });
 
   const handleChange = (
@@ -445,6 +449,29 @@ const CriarImovel2 = () => {
               />
             </div>
           </div>
+          {propertyInfo.tipo === "aluguel" && (
+            <div className="mt-4">
+              <label>Data disponível para alugar (Início)*</label>
+              <input
+                type="date"
+                name="dataDisponivelInicio"
+                value={propertyInfo.dataDisponivelInicio}
+                onChange={handleChange}
+                className="border p-2 w-full rounded"
+                required
+              />
+
+              <label className="mt-2">Data disponível para alugar (Fim)*</label>
+              <input
+                type="date"
+                name="dataDisponivelFim"
+                value={propertyInfo.dataDisponivelFim}
+                onChange={handleChange}
+                className="border p-2 w-full rounded"
+                required
+              />
+            </div>
+          )}
           {/* Lazer - Checkbox com as opções */}
           <div className="text-center mt-4">
             <div className="text-2xl ">

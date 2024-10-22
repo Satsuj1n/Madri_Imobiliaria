@@ -39,8 +39,8 @@ export interface ImovelDocument extends Document {
   status: "pendente" | "aprovado";
   IPTUAnual?: number;
   IPTUMensal?: number;
-  aluguelValor?: number; // Preço de aluguel se "aluguel" for selecionado
-  valor?: number; // Preço de venda se "venda" for selecionado
+  aluguelValor?: number;
+  valor?: number;
   numero?: string;
   bairro?: string;
   regiao?: string;
@@ -58,9 +58,12 @@ export interface ImovelDocument extends Document {
   metrosEsquerdo?: number;
   zonaUso?: string;
   coeficienteAproveitamento?: number;
+  imagemPrincipal?: string;
+  outrasImagens?: string[];
 
-  imagemPrincipal?: string; // URL da imagem principal
-  outrasImagens?: string[]; // Array com URLs das imagens adicionais
+  // Novos campos de data
+  dataDisponivelInicio?: Date;
+  dataDisponivelFim?: Date;
 }
 
 const ImovelSchema: Schema = new Schema({
@@ -137,8 +140,12 @@ const ImovelSchema: Schema = new Schema({
   coeficienteAproveitamento: { type: Number },
 
   // Campos para imagens
-  imagemPrincipal: { type: String }, // URL da imagem principal
-  outrasImagens: { type: [String] }, // Array de URLs de imagens adicionais
+  imagemPrincipal: { type: String },
+  outrasImagens: { type: [String] },
+
+  // Novos campos de data
+  dataDisponivelInicio: { type: Date },
+  dataDisponivelFim: { type: Date },
 });
 
 export default mongoose.model<ImovelDocument>("Imovel", ImovelSchema);

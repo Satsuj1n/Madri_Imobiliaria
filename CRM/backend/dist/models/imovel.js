@@ -95,7 +95,10 @@ const ImovelSchema = new mongoose_1.Schema({
     zonaUso: { type: String },
     coeficienteAproveitamento: { type: Number },
     // Campos para imagens
-    imagemPrincipal: { type: String }, // URL da imagem principal
-    outrasImagens: { type: [String] }, // Array de URLs de imagens adicionais
+    imagemPrincipal: { type: String },
+    outrasImagens: { type: [String] },
+    // Novos campos de data
+    dataDisponivelInicio: { type: Date },
+    dataDisponivelFim: { type: Date },
 });
 exports.default = mongoose_1.default.model("Imovel", ImovelSchema);

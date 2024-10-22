@@ -37,8 +37,10 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             console.log("Cliente não encontrado.");
             return res.status(404).json({ error: "Cliente não encontrado" });
         }
-        // Pega o restante das informações do corpo da requisição
-        const { titulo, descricao, endereco, cep, area, quarto, banheiro, tipo, categoria, numero, bairro, regiao, subRegiao, cidadeEstado, finalidade, tipoComplemento, complemento, torreBloco, lazer, areaExterna, areaInterna, areaLote, metrosFrente, metrosFundo, metrosDireito, metrosEsquerdo, zonaUso, coeficienteAproveitamento, IPTUAnual, IPTUMensal, aluguelValor, valor, } = req.body;
+        // Pega o restante das informações do corpo da requisição, incluindo as novas datas
+        const { titulo, descricao, endereco, cep, area, quarto, banheiro, tipo, categoria, numero, bairro, regiao, subRegiao, cidadeEstado, finalidade, tipoComplemento, complemento, torreBloco, lazer, areaExterna, areaInterna, areaLote, metrosFrente, metrosFundo, metrosDireito, metrosEsquerdo, zonaUso, coeficienteAproveitamento, IPTUAnual, IPTUMensal, aluguelValor, valor, dataDisponivelInicio, // Novo campo
+        dataDisponivelFim, // Novo campo
+         } = req.body;
         console.log("Dados do imóvel recebidos:", {
             titulo,
             descricao,
@@ -72,6 +74,8 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             IPTUMensal,
             aluguelValor,
             valor,
+            dataDisponivelInicio,
+            dataDisponivelFim,
         });
         // Aqui você adiciona a lógica para lidar com o upload das imagens
         let imagemPrincipalUrl = "";
@@ -129,6 +133,13 @@ const createImovel = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             valor: tipo === "venda" ? valor : undefined,
             imagemPrincipal: imagemPrincipalUrl, // Armazena o URL da imagem principal
             outrasImagens: outrasImagensUrls, // Armazena os URLs das outras imagens
+            // Inclui os novos campos de data
+            dataDisponivelInicio: dataDisponivelInicio
+                ? new Date(dataDisponivelInicio)
+                : undefined,
+            dataDisponivelFim: dataDisponivelFim
+                ? new Date(dataDisponivelFim)
+                : undefined,
         });
         console.log("Novo imóvel a ser criado:", novoImovel);
         const imovel = yield novoImovel.save();
