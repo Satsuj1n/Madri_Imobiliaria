@@ -110,6 +110,8 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
                 onChange={(e) => setTipoPropriedade(e.target.value)}
                 className="font-bold text-[18px] border-none outline-none bg-white appearance-none p-2"
               >
+                <option value="">Todas</option>{" "}
+                {/* Opção vazia */}
                 {/* Mapeia as categorias definidas no banco de dados */}
                 {categorias.map((categoria) => (
                   <option key={categoria} value={categoria}>
@@ -117,6 +119,7 @@ const PropertySearch = ({ onSearch }: { onSearch: (filters: any) => void }) => {
                   </option>
                 ))}
               </select>
+
               {/* Ícone da seta para baixo */}
               <DownArrowIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500" />
             </div>

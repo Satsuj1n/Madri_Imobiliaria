@@ -40,7 +40,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
       <div className="p-6">
         {/* Preço */}
         <div className="text-[#0053f8] font-bold text-2xl">
-          R$ {aluguelValor}
+          {aluguelValor}
           <span className="text-[#000929] text-base font-normal opacity-50">
             / mês
           </span>

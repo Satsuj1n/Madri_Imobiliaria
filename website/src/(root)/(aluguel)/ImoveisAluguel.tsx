@@ -7,6 +7,7 @@ import loadingIcon from "../../assets/icons/loading.svg"; // Caminho para o load
 
 interface Imovel {
   _id: string;
+  tipo: string;
   titulo: string;
   descricao: string;
   aluguelValor: number;
@@ -18,7 +19,9 @@ interface Imovel {
   banheiro: number;
   area: number;
   imagemPrincipal: string;
-  tipo: string;
+  categoria: string; // Alterado para "categoria"
+  dataInicioDisponivel?: string;
+  dataFimDisponivel?: string;
 }
 
 const ImoveisAluguel: FC = () => {
@@ -27,8 +30,9 @@ const ImoveisAluguel: FC = () => {
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Para armazenar imóveis filtrados
   const [filters, setFilters] = useState({
     localizacao: "",
-    faixaPreco: "",
-    tipoPropriedade: "",
+    faixaPreco: "R$0–R$2,500",
+    categoria: "", // Filtro para categoria
+    dataMudanca: "", // Adiciona o filtro de data de mudança
   });
 
   // Função para buscar todos os imóveis
@@ -45,6 +49,8 @@ const ImoveisAluguel: FC = () => {
 
   // Função para aplicar os filtros
   const applyFilters = (imoveis: Imovel[], filters: any) => {
+    console.log("Aplicando filtros:", filters);
+
     return imoveis.filter((imovel) => {
       // Filtra sempre pelo preço
       const withinPriceRange =
@@ -52,22 +58,54 @@ const ImoveisAluguel: FC = () => {
           ? imovel.aluguelValor >= 0 && imovel.aluguelValor <= 2500
           : filters.faixaPreco === "R$2,500–R$5,000"
           ? imovel.aluguelValor > 2500 && imovel.aluguelValor <= 5000
-          : imovel.aluguelValor > 5000;
+          : filters.faixaPreco === "R$5,000+"
+          ? imovel.aluguelValor > 5000
+          : true; // Considera todos se não houver faixa de preço especificada
 
-      // Filtra pela localização apenas se o campo foi preenchido
+      console.log(
+        `Imóvel: ${imovel.titulo}, Valor: ${imovel.aluguelValor}, Passou no filtro de preço?`,
+        withinPriceRange
+      );
+
+      // Filtra pela localização usando includes e ignorando maiúsculas/minúsculas
       const matchesLocation = filters.localizacao
         ? imovel.cidadeEstado
             .toLowerCase()
             .includes(filters.localizacao.toLowerCase())
-        : true; // Se não foi preenchido, passa todos os imóveis
+        : true; // Se o campo de localização estiver vazio, passa todos os imóveis
 
-      // Filtra pelo tipo de propriedade apenas se o campo foi preenchido
-      const matchesPropertyType = filters.tipoPropriedade
-        ? imovel.tipo.toLowerCase() === filters.tipoPropriedade.toLowerCase()
-        : true; // Se não foi preenchido, passa todos os imóveis
+      console.log(
+        `Imóvel: ${imovel.titulo}, CidadeEstado: ${imovel.cidadeEstado}, Passou no filtro de localização?`,
+        matchesLocation
+      );
+
+      // Filtra pela categoria de propriedade apenas se o campo for preenchido
+      const matchesCategory = filters.categoria
+        ? imovel.categoria.toLowerCase() === filters.categoria.toLowerCase()
+        : true; // Se for vazio ou undefined, passa todos os imóveis
+
+      console.log(
+        `Imóvel: ${imovel.titulo}, Categoria: ${imovel.categoria}, Passou no filtro de categoria?`,
+        matchesCategory
+      );
+
+      // Filtra pela data de mudança se estiver preenchido, e compara com as datas de disponibilidade
+      const matchesDate = filters.dataMudanca
+        ? new Date(filters.dataMudanca) >=
+            new Date(imovel.dataInicioDisponivel || "") &&
+          new Date(filters.dataMudanca) <=
+            new Date(imovel.dataFimDisponivel || "")
+        : true; // Se não for preenchido, passa todos os imóveis
+
+      console.log(
+        `Imóvel: ${imovel.titulo}, Data: ${filters.dataMudanca}, Passou no filtro de data?`,
+        matchesDate
+      );
 
       // Retorna apenas os imóveis que passam em todos os filtros
-      return withinPriceRange && matchesLocation && matchesPropertyType;
+      return (
+        withinPriceRange && matchesLocation && matchesCategory && matchesDate
+      );
     });
   };
 
@@ -91,10 +129,16 @@ const ImoveisAluguel: FC = () => {
 
   // Função chamada quando o usuário realiza a busca com os filtros
   const handleSearch = (newFilters: any) => {
-    setFilters(newFilters);
-    const filtrados = applyFilters(imoveis, newFilters);
+    console.log("Filtros recebidos:", newFilters);
+    
+    // Se a categoria não estiver selecionada (valor vazio), considera que não foi aplicado o filtro de categoria
+    const categoria = newFilters.tipoPropriedade || "";
+  
+    setFilters({ ...newFilters, categoria });
+    const filtrados = applyFilters(imoveis, { ...newFilters, categoria });
     setFilteredImoveis(filtrados);
   };
+  
 
   return (
     <>
