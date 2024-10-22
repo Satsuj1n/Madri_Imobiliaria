@@ -71,8 +71,11 @@ const ImoveisAluguel: FC = () => {
       const matchesLocation = filters.localizacao
         ? imovel.cidadeEstado
             .toLowerCase()
+            .includes(filters.localizacao.toLowerCase()) ||
+          imovel.endereco
+            .toLowerCase()
             .includes(filters.localizacao.toLowerCase())
-        : true; // Se o campo de localização estiver vazio, passa todos os imóveis
+        : true;
 
       console.log(
         `Imóvel: ${imovel.titulo}, CidadeEstado: ${imovel.cidadeEstado}, Passou no filtro de localização?`,
