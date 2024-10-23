@@ -139,8 +139,6 @@ const ImoveisAluguel: FC = () => {
           <div className="flex items-center justify-center">
             <PropertySearch
               onSearch={handleSearch}
-              mostrarDatas={true}
-              precoOptions={["R$0–R$2,500", "R$2,500–R$5,000", "R$5,000+"]}
             />
           </div>
           <div className="container mx-auto py-8">

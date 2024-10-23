@@ -1,61 +1,31 @@
 import React, { useState } from "react";
-import { Button } from "./Button";
-import { ReactComponent as DownArrowIcon } from "../../assets/icons/DownArrowIcon.svg"; // Substitua pelo seu ícone de seta para baixo
+import { Button } from "./Button"; // Importa o seu componente Button
+import { ReactComponent as FilterIcon } from "../../assets/icons/filter.svg"; // Substitua pelo caminho correto do seu ícone de filtro
 
 interface PropertySearchProps {
   onSearch: (filters: any) => void;
-  mostrarDatas?: boolean; // Para controlar exibição de datas
-  precoOptions: string[]; // Adicionada prop para as opções de preço
 }
 
-const PropertySearch: React.FC<PropertySearchProps> = ({
-  onSearch,
-  mostrarDatas = true, // Valor padrão true para mostrar datas
-  precoOptions, // Recebe as opções de preço
-}) => {
+const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
   const [localizacao, setLocalizacao] = useState("");
-  const [dataEntrada, setDataEntrada] = useState("");
-  const [dataSaida, setDataSaida] = useState("");
-  const [faixaPreco, setFaixaPreco] = useState(precoOptions[0]);
-  const [tipoPropriedade, setTipoPropriedade] = useState("");
-
-  // As categorias de propriedades conforme o seu banco de dados
-  const categorias = [
-    "andar corrido",
-    "apartamento",
-    "área privativa",
-    "casa",
-    "chácara",
-    "cobertura",
-    "fazenda",
-    "flat",
-    "galpão",
-    "garagem",
-    "kitnet",
-    "loja",
-    "lote",
-    "lote em condomínio",
-    "prédio",
-    "sala",
-    "salão",
-    "sítio",
-  ];
+  const [isFilterOpen, setIsFilterOpen] = useState(false); // Estado para controlar o modal de filtros
 
   // Função para enviar os filtros ao componente pai
   const handleSearch = () => {
     onSearch({
       localizacao,
-      dataEntrada: mostrarDatas ? dataEntrada : undefined,
-      dataSaida: mostrarDatas ? dataSaida : undefined,
-      faixaPreco,
-      tipoPropriedade,
     });
+  };
+
+  // Função para abrir o modal de filtros
+  const toggleFilters = () => {
+    setIsFilterOpen(!isFilterOpen);
   };
 
   return (
     <div className="flex flex-col items-center md:items-start relative z-10">
       {/* Versão Desktop */}
-      <div className="hidden md:flex bg-white p-4 rounded-lg shadow-md w-full md:w-[1100px] justify-between items-center mt-4">
+      <div className="hidden md:flex bg-white p-4 rounded-lg shadow-md w-full md:w-[550px] justify-between items-center mt-4">
         {/* Bloco de Localização */}
         <div className="flex items-center space-x-4">
           <div>
@@ -70,96 +40,19 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
           </div>
         </div>
 
-        {/* Divisor */}
-        <div className="border-l border-gray-300 h-10 mx-4"></div>
-
-        {/* Bloco de Data de Entrada (Apenas mostra se mostrarDatas for true) */}
-        {mostrarDatas && (
-          <>
-            <div className="flex items-center space-x-4">
-              <div>
-                <p className="text-gray-500 text-[14px] ml-1">Data de Entrada</p>
-                <input
-                  value={dataEntrada}
-                  onChange={(e) => setDataEntrada(e.target.value)}
-                  className="font-bold text-[16px] border-none outline-none"
-                  type="date"
-                />
-              </div>
-            </div>
-
-            {/* Divisor */}
-            <div className="border-l border-gray-300 h-10 mx-4"></div>
-
-            {/* Bloco de Data de Saída */}
-            <div className="flex items-center space-x-4">
-              <div>
-                <p className="text-gray-500 text-[14px] ml-1">Data de Saída</p>
-                <input
-                  value={dataSaida}
-                  onChange={(e) => setDataSaida(e.target.value)}
-                  className="font-bold text-[16px] border-none outline-none"
-                  type="date"
-                />
-              </div>
-            </div>
-
-            {/* Divisor */}
-            <div className="border-l border-gray-300 h-10 mx-4"></div>
-          </>
-        )}
-
-        {/* Bloco de Preço */}
-        <div className="flex items-center space-x-4 relative">
-          <div>
-            <p className="text-gray-500 text-[14px] ml-1">Preço</p>
-            {/* Aplica largura diferente quando mostrarDatas for false */}
-            <div className={`relative ${mostrarDatas ? 'w-[160px]' : 'w-[225px]'}`}> {/* Condicional para largura */}
-              <select
-                value={faixaPreco}
-                onChange={(e) => setFaixaPreco(e.target.value)}
-                className="font-bold text-[16px] border-none outline-none bg-white appearance-none p-2 w-full"
-              >
-                {precoOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              {/* Ícone da seta para baixo */}
-              <DownArrowIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500" />
-            </div>
-          </div>
-        </div>
-
-        {/* Divisor */}
-        <div className="border-l border-gray-300 h-10 mx-4"></div>
-
-        {/* Bloco de Tipo de Propriedade */}
-        <div className="flex items-center space-x-4 relative">
-          <div>
-            <p className="text-gray-500 text-[14px] ml-1">Tipo de Propriedade</p>
-            <div className="relative w-[160px]">
-              <select
-                value={tipoPropriedade}
-                onChange={(e) => setTipoPropriedade(e.target.value)}
-                className="font-bold text-[16px] border-none outline-none bg-white appearance-none p-2 w-full"
-              >
-                <option value="">Todos</option>
-                {categorias.map((categoria) => (
-                  <option key={categoria} value={categoria}>
-                    {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-                  </option>
-                ))}
-              </select>
-              {/* Ícone da seta para baixo */}
-              <DownArrowIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500" />
-            </div>
-          </div>
+        {/* Botão de Filtros */}
+        <div className="ml-2">
+          {" "}
+          {/* Adicionei margin entre o botão de filtros e o de buscar */}
+          <Button variant="outline" size="large2" onClick={toggleFilters}>
+            <FilterIcon className="w-5 h-5 mr-2" />{" "}
+            {/* Ícone com margem para a direita */}
+            Filtros
+          </Button>
         </div>
 
         {/* Botão de Busca */}
-        <div>
+        <div className="">
           <Button variant="large" size="large" onClick={handleSearch}>
             Buscar
           </Button>
@@ -177,67 +70,42 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
           className="mb-4 p-6 border rounded-md w-full"
         />
 
-        {/* Campos de datas apenas no mobile se mostrarDatas for true */}
-        {mostrarDatas && (
-          <>
-            <label className="mb-2 text-gray-500 text-[14px]">Data de Entrada</label>
-            <input
-              type="date"
-              placeholder="Data de Entrada"
-              value={dataEntrada}
-              onChange={(e) => setDataEntrada(e.target.value)}
-              className="mb-4 p-6 border rounded-md w-full"
-            />
-            <label className="mb-2 text-gray-500 text-[14px]">Data de Saída</label>
-            <input
-              type="date"
-              placeholder="Data de Saída"
-              value={dataSaida}
-              onChange={(e) => setDataSaida(e.target.value)}
-              className="mb-4 p-6 border rounded-md w-full"
-            />
-          </>
-        )}
-
-        <label className="mb-2 text-gray-500 text-[14px]">Preço</label>
-        <div className="relative w-full mb-4">
-          <select
-            value={faixaPreco}
-            onChange={(e) => setFaixaPreco(e.target.value)}
-            className="p-6 border rounded-md w-full appearance-none"
-          >
-            {precoOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          {/* Ícone da seta para baixo no mobile */}
-          <DownArrowIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-500" />
-        </div>
-
-        <label className="mb-2 text-gray-500 text-[14px]">Tipo de Propriedade</label>
-        <div className="relative w-full mb-4">
-          <select
-            value={tipoPropriedade}
-            onChange={(e) => setTipoPropriedade(e.target.value)}
-            className="p-6 border rounded-md w-full appearance-none"
-          >
-            <option value="">Todas</option>
-            {categorias.map((categoria) => (
-              <option key={categoria} value={categoria}>
-                {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-              </option>
-            ))}
-          </select>
-          {/* Ícone da seta para baixo no mobile */}
-          <DownArrowIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-500" />
-        </div>
-
-        <Button variant="default" size="large" className="w-full" onClick={handleSearch}>
+        <Button
+          variant="default"
+          size="large"
+          className="w-full"
+          onClick={handleSearch}
+        >
           Buscar
         </Button>
       </div>
+
+      {/* Modal de Filtros */}
+      {isFilterOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[300px]">
+            <h2 className="text-xl font-semibold mb-4">Filtros</h2>
+
+            {/* Bloco de Data de Entrada */}
+            <div className="mb-4">
+              <label className="text-gray-600">Data de Entrada</label>
+              <input type="date" className="w-full p-2 border rounded-md" />
+            </div>
+
+            {/* Bloco de Data de Saída */}
+            <div className="mb-4">
+              <label className="text-gray-600">Data de Saída</label>
+              <input type="date" className="w-full p-2 border rounded-md" />
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <Button variant="default" onClick={toggleFilters}>
+                Fechar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -26,6 +26,7 @@ const ImoveisVenda: FC = () => {
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Estado para controlar o carregamento
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Para armazenar imóveis filtrados
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filters, setFilters] = useState({
     localizacao: "",
     faixaPreco: "R$0–R$100.000",
@@ -140,11 +141,7 @@ const ImoveisVenda: FC = () => {
           </h1>
           <div className="flex items-center justify-center">
             {/* Passa a função de handleSearch para o PropertySearch */}
-            <PropertySearch
-              onSearch={handleSearch}
-              mostrarDatas={false}
-              precoOptions={["R$0–R$100.000", "R$100.000–R$500.000", "R$500.000+"]}
-            />
+            <PropertySearch onSearch={handleSearch} />
           </div>
 
           {/* Lista de imóveis de venda */}
