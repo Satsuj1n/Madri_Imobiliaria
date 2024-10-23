@@ -32,7 +32,7 @@ const buttonVariants = cva(
         large:
           "h-14 px-8 py-3 rounded-lg text-lg leading-[1.5] font-bold font-['Plus Jakarta Sans']",
         large2:
-          "h-14 px-4 py-3 rounded-lg text-lg leading-[1.5] font-bold font-['Plus Jakarta Sans']",
+          "h-14 px-6 py-3 rounded-lg text-lg leading-[1.5] font-bold font-['Plus Jakarta Sans']",
         extraLarge:
           "h-16 px-10 py-4 rounded-lg text-xl leading-[1.5] font-bold font-['Plus Jakarta Sans']",
         xxLarge:
