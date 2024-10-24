@@ -33,7 +33,9 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
   const [precoMinimo, setPrecoMinimo] = useState(0);
   const [precoMaximo, setPrecoMaximo] = useState(5000);
   const [categoria, setCategoria] = useState("");
-  const [isFilterOpen, setIsFilterOpen] = useState(false); // Estado para controlar o modal de filtros
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [quarto, setQuarto] = useState(1); // Estado para quarto
+  const [banheiro, setBanheiro] = useState(1); // Estado para banheiro
 
   // Função para enviar os filtros ao componente pai
   const handleSearch = () => {
@@ -42,12 +44,35 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
       precoMinimo,
       precoMaximo,
       categoria,
+      quarto,
+      banheiro,
     });
   };
 
   // Função para abrir o modal de filtros
   const toggleFilters = () => {
     setIsFilterOpen(!isFilterOpen);
+  };
+  // Função para incrementar o número de quartos
+  const incrementQuarto = () => {
+    setQuarto((prevQuarto) => prevQuarto + 1);
+  };
+
+  // Função para decrementar o número de quartos
+  const decrementQuarto = () => {
+    setQuarto((prevQuarto) => (prevQuarto > 1 ? prevQuarto - 1 : prevQuarto)); // Evitar que o valor seja menor que 1
+  };
+
+  // Função para incrementar o número de banheiros
+  const incrementBanheiro = () => {
+    setBanheiro((prevBanheiro) => prevBanheiro + 1);
+  };
+
+  // Função para decrementar o número de banheiros
+  const decrementBanheiro = () => {
+    setBanheiro((prevBanheiro) =>
+      prevBanheiro > 1 ? prevBanheiro - 1 : prevBanheiro
+    ); // Evitar que o valor seja menor que 1
   };
 
   // Lógica para impedir que o preço mínimo seja maior que o máximo
@@ -80,7 +105,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
     height: "16px",
     background: "#0041c2",
     cursor: "pointer",
-    borderRadius: "50%", 
+    borderRadius: "50%",
   };
 
   const sliderTrackStyle: React.CSSProperties = {
@@ -145,24 +170,24 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
       {/* Modal de Filtros */}
       {isFilterOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[300px]">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[450px]">
             <h2 className="text-xl font-semibold mb-4">Filtros</h2>
 
             {/* Bloco de Data de Entrada */}
             <div className="mb-4">
-              <label className="text-gray-600">Data de Entrada</label>
+              <label className="font-semibold text-gray-600">Data de Entrada</label>
               <input type="date" className="w-full p-2 border rounded-md" />
             </div>
 
             {/* Bloco de Data de Saída */}
             <div className="mb-4">
-              <label className="text-gray-600">Data de Saída</label>
+              <label className="font-semibold text-gray-600">Data de Saída</label>
               <input type="date" className="w-full p-2 border rounded-md" />
             </div>
 
             {/* Slider Preço Mínimo */}
             <div className="mb-4">
-              <label className="text-gray-600">
+              <label className="font-semibold text-gray-600">
                 Preço Mínimo: R$ {precoMinimo}
               </label>
               <input
@@ -196,7 +221,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
             {/* Slider Preço Máximo */}
             <div className="mb-4">
-              <label className="text-gray-600">
+              <label className="font-semibold text-gray-600">
                 Preço Máximo: R$ {precoMaximo}
               </label>
               <input
@@ -228,9 +253,49 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
               </style>
             </div>
 
+            {/* Bloco de Quartos */}
+            <div className="mb-4">
+              <p className="font-semibold text-gray-600 mb-2">Quartos</p>
+              <div className="flex items-center space-x-4">
+                <button
+                  className="border rounded-full px-3 py-1"
+                  onClick={decrementQuarto}
+                >
+                  -
+                </button>
+                <span>{quarto}</span>
+                <button
+                  className="border rounded-full px-3 py-1"
+                  onClick={incrementQuarto}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Bloco de Banheiros */}
+            <div className="mb-4">
+              <p className="font-semibold text-gray-600 mb-2">Banheiros</p>
+              <div className="flex items-center space-x-4">
+                <button
+                  className="border rounded-full px-3 py-1"
+                  onClick={decrementBanheiro}
+                >
+                  -
+                </button>
+                <span>{banheiro}</span>
+                <button
+                  className="border rounded-full px-3 py-1"
+                  onClick={incrementBanheiro}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
             {/* Dropdown de Categorias */}
             <div className="mb-4">
-              <label className="text-gray-600">Categoria</label>
+              <label className="font-semibold text-gray-600">Categoria</label>
               <select
                 value={categoria}
                 onChange={(e) => setCategoria(e.target.value)}
@@ -245,7 +310,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
               </select>
             </div>
 
-            <div className="flex justify-center space-x-2 mt-4">
+            <div className="flex justify-center space-x-4 mt-4">
               <Button variant="default" onClick={toggleFilters}>
                 Fechar
               </Button>
