@@ -9,6 +9,7 @@ import MapComponent from "components_i/ui/MapComponent";
 interface Imovel {
   _id: string;
   tipo: string;
+  cep: string;
   titulo: string;
   descricao: string;
   aluguelValor: number;
@@ -137,9 +138,7 @@ const ImoveisAluguel: FC = () => {
             Imóveis para Aluguel
           </h1>
           <div className="flex items-center justify-center">
-            <PropertySearch
-              onSearch={handleSearch}
-            />
+            <PropertySearch onSearch={handleSearch} />
           </div>
           <div className="container mx-auto py-8">
             {loading ? (
@@ -176,13 +175,13 @@ const ImoveisAluguel: FC = () => {
         {/* Mapa */}
         <div className="w-2/5 h-screen">
           <div className="w-full h-full relative">
-            <MapComponent latitude={-15.7942} longitude={-47.8825} />
+            <MapComponent imoveis={filteredImoveis} />
           </div>
         </div>
       </div>
       <Footer />
     </>
   );
-};
+}; 
 
 export default ImoveisAluguel;
