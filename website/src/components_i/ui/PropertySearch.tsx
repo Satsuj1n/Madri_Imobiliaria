@@ -1,6 +1,28 @@
 import React, { useState } from "react";
-import { Button } from "./Button"; // Importa o seu componente Button
+import { Button } from "./Button"; // Substitua pelo seu componente Button
 import { ReactComponent as FilterIcon } from "../../assets/icons/filter.svg"; // Substitua pelo caminho correto do seu ícone de filtro
+
+// Lista de categorias de imóveis
+const categorias = [
+  "andar corrido",
+  "apartamento",
+  "área privativa",
+  "casa",
+  "chácara",
+  "cobertura",
+  "fazenda",
+  "flat",
+  "galpão",
+  "garagem",
+  "kitnet",
+  "loja",
+  "lote",
+  "lote em condomínio",
+  "prédio",
+  "sala",
+  "salão",
+  "sítio",
+];
 
 interface PropertySearchProps {
   onSearch: (filters: any) => void;
@@ -8,18 +30,61 @@ interface PropertySearchProps {
 
 const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
   const [localizacao, setLocalizacao] = useState("");
+  const [precoMinimo, setPrecoMinimo] = useState(0);
+  const [precoMaximo, setPrecoMaximo] = useState(5000);
+  const [categoria, setCategoria] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Estado para controlar o modal de filtros
 
   // Função para enviar os filtros ao componente pai
   const handleSearch = () => {
     onSearch({
       localizacao,
+      precoMinimo,
+      precoMaximo,
+      categoria,
     });
   };
 
   // Função para abrir o modal de filtros
   const toggleFilters = () => {
     setIsFilterOpen(!isFilterOpen);
+  };
+
+  // Lógica para impedir que o preço mínimo seja maior que o máximo
+  const handleMinPriceChange = (value: number) => {
+    if (value <= precoMaximo) {
+      setPrecoMinimo(value);
+    }
+  };
+
+  const handleMaxPriceChange = (value: number) => {
+    if (value >= precoMinimo) {
+      setPrecoMaximo(value);
+    }
+  };
+
+  // Estilos inline para os sliders
+  const sliderStyle: React.CSSProperties = {
+    appearance: "none" as "none",
+    width: "100%",
+    height: "8px",
+    background: "#d3d3d3",
+    outline: "none",
+    opacity: 0.7,
+    transition: "opacity 0.2s",
+  };
+
+  const sliderThumbStyle: React.CSSProperties = {
+    appearance: "none" as "none",
+    width: "16px",
+    height: "16px",
+    background: "#0041c2",
+    cursor: "pointer",
+    borderRadius: "50%", 
+  };
+
+  const sliderTrackStyle: React.CSSProperties = {
+    background: "#d3d3d3",
   };
 
   return (
@@ -42,11 +107,8 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
         {/* Botão de Filtros */}
         <div className="ml-2">
-          {" "}
-          {/* Adicionei margin entre o botão de filtros e o de buscar */}
           <Button variant="outline" size="large2" onClick={toggleFilters}>
-            <FilterIcon className="w-5 h-5 mr-2" />{" "}
-            {/* Ícone com margem para a direita */}
+            <FilterIcon className="w-5 h-5 mr-2" />
             Filtros
           </Button>
         </div>
@@ -98,9 +160,97 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
               <input type="date" className="w-full p-2 border rounded-md" />
             </div>
 
-            <div className="flex justify-end space-x-2">
+            {/* Slider Preço Mínimo */}
+            <div className="mb-4">
+              <label className="text-gray-600">
+                Preço Mínimo: R$ {precoMinimo}
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="50000"
+                value={precoMinimo}
+                onChange={(e) => handleMinPriceChange(Number(e.target.value))}
+                style={{ ...sliderStyle, ...sliderTrackStyle }}
+              />
+              <style>
+                {`
+                  input[type="range"]::-webkit-slider-thumb {
+                    ${Object.entries(sliderThumbStyle)
+                      .map(([key, value]) => `${key}: ${value};`)
+                      .join(" ")}
+                  }
+                  input[type="range"]::-moz-range-thumb {
+                    ${Object.entries(sliderThumbStyle)
+                      .map(([key, value]) => `${key}: ${value};`)
+                      .join(" ")}
+                  }
+                  input[type="range"]::-ms-thumb {
+                    ${Object.entries(sliderThumbStyle)
+                      .map(([key, value]) => `${key}: ${value};`)
+                      .join(" ")}
+                  }
+                `}
+              </style>
+            </div>
+
+            {/* Slider Preço Máximo */}
+            <div className="mb-4">
+              <label className="text-gray-600">
+                Preço Máximo: R$ {precoMaximo}
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="50000"
+                value={precoMaximo}
+                onChange={(e) => handleMaxPriceChange(Number(e.target.value))}
+                style={{ ...sliderStyle, ...sliderTrackStyle }}
+              />
+              <style>
+                {`
+                  input[type="range"]::-webkit-slider-thumb {
+                    ${Object.entries(sliderThumbStyle)
+                      .map(([key, value]) => `${key}: ${value};`)
+                      .join(" ")}
+                  }
+                  input[type="range"]::-moz-range-thumb {
+                    ${Object.entries(sliderThumbStyle)
+                      .map(([key, value]) => `${key}: ${value};`)
+                      .join(" ")}
+                  }
+                  input[type="range"]::-ms-thumb {
+                    ${Object.entries(sliderThumbStyle)
+                      .map(([key, value]) => `${key}: ${value};`)
+                      .join(" ")}
+                  }
+                `}
+              </style>
+            </div>
+
+            {/* Dropdown de Categorias */}
+            <div className="mb-4">
+              <label className="text-gray-600">Categoria</label>
+              <select
+                value={categoria}
+                onChange={(e) => setCategoria(e.target.value)}
+                className="w-full p-2 border rounded-md"
+              >
+                <option value="">Todas as categorias</option>
+                {categorias.map((categoria) => (
+                  <option key={categoria} value={categoria}>
+                    {categoria}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex justify-center space-x-2 mt-4">
               <Button variant="default" onClick={toggleFilters}>
                 Fechar
+              </Button>
+              <Button variant="default" onClick={handleSearch}>
+                Aplicar Filtros
               </Button>
             </div>
           </div>
