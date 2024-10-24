@@ -22,7 +22,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ latitude, longitude }) => {
 
   const mapOptions = {
     disableDefaultUI: true, // Remove todos os controles
-    zoomControl: false, // Remove o controle de zoom
+    zoomControl: true, // Remove o controle de zoom
     streetViewControl: false, // Remove o boneco de street view
     fullscreenControl: false, // Remove o botão de tela cheia
     styles: [
