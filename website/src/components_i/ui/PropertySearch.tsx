@@ -37,16 +37,19 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
   const [quarto, setQuarto] = useState(1); // Estado para quarto
   const [banheiro, setBanheiro] = useState(1); // Estado para banheiro
 
-  // Função para enviar os filtros ao componente pai
+  // Função para enviar os filtros ao componente pai e fechar o modal
   const handleSearch = () => {
-    onSearch({
+    const appliedFilters = {
       localizacao,
-      precoMinimo,
-      precoMaximo,
+      precoMinimo: precoMinimo || 0, // Garante que o valor mínimo seja 0 caso não esteja definido
+      precoMaximo: precoMaximo || 50000, // Garante um valor máximo padrão
       categoria,
       quarto,
       banheiro,
-    });
+    };
+
+    onSearch(appliedFilters);
+    setIsFilterOpen(false); // Fechar o modal de filtros
   };
 
   // Função para abrir o modal de filtros
@@ -175,13 +178,17 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
             {/* Bloco de Data de Entrada */}
             <div className="mb-4">
-              <label className="font-semibold text-gray-600">Data de Entrada</label>
+              <label className="font-semibold text-gray-600">
+                Data de Entrada
+              </label>
               <input type="date" className="w-full p-2 border rounded-md" />
             </div>
 
             {/* Bloco de Data de Saída */}
             <div className="mb-4">
-              <label className="font-semibold text-gray-600">Data de Saída</label>
+              <label className="font-semibold text-gray-600">
+                Data de Saída
+              </label>
               <input type="date" className="w-full p-2 border rounded-md" />
             </div>
 

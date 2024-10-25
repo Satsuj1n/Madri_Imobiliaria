@@ -56,15 +56,10 @@ const ImoveisAluguel: FC = () => {
     console.log("Aplicando filtros:", filters);
 
     return imoveis.filter((imovel) => {
-      // Filtra sempre pelo preço
+      // Verifica se o imóvel está dentro do intervalo de preço definido
       const withinPriceRange =
-        filters.faixaPreco === "R$0–R$2,500"
-          ? imovel.aluguelValor >= 0 && imovel.aluguelValor <= 2500
-          : filters.faixaPreco === "R$2,500–R$5,000"
-          ? imovel.aluguelValor > 2500 && imovel.aluguelValor <= 5000
-          : filters.faixaPreco === "R$5,000+"
-          ? imovel.aluguelValor > 5000
-          : true; // Considera todos se não houver faixa de preço especificada
+        (!filters.precoMinimo || imovel.aluguelValor >= filters.precoMinimo) &&
+        (!filters.precoMaximo || imovel.aluguelValor <= filters.precoMaximo);
 
       // Filtra pela localização usando includes e ignorando maiúsculas/minúsculas
       const matchesLocation = filters.localizacao
@@ -79,7 +74,11 @@ const ImoveisAluguel: FC = () => {
       // Filtra pela categoria de propriedade apenas se o campo for preenchido
       const matchesCategory = filters.categoria
         ? imovel.categoria.toLowerCase() === filters.categoria.toLowerCase()
-        : true; // Se for vazio ou undefined, passa todos os imóveis
+        : true;
+
+      // Filtra pelo número de quartos e banheiros
+      const matchesRooms = imovel.quarto >= filters.quarto;
+      const matchesBathrooms = imovel.banheiro >= filters.banheiro;
 
       // Corrigindo a lógica de comparação de datas de entrada e saída
       const matchesDate =
@@ -93,7 +92,12 @@ const ImoveisAluguel: FC = () => {
           : true; // Se as datas não forem preenchidas, passa todos os imóveis
 
       return (
-        withinPriceRange && matchesLocation && matchesCategory && matchesDate
+        withinPriceRange &&
+        matchesLocation &&
+        matchesCategory &&
+        matchesRooms &&
+        matchesBathrooms &&
+        matchesDate
       );
     });
   };
@@ -120,11 +124,18 @@ const ImoveisAluguel: FC = () => {
   const handleSearch = (newFilters: any) => {
     console.log("Filtros recebidos:", newFilters);
 
-    // Se a categoria não estiver selecionada (valor vazio), considera que não foi aplicado o filtro de categoria
-    const categoria = newFilters.tipoPropriedade || "";
+    // Atualiza os filtros recebidos, incluindo os quartos e banheiros
+    const updatedFilters = {
+      ...newFilters,
+      categoria: newFilters.categoria || "", // Considera todas as categorias se não estiver selecionada
+      quarto: newFilters.quarto || 1, // Valor mínimo para quarto
+      banheiro: newFilters.banheiro || 1, // Valor mínimo para banheiro
+    };
 
-    setFilters({ ...newFilters, categoria });
-    const filtrados = applyFilters(imoveis, { ...newFilters, categoria });
+    setFilters(updatedFilters);
+
+    // Aplica os filtros para a lista de imóveis
+    const filtrados = applyFilters(imoveis, updatedFilters);
     setFilteredImoveis(filtrados);
   };
 
@@ -182,6 +193,6 @@ const ImoveisAluguel: FC = () => {
       <Footer />
     </>
   );
-}; 
+};
 
 export default ImoveisAluguel;
