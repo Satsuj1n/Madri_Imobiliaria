@@ -164,7 +164,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
         {/* Botão de Filtros */}
         <div className="ml-2">
-          <Button variant="outline" size="large2" onClick={toggleFilters}>
+          <Button variant="outlineblack" size="large2" onClick={toggleFilters}>
             <FilterIcon className="w-5 h-5 mr-2" />
             Filtros
           </Button>

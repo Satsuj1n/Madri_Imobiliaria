@@ -13,6 +13,8 @@ const buttonVariants = cva(
         extraLarge: "bg-[#0053f8] text-white hover:bg-[#0041c2]",
         outline:
           "border border-[#E0DEF7] text-[#0053f8] hover:bg-[rgb(209,224,253)]/20", // Aqui já está a cor do texto como #0053f8
+          outlineblack:
+          "border border-[#E0DEF7] text-gray-800 hover:bg-[rgb(209,224,253)]/20", // Aqui já está a cor do texto como #0053f8
         outlineDefault:
           "border-2 border-[#E0DEF7] text-[#0053f8] hover:bg-[#E0DEF7]/20",
         outlineLarge:
