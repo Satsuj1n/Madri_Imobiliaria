@@ -202,10 +202,13 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
       {/* Modal de Filtros */}
       {isFilterOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-xl shadow-lg w-[450px] relative">
+          <div className="bg-white rounded-xl shadow-lg w-[450px] h-[80vh] overflow-y-auto relative">
             {/* Navbar Filtros */}
-            <div className="bg-white p-4 flex justify-between items-center shadow rounded-t-xl">
-              <button className="text-blue-800 font-bold" onClick={toggleFilters}>
+            <div className="bg-white p-4 flex justify-between items-center shadow rounded-t-xl sticky top-0 z-10">
+              <button
+                className="text-blue-800 font-bold"
+                onClick={toggleFilters}
+              >
                 ✕
               </button>
               <h2 className="text-lg font-bold text-center flex-1 ml-12">
@@ -215,10 +218,11 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
               <div style={{ width: "64px" }}></div>
             </div>
 
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto max-h-[65vh]">
+              <h3 className="text-lg font-semibold mb-2">Datas</h3>
               {/* Bloco de Data de Entrada */}
               <div className="mb-4">
-                <label className="font-semibold text-gray-600">
+                <label className="font-semibold text-sm text-gray-600">
                   Data de Entrada
                 </label>
                 <input type="date" className="w-full p-2 border rounded-md" />
@@ -226,7 +230,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
               {/* Bloco de Data de Saída */}
               <div className="mb-4">
-                <label className="font-semibold text-gray-600">
+                <label className="font-semibold text-sm text-gray-600">
                   Data de Saída
                 </label>
                 <input type="date" className="w-full p-2 border rounded-md" />
@@ -234,10 +238,11 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
               {/* Divisor */}
               <hr className="my-4" />
+              <h3 className="text-lg font-semibold mb-2">Preços</h3>
 
               {/* Slider Preço Mínimo */}
               <div className="mb-4">
-                <label className="font-semibold text-gray-600">
+                <label className="font-semibold text-sm text-gray-600">
                   Preço Mínimo: R$ {precoMinimo}
                 </label>
                 <input
@@ -271,7 +276,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
               {/* Slider Preço Máximo */}
               <div className="mb-4">
-                <label className="font-semibold text-gray-600">
+                <label className="font-semibold text-sm text-gray-600">
                   Preço Máximo: R$ {precoMaximo}
                 </label>
                 <input
@@ -305,10 +310,13 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
               {/* Divisor */}
               <hr className="my-4" />
+              <h3 className="text-lg font-semibold mb-2">
+                Quartos e Banheiros
+              </h3>
 
               {/* Bloco de Quartos */}
               <div className="mb-4">
-                <p className="font-semibold text-gray-600 mb-2">Quartos</p>
+                <p className="font-semibold text-sm text-gray-600 mb-2">Quartos</p>
                 <div className="flex items-center space-x-4">
                   <button
                     className="border rounded-full px-3 py-1"
@@ -330,7 +338,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
               {/* Bloco de Banheiros */}
               <div className="mb-4">
-                <p className="font-semibold text-gray-600 mb-2">Banheiros</p>
+              <p className="font-semibold text-sm text-gray-600 mb-2">Banheiros</p>
                 <div className="flex items-center space-x-4">
                   <button
                     className="border rounded-full px-3 py-1"
@@ -355,7 +363,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
               {/* Dropdown de Categorias */}
               <div className="mb-4">
-                <label className="font-semibold text-gray-600">Categoria</label>
+                <h3 className="text-lg font-semibold mb-2">Categoria</h3>
                 <select
                   value={categoria}
                   onChange={(e) => setCategoria(e.target.value)}
@@ -369,20 +377,20 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
                   ))}
                 </select>
               </div>
+            </div>
 
-              {/* Botões de Ação */}
-              <div className="flex justify-between mt-4">
-                <button
-                  onClick={clearFilters}
-                  className="text-gray-600 bg-white border-none"
-                  style={{ cursor: "pointer" }}
-                >
-                  Remover filtros
-                </button>
-                <Button variant="default" onClick={handleSearch}>
-                  Aplicar Filtros
-                </Button>
-              </div>
+            {/* Botões de Ação */}
+            <div className="bg-white p-4 flex justify-between items-center border-t rounded-b-xl sticky bottom-0 z-10">
+              <button
+              onClick={clearFilters}
+              className="text-gray-600 bg-white border-none"
+              style={{ cursor: "pointer" }}
+              >
+              Remover filtros
+              </button>
+              <Button variant="default" onClick={handleSearch}>
+              Aplicar Filtros
+              </Button>
             </div>
           </div>
         </div>
