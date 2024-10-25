@@ -157,7 +157,12 @@ const ImoveisAluguel: FC = () => {
                 <img src={loadingIcon} alt="Loading" className="w-36 h-36" />
               </div>
             ) : filteredImoveis.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-8 w-full max-w-[1120px] px-4 mb-12 mx-auto">
+              <div
+                className="grid gap-10 mt-8 w-full max-w-[1120px] px-4 mb-12 mx-auto"
+                style={{
+                  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                }}
+              >
                 {filteredImoveis.map((imovel) => (
                   <HouseCard
                     key={imovel._id}

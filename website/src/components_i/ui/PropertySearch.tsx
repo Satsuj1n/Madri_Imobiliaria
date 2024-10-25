@@ -270,7 +270,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
                 >
                   -
                 </button>
-                <span>{quarto}</span>
+                <span>{quarto}+</span>
                 <button
                   className="border rounded-full px-3 py-1"
                   onClick={incrementQuarto}
@@ -290,7 +290,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
                 >
                   -
                 </button>
-                <span>{banheiro}</span>
+                <span>{banheiro}+</span>
                 <button
                   className="border rounded-full px-3 py-1"
                   onClick={incrementBanheiro}
