@@ -145,7 +145,7 @@ const ImoveisAluguel: FC = () => {
       <div className="bg-gradient-to-b from-white to-[#e7ecfd] min-h-screen flex">
         {/* Lista de Imóveis */}
         <div className="w-3/5 p-4 h-screen overflow-y-auto scrollbar-hide">
-          <h1 className="text-2xl font-semibold text-gray-800 text-center mt-24">
+          <h1 className="text-2xl font-semibold text-gray-800 text-center mt-24 mb-8">
             Imóveis para Aluguel
           </h1>
           <div className="flex items-center justify-center">
@@ -161,6 +161,8 @@ const ImoveisAluguel: FC = () => {
                 className="grid gap-10 mt-8 w-full max-w-[1120px] px-4 mb-12 mx-auto"
                 style={{
                   gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                  justifyItems: "center", // Centraliza os itens para não expandir excessivamente
+                  alignItems: "center", // Alinha verticalmente ao centro
                 }}
               >
                 {filteredImoveis.map((imovel) => (

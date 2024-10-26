@@ -188,6 +188,15 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
           onChange={(e) => setLocalizacao(e.target.value)}
           className="mb-4 p-6 border rounded-md w-full"
         />
+        <Button
+          variant="outlineblack"
+          size="large"
+          className="w-full mb-4"
+          onClick={toggleFilters}
+        >
+          <FilterIcon className="w-5 h-5 mr-2" />
+          Filtros
+        </Button>
 
         <Button
           variant="default"
@@ -316,7 +325,9 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
               {/* Bloco de Quartos */}
               <div className="mb-4">
-                <p className="font-semibold text-sm text-gray-600 mb-2">Quartos</p>
+                <p className="font-semibold text-sm text-gray-600 mb-2">
+                  Quartos
+                </p>
                 <div className="flex items-center space-x-4">
                   <button
                     className="border rounded-full px-3 py-1"
@@ -338,7 +349,9 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
 
               {/* Bloco de Banheiros */}
               <div className="mb-4">
-              <p className="font-semibold text-sm text-gray-600 mb-2">Banheiros</p>
+                <p className="font-semibold text-sm text-gray-600 mb-2">
+                  Banheiros
+                </p>
                 <div className="flex items-center space-x-4">
                   <button
                     className="border rounded-full px-3 py-1"
@@ -382,14 +395,14 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
             {/* Botões de Ação */}
             <div className="bg-white p-4 flex justify-between items-center border-t rounded-b-xl sticky bottom-0 z-10">
               <button
-              onClick={clearFilters}
-              className="text-gray-600 bg-white border-none"
-              style={{ cursor: "pointer" }}
+                onClick={clearFilters}
+                className="text-gray-600 bg-white border-none"
+                style={{ cursor: "pointer" }}
               >
-              Remover filtros
+                Remover filtros
               </button>
               <Button variant="default" onClick={handleSearch}>
-              Aplicar Filtros
+                Aplicar Filtros
               </Button>
             </div>
           </div>
