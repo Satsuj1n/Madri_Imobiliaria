@@ -26,30 +26,33 @@ const categorias = [
 
 interface PropertySearchProps {
   onSearch: (filters: any) => void;
+  maxPrice?: number; // Nova prop opcional para definir o preço máximo
 }
-
-const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
+const PropertySearch: React.FC<PropertySearchProps> = ({
+  onSearch,
+  maxPrice = 50000,
+}) => {
   const [localizacao, setLocalizacao] = useState("");
   const [precoMinimo, setPrecoMinimo] = useState(0);
-  const [precoMaximo, setPrecoMaximo] = useState(5000);
+  const [precoMaximo, setPrecoMaximo] = useState(maxPrice);
   const [categoria, setCategoria] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [quarto, setQuarto] = useState<number | "Qualquer">("Qualquer"); // Estado para quarto
-  const [banheiro, setBanheiro] = useState<number | "Qualquer">("Qualquer"); // Estado para banheiro
+  const [quarto, setQuarto] = useState<number | "Qualquer">("Qualquer");
+  const [banheiro, setBanheiro] = useState<number | "Qualquer">("Qualquer");
 
   // Função para enviar os filtros ao componente pai e fechar o modal
   const handleSearch = () => {
     const appliedFilters = {
       localizacao,
-      precoMinimo: precoMinimo || 0, // Garante que o valor mínimo seja 0 caso não esteja definido
-      precoMaximo: precoMaximo || 50000, // Garante um valor máximo padrão
+      precoMinimo: precoMinimo || 0,
+      precoMaximo: precoMaximo || maxPrice,
       categoria,
-      quarto: quarto === "Qualquer" ? undefined : quarto, // Se "Qualquer" estiver selecionado, remove o filtro
-      banheiro: banheiro === "Qualquer" ? undefined : banheiro, // Se "Qualquer" estiver selecionado, remove o filtro
+      quarto: quarto === "Qualquer" ? undefined : quarto,
+      banheiro: banheiro === "Qualquer" ? undefined : banheiro,
     };
 
     onSearch(appliedFilters);
-    setIsFilterOpen(false); // Fechar o modal de filtros
+    setIsFilterOpen(false);
   };
 
   // Função para abrir o modal de filtros
@@ -257,7 +260,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
                 <input
                   type="range"
                   min="0"
-                  max="50000"
+                  max={maxPrice}
                   value={precoMinimo}
                   onChange={(e) => handleMinPriceChange(Number(e.target.value))}
                   style={{ ...sliderStyle, ...sliderTrackStyle }}
@@ -291,7 +294,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ onSearch }) => {
                 <input
                   type="range"
                   min="0"
-                  max="50000"
+                  max={maxPrice}
                   value={precoMaximo}
                   onChange={(e) => handleMaxPriceChange(Number(e.target.value))}
                   style={{ ...sliderStyle, ...sliderTrackStyle }}

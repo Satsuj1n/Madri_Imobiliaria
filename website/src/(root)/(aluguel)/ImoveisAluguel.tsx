@@ -142,9 +142,9 @@ const ImoveisAluguel: FC = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-gradient-to-b from-white to-[#e7ecfd] min-h-screen flex">
+      <div className="bg-gradient-to-b from-white to-[#e7ecfd] min-h-screen flex flex-col lg:flex-row">
         {/* Lista de Imóveis */}
-        <div className="w-3/5 p-4 h-screen overflow-y-auto scrollbar-hide">
+        <div className="lg:w-3/5 w-full p-4 h-auto lg:h-screen overflow-y-auto scrollbar-hide">
           <h1 className="text-2xl font-semibold text-gray-800 text-center mt-24 mb-8">
             Imóveis para Aluguel
           </h1>
@@ -191,7 +191,7 @@ const ImoveisAluguel: FC = () => {
         </div>
 
         {/* Mapa */}
-        <div className="w-2/5 h-screen">
+        <div className="lg:w-2/5 w-full h-96 lg:h-screen">
           <div className="w-full h-full relative">
             <MapComponent imoveis={filteredImoveis} />
           </div>

@@ -31,12 +31,17 @@ const ImoveisVenda: FC = () => {
   const [loading, setLoading] = useState<boolean>(true); // Estado para controlar o carregamento
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Para armazenar imóveis filtrados
 
+  // Filtros iniciais
   const [filters, setFilters] = useState({
     localizacao: "",
-    faixaPreco: "R$0–R$100.000",
+    precoMinimo: 0,
+    precoMaximo: 1000000,
     categoria: "", // Filtro para categoria
+    quarto: 1,
+    banheiro: 1,
   });
 
+  // Função para buscar todos os imóveis
   const getAllImoveis = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/imoveis");
@@ -48,23 +53,18 @@ const ImoveisVenda: FC = () => {
     }
   };
 
+  // Função para aplicar os filtros
   const applyFilters = (imoveis: Imovel[], filters: any) => {
-    const filteredResults = imoveis.filter((imovel) => {
-      const withinPriceRange = (() => {
-        switch (filters.faixaPreco) {
-          case "R$0–R$100.000":
-            return imovel.valor && imovel.valor >= 0 && imovel.valor <= 100000;
-          case "R$100.000–R$500.000":
-            return (
-              imovel.valor && imovel.valor > 100000 && imovel.valor <= 500000
-            );
-          case "R$500.000+":
-            return imovel.valor && imovel.valor > 500000;
-          default:
-            return true;
-        }
-      })();
+    return imoveis.filter((imovel) => {
+      // Verifica se o imóvel está dentro do intervalo de preço definido
+      const withinPriceRange =
+        (!filters.precoMinimo ||
+          (imovel.valor !== undefined &&
+            imovel.valor >= filters.precoMinimo)) &&
+        (!filters.precoMaximo ||
+          (imovel.valor !== undefined && imovel.valor <= filters.precoMaximo));
 
+      // Filtra pela localização usando includes e ignorando maiúsculas/minúsculas
       const matchesLocation = filters.localizacao
         ? imovel.cidadeEstado
             .toLowerCase()
@@ -74,36 +74,59 @@ const ImoveisVenda: FC = () => {
             .includes(filters.localizacao.toLowerCase())
         : true;
 
+      // Filtra pela categoria de propriedade apenas se o campo for preenchido
       const matchesCategory = filters.categoria
         ? imovel.categoria.toLowerCase() === filters.categoria.toLowerCase()
         : true;
 
-      return withinPriceRange && matchesLocation && matchesCategory;
-    });
+      // Filtra pelo número de quartos e banheiros
+      const matchesRooms = imovel.quarto >= (filters.quarto || 1);
+      const matchesBathrooms = imovel.banheiro >= (filters.banheiro || 1);
 
-    return filteredResults;
+      return (
+        withinPriceRange &&
+        matchesLocation &&
+        matchesCategory &&
+        matchesRooms &&
+        matchesBathrooms
+      );
+    });
   };
 
   useEffect(() => {
+    // Carregar todos os imóveis ao montar o componente
     const fetchImoveis = async () => {
       const todosImoveis = await getAllImoveis();
 
+      // Filtrar apenas os imóveis com o tipo 'venda'
       const imoveisVenda = todosImoveis.filter(
         (imovel: Imovel) => imovel.tipo === "venda"
       );
 
-      setImoveis(imoveisVenda);
-      setFilteredImoveis(imoveisVenda);
-      setLoading(false);
+      setImoveis(imoveisVenda); // Atualiza o estado com os imóveis de venda
+      setFilteredImoveis(imoveisVenda); // Inicializa imóveis filtrados
+      setLoading(false); // Finaliza o carregamento
     };
 
-    fetchImoveis();
+    fetchImoveis(); // Chamar a função de busca
   }, []);
 
+  // Função chamada quando o usuário realiza a busca com os filtros
   const handleSearch = (newFilters: any) => {
-    const categoria = newFilters.tipoPropriedade || "";
-    setFilters({ ...newFilters, categoria });
-    const filtrados = applyFilters(imoveis, { ...newFilters, categoria });
+    console.log("Filtros recebidos:", newFilters);
+
+    // Atualiza os filtros recebidos, incluindo os quartos e banheiros
+    const updatedFilters = {
+      ...newFilters,
+      categoria: newFilters.categoria || "", // Considera todas as categorias se não estiver selecionada
+      quarto: newFilters.quarto || 1, // Valor mínimo para quarto
+      banheiro: newFilters.banheiro || 1, // Valor mínimo para banheiro
+    };
+
+    setFilters(updatedFilters);
+
+    // Aplica os filtros para a lista de imóveis
+    const filtrados = applyFilters(imoveis, updatedFilters);
     setFilteredImoveis(filtrados);
   };
 
@@ -116,7 +139,7 @@ const ImoveisVenda: FC = () => {
             Imóveis para Venda
           </h1>
           <div className="flex items-center justify-center">
-            <PropertySearch onSearch={handleSearch} />
+            <PropertySearch onSearch={handleSearch} maxPrice={1000000} />
           </div>
 
           <div className="container mx-auto py-8">
