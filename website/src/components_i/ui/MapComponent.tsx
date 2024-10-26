@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, LoadScript, OverlayView } from "@react-google-maps/api";
 
+// Atualizamos a interface para lidar com imóveis de aluguel e venda
 interface Imovel {
   _id: string;
-  cep: string;
+  cep?: string; // Opcional para imóveis de venda
   titulo: string;
-  aluguelValor: number;
+  aluguelValor?: number; // Opcional para imóveis de aluguel
+  valor?: number; // Opcional para imóveis de venda
 }
 
 interface MapComponentProps {
@@ -14,7 +16,7 @@ interface MapComponentProps {
 
 const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
   const [coordinatesList, setCoordinatesList] = useState<
-    { lat: number; lng: number; _id: string; aluguelValor: number }[]
+    { lat: number; lng: number; _id: string; preco: number }[] // Modificado para lidar com o preço genérico
   >([]);
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(
     null
@@ -86,20 +88,23 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
         lat: number;
         lng: number;
         _id: string;
-        aluguelValor: number;
+        preco: number;
       }[] = [];
       const bounds = new window.google.maps.LatLngBounds();
 
       for (const imovel of imoveis) {
-        const coords = await getCoordinatesFromCep(imovel.cep);
-        if (coords) {
-          newCoordinatesList.push({
-            ...coords,
-            _id: imovel._id,
-            aluguelValor: imovel.aluguelValor,
-          });
+        if (imovel.cep) {
+          const coords = await getCoordinatesFromCep(imovel.cep);
+          if (coords) {
+            const preco = imovel.aluguelValor || imovel.valor || 0;
+            newCoordinatesList.push({
+              ...coords,
+              _id: imovel._id,
+              preco,
+            });
 
-          bounds.extend({ lat: coords.lat, lng: coords.lng });
+            bounds.extend({ lat: coords.lat, lng: coords.lng });
+          }
         }
       }
 
@@ -125,7 +130,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
       <LoadScript googleMapsApiKey={apiKey}>
         <GoogleMap
           mapContainerStyle={containerStyle}
-          // Ajusta o zoom para cobrir todos os imóveis
           zoom={coordinatesList.length > 1 ? undefined : 16} // Se houver mais de um imóvel, ajusta automaticamente, senão aplica zoom fixo
           center={
             mapBounds
@@ -146,7 +150,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
               mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
             >
               <div className="bg-white text-[#0053f8] p-2 px-6 flex justify-center items-center text-center rounded-lg shadow-lg font-bold text-nowrap">
-                R${coords.aluguelValor}
+                R${coords.preco}{" "}
+                {/* Exibindo o valor genérico (aluguel ou venda) */}
               </div>
             </OverlayView>
           ))}
