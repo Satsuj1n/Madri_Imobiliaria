@@ -67,7 +67,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
   const clearFilters = () => {
     setLocalizacao("");
     setPrecoMinimo(0);
-    setPrecoMaximo(50000);
+    setPrecoMaximo(isVenda ? 10000000 : 50000);
     setCategoria("");
     setQuarto("Qualquer");
     setBanheiro("Qualquer");
