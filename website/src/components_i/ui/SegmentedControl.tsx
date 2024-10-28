@@ -3,8 +3,6 @@ import { ReactComponent as KeyOn } from "../../assets/icons/keyON.svg";
 import { ReactComponent as KeyOff } from "../../assets/icons/keyOFF.svg";
 import { ReactComponent as BuyIconOn } from "../../assets/icons/buyIconON.svg";
 import { ReactComponent as BuyIconOff } from "../../assets/icons/buyIconOFF.svg";
-import { ReactComponent as SellIconOn } from "../../assets/icons/sellIconON.svg";
-import { ReactComponent as SellIconOff } from "../../assets/icons/sellIconOFF.svg";
 
 const SegmentedControl = () => {
   const [selected, setSelected] = useState("Rent");
@@ -12,7 +10,6 @@ const SegmentedControl = () => {
   const options = [
     { value: "Alugar", IconOn: KeyOn, IconOff: KeyOff },
     { value: "Comprar", IconOn: BuyIconOn, IconOff: BuyIconOff },
-    { value: "Vender", IconOn: SellIconOn, IconOff: SellIconOff },
   ];
 
   const buttonStyles = `inline-flex items-center justify-center gap-2 p-1.5 md:p-2 rounded-md cursor-pointer`;
