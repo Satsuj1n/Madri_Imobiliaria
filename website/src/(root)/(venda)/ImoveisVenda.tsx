@@ -32,10 +32,11 @@ const ImoveisVenda: FC = () => {
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Para armazenar imóveis filtrados
 
   // Filtros iniciais
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filters, setFilters] = useState({
     localizacao: "",
     precoMinimo: 0,
-    precoMaximo: 1000000,
+    precoMaximo: 10000000,
     categoria: "", // Filtro para categoria
     quarto: 1,
     banheiro: 1,
@@ -135,11 +136,11 @@ const ImoveisVenda: FC = () => {
       <Navbar />
       <div className="bg-gradient-to-b from-white to-[#e7ecfd] min-h-screen flex flex-col lg:flex-row">
         <div className="lg:w-3/5 w-full p-4 h-auto lg:h-screen overflow-y-auto scrollbar-hide">
-          <h1 className="text-2xl font-semibold text-gray-800 text-center mt-24">
+          <h1 className="text-2xl font-semibold text-gray-800 text-center mt-24 mb-8">
             Imóveis para Venda
           </h1>
           <div className="flex items-center justify-center">
-            <PropertySearch onSearch={handleSearch} maxPrice={1000000} />
+            <PropertySearch onSearch={handleSearch} maxPrice={10000000} isVenda={true} />
           </div>
 
           <div className="container mx-auto py-8">

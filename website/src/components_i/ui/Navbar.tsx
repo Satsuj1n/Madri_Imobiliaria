@@ -238,13 +238,13 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white shadow-lg">
           <div className="flex flex-col items-center gap-4 p-4">
-            <a href="#" className="text-sm">
+            <a href="/aluguel" className="text-sm">
               Alugar
             </a>
-            <a href="#" className="text-sm">
+            <a href="/venda" className="text-sm">
               Comprar
             </a>
-            <a href="#" className="text-sm">
+            <a href="/criar-imovel/1" className="text-sm">
               Vender
             </a>
             <a href="#" className="text-sm">

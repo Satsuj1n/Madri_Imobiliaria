@@ -27,10 +27,13 @@ const categorias = [
 interface PropertySearchProps {
   onSearch: (filters: any) => void;
   maxPrice?: number; // Nova prop opcional para definir o preço máximo
+  isVenda?: boolean; // Nova prop opcional para indicar se é venda
 }
+
 const PropertySearch: React.FC<PropertySearchProps> = ({
   onSearch,
   maxPrice = 50000,
+  isVenda = false, // O padrão é false, ou seja, não é venda
 }) => {
   const [localizacao, setLocalizacao] = useState("");
   const [precoMinimo, setPrecoMinimo] = useState(0);
@@ -214,7 +217,11 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
       {/* Modal de Filtros */}
       {isFilterOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-xl shadow-lg w-[450px] h-[80vh] overflow-y-auto relative">
+          <div
+            className={`bg-white rounded-xl shadow-lg relative ${
+              isVenda ? "h-[70vh]" : "h-[80vh]"
+            } w-[450px] ${isVenda ? "overflow-hidden" : "overflow-y-auto"}`}
+          >
             {/* Navbar Filtros */}
             <div className="bg-white p-4 flex justify-between items-center shadow rounded-t-xl sticky top-0 z-10">
               <button
@@ -231,25 +238,37 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
             </div>
 
             <div className="p-6 overflow-y-auto max-h-[65vh]">
-              <h3 className="text-lg font-semibold mb-2">Datas</h3>
-              {/* Bloco de Data de Entrada */}
-              <div className="mb-4">
-                <label className="font-semibold text-sm text-gray-600">
-                  Data de Entrada
-                </label>
-                <input type="date" className="w-full p-2 border rounded-md" />
-              </div>
+              {/* Exibir datas somente se não for venda */}
+              {!isVenda && (
+                <>
+                  <h3 className="text-lg font-semibold mb-2">Datas</h3>
+                  {/* Bloco de Data de Entrada */}
+                  <div className="mb-4">
+                    <label className="font-semibold text-sm text-gray-600">
+                      Data de Entrada
+                    </label>
+                    <input
+                      type="date"
+                      className="w-full p-2 border rounded-md"
+                    />
+                  </div>
 
-              {/* Bloco de Data de Saída */}
-              <div className="mb-4">
-                <label className="font-semibold text-sm text-gray-600">
-                  Data de Saída
-                </label>
-                <input type="date" className="w-full p-2 border rounded-md" />
-              </div>
+                  {/* Bloco de Data de Saída */}
+                  <div className="mb-4">
+                    <label className="font-semibold text-sm text-gray-600">
+                      Data de Saída
+                    </label>
+                    <input
+                      type="date"
+                      className="w-full p-2 border rounded-md"
+                    />
+                  </div>
 
-              {/* Divisor */}
-              <hr className="my-4" />
+                  {/* Divisor */}
+                  <hr className="my-4" />
+                </>
+              )}
+
               <h3 className="text-lg font-semibold mb-2">Preços</h3>
 
               {/* Slider Preço Mínimo */}

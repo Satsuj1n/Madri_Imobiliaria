@@ -149,7 +149,7 @@ const ImoveisAluguel: FC = () => {
             Imóveis para Aluguel
           </h1>
           <div className="flex items-center justify-center">
-            <PropertySearch onSearch={handleSearch} />
+            <PropertySearch onSearch={handleSearch} isVenda={false}/>
           </div>
           <div className="container mx-auto py-8">
             {loading ? (
