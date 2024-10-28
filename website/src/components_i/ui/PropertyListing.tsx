@@ -8,11 +8,14 @@ interface Imovel {
   _id: string;
   tipo: string;
   titulo: string;
+  descricao: string;
   valor?: number; // Para imóveis de venda
   aluguelValor?: number; // Para imóveis de aluguel
   endereco: string;
+  cep: string;
   numero: string;
   bairro: string;
+  regiao: string;
   cidadeEstado: string;
   quarto: number;
   banheiro: number;
@@ -21,10 +24,13 @@ interface Imovel {
 }
 
 const PropertyListing = () => {
-  const [imoveis, setImoveis] = useState<Imovel[]>([]); // Garante que imoveis é sempre um array
-  const [displayedImoveis, setDisplayedImoveis] = useState<Imovel[]>([]); // Imóveis já exibidos
+  const [imoveis, setImoveis] = useState<Imovel[]>([]); // Todos os imóveis carregados da API
+  const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Imóveis filtrados com base nos critérios
+  const [displayedImoveis, setDisplayedImoveis] = useState<Imovel[]>([]); // Imóveis atualmente exibidos
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState<string>(""); // Para a busca geral
+  const [selectedType, setSelectedType] = useState<string | null>(null); // Para o filtro de tipo de imóvel
   const itemsPerPage = 6; // Número de imóveis por página
 
   // Função para buscar todos os imóveis do banco de dados
@@ -33,39 +39,90 @@ const PropertyListing = () => {
     try {
       const response = await fetch(`http://localhost:5000/api/imoveis`);
       const data = await response.json();
-      console.log("Dados recebidos da API:", data); // Log para verificar os dados recebidos
+      console.log("Dados recebidos da API:", data);
 
       if (Array.isArray(data)) {
-        setImoveis(data); // Garante que os dados corretos são armazenados
+        setImoveis(data);
+        setFilteredImoveis(data); // Inicializa com todos os imóveis
         setDisplayedImoveis(data.slice(0, itemsPerPage)); // Exibe os primeiros imóveis
       } else if (data.imoveis && Array.isArray(data.imoveis)) {
-        setImoveis(data.imoveis); // Corrige se o array de imóveis estiver aninhado
+        setImoveis(data.imoveis);
+        setFilteredImoveis(data.imoveis); // Inicializa com todos os imóveis
         setDisplayedImoveis(data.imoveis.slice(0, itemsPerPage)); // Exibe os primeiros imóveis
       } else {
         console.error("Formato inesperado da resposta da API:", data);
-        setImoveis([]); // Define um array vazio se houver um erro inesperado
+        setImoveis([]);
       }
     } catch (error) {
       console.error("Erro ao buscar imóveis:", error);
-      setImoveis([]); // Em caso de erro, define imoveis como um array vazio
+      setImoveis([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Carregar todos os imóveis ao montar o componente
   useEffect(() => {
     fetchImoveis();
   }, []);
 
-  // Função para carregar mais imóveis conforme a página
+  // Aplica os filtros automaticamente ao mudar tipo ou localização
+  useEffect(() => {
+    applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedType, searchQuery]); // Reage a mudanças no tipo ou na busca
+
+  // Função para aplicar os filtros de tipo de imóvel e busca
+  const applyFilters = () => {
+    let filtered = imoveis;
+
+    // Filtro por tipo de imóvel
+    if (selectedType === "Alugar") {
+      filtered = filtered.filter((imovel) => imovel.aluguelValor);
+    } else if (selectedType === "Comprar") {
+      filtered = filtered.filter((imovel) => imovel.valor);
+    }
+
+    // Filtro por busca geral (título, descrição, endereço, cep, bairro, regiao)
+    if (searchQuery) {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      filtered = filtered.filter((imovel) =>
+        [
+          imovel.titulo,
+          imovel.descricao,
+          imovel.endereco,
+          imovel.cep,
+          imovel.bairro,
+          imovel.regiao,
+        ]
+          .join(" ")
+          .toLowerCase()
+          .includes(lowercasedQuery)
+      );
+    }
+
+    setFilteredImoveis(filtered);
+    setDisplayedImoveis(filtered.slice(0, itemsPerPage)); // Reseta a exibição inicial após aplicar os filtros
+    setCurrentPage(1); // Reseta a página para a primeira
+  };
+
+  // Atualiza o tipo de imóvel ao clicar no SegmentedControl
+  const handleTypeChange = (type: string | null) => {
+    setSelectedType(type);
+  };
+
+  // Atualiza a busca geral
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  // Função para carregar mais imóveis conforme a página, sem duplicar
   const loadMoreImoveis = () => {
     const startIndex = currentPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const nextImoveis = imoveis.slice(startIndex, endIndex); // Imóveis adicionais
+    const nextImoveis = filteredImoveis.slice(startIndex, endIndex); // Pega mais imóveis filtrados
 
-    setDisplayedImoveis((prevDisplayed) => [...prevDisplayed, ...nextImoveis]); // Adiciona os novos imóveis aos já exibidos
-    setCurrentPage((prevPage) => prevPage + 1); // Incrementa a página
+    setDisplayedImoveis((prevDisplayed) => [...prevDisplayed, ...nextImoveis]); // Adiciona novos imóveis
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   return (
@@ -96,10 +153,13 @@ const PropertyListing = () => {
       {/* Barra de controle e busca */}
       <div className="flex flex-col md:flex-row justify-between w-full max-w-[1120px] mt-4 px-4 mb-4 space-y-2 md:space-y-0">
         <div className="w-full md:w-auto">
-          <SegmentedControl />
+          <SegmentedControl
+            selectedType={selectedType}
+            onTypeChange={handleTypeChange}
+          />
         </div>
         <div className="w-full md:w-auto">
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
         </div>
       </div>
 
@@ -117,7 +177,7 @@ const PropertyListing = () => {
                   : imovel.valor
                   ? `R$${imovel.valor}`
                   : ""
-              } // Exibe o valor de aluguel ou venda, dependendo do que estiver disponível
+              }
               titulo={imovel.titulo}
               endereco={imovel.endereco}
               cidadeEstado={imovel.cidadeEstado}
@@ -137,7 +197,7 @@ const PropertyListing = () => {
 
       {/* Botão de "Ver Mais Propriedades" */}
       <div className="mb-28">
-        {currentPage * itemsPerPage < imoveis.length && (
+        {currentPage * itemsPerPage < filteredImoveis.length && (
           <Button variant="large" size="large" onClick={loadMoreImoveis}>
             Ver Mais Propriedades
           </Button>
