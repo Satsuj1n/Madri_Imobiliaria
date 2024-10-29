@@ -9,7 +9,9 @@ import CriarImovel1 from "./(root)/(criar-imovel)/CriarImovel1"; // Página 1 pa
 import CriarImovel2 from "./(root)/(criar-imovel)/CriarImovel2"; // Página 2 para criar imóvel
 import CriarImovel3 from "./(root)/(criar-imovel)/CriarImovel3"; // Página 3 para criar imóvel
 import ImoveisAluguel from "./(root)/(aluguel)/ImoveisAluguel"; // Página de aluguel
-import ImoveisVenda from "./(root)/(venda)/ImoveisVenda"
+import ImoveisVenda from "./(root)/(venda)/ImoveisVenda";
+
+import Detalhes from "./(root)/(imovel)/Detalhes"; // Página de detalhes do imóvel
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
         {/* Parte 3 - Criar Imóvel */}
         <Route path="/aluguel" element={<ImoveisAluguel />} />{" "}
         <Route path="/venda" element={<ImoveisVenda />} />{" "}
+        <Route path="/imovel/:id" element={<Detalhes />} />{" "}
       </Routes>
     </Router>
   );

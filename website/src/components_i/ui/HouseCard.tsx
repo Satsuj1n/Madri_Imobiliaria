@@ -1,9 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate para redirecionamento
 import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
 
 interface HouseCardProps {
+  id: string; // Adicionei o id para ser usado no redirecionamento
   aluguelValor: string;
   titulo: string;
   endereco: string;
@@ -18,6 +20,7 @@ interface HouseCardProps {
 }
 
 const HouseCard: React.FC<HouseCardProps> = ({
+  id,
   aluguelValor,
   titulo,
   endereco,
@@ -28,10 +31,19 @@ const HouseCard: React.FC<HouseCardProps> = ({
   banheiro,
   area,
   imagemPrincipal,
-  tipo, // Recebendo a prop tipo
+  tipo,
 }) => {
+  const navigate = useNavigate(); // Hook para redirecionar
+
+  const handleCardClick = () => {
+    navigate(`/imovel/${id}`); // Redireciona para a página de detalhes usando o id do imóvel
+  };
+
   return (
-    <div className={`border rounded-lg shadow-md bg-white`}>
+    <div
+      className="border rounded-lg shadow-md bg-white cursor-pointer"
+      onClick={handleCardClick}
+    >
       {/* Imagem da Casa */}
       <img
         src={imagemPrincipal}

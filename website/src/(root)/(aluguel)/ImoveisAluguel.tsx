@@ -149,7 +149,7 @@ const ImoveisAluguel: FC = () => {
             Imóveis para Aluguel
           </h1>
           <div className="flex items-center justify-center">
-            <PropertySearch onSearch={handleSearch} isVenda={false}/>
+            <PropertySearch onSearch={handleSearch} isVenda={false} />
           </div>
           <div className="container mx-auto py-8">
             {loading ? (
@@ -167,6 +167,7 @@ const ImoveisAluguel: FC = () => {
               >
                 {filteredImoveis.map((imovel) => (
                   <HouseCard
+                    id={imovel._id}
                     key={imovel._id}
                     aluguelValor={`R$ ${imovel.aluguelValor}`}
                     titulo={imovel.titulo}

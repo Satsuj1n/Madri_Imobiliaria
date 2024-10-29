@@ -170,6 +170,7 @@ const PropertyListing = () => {
         ) : displayedImoveis.length > 0 ? (
           displayedImoveis.map((imovel) => (
             <HouseCard
+              id={imovel._id}
               key={imovel._id}
               aluguelValor={
                 imovel.aluguelValor

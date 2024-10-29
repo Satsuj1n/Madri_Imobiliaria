@@ -159,6 +159,7 @@ const ImoveisVenda: FC = () => {
               >
                 {filteredImoveis.map((imovel) => (
                   <HouseCard
+                    id={imovel._id}
                     key={imovel._id}
                     aluguelValor={`R$ ${imovel.valor}`} // valor para venda
                     titulo={imovel.titulo}
