@@ -242,13 +242,21 @@ const Beneficit = () => {
       </div>
 
       {/* Image occupying half the box on the right side */}
-      <div className="w-full lg:w-1/2 h-full flex justify-end items-end mt-4 lg:mt-0">
-        <img
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={cardAnimationComplete ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 0.5 }}
+        className="w-full lg:w-1/2 h-full flex justify-end items-end mt-4 lg:mt-0"
+      >
+        <motion.img
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={cardAnimationComplete ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.5 }}
           src="https://i.imgur.com/aKr2xVQ.png"
           alt="Ilustração de casa"
           className="w-full h-auto lg:h-full object-cover rounded-r-lg"
         />
-      </div>
+      </motion.div>
     </div>
   );
 };
