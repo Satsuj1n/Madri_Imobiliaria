@@ -43,10 +43,13 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
   };
 
   const mapOptions = {
-    disableDefaultUI: true,
-    zoomControl: true,
-    streetViewControl: false,
-    fullscreenControl: false,
+    disableDefaultUI: true, // Desativa toda a UI padrão
+    zoomControl: true, // Habilita apenas o controle de zoom
+    streetViewControl: false, // Desativa o controle de Street View
+    fullscreenControl: false, // Desativa o controle de tela cheia
+    mapTypeControl: false, // Desativa o controle de tipo de mapa
+    scaleControl: false, // Desativa a escala do mapa
+    rotateControl: false, // Desativa a rotação do mapa
     styles: [
       {
         featureType: "all",
@@ -144,6 +147,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "",
+    language: "pt-BR", // Adiciona o idioma português
   });
 
   if (loadError) {
