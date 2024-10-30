@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components_i/ui/Navbar";
-import BrowseProperties from "components_i/ui/BrowseProperties";
 import { Button } from "components_i/ui/Button";
 import PropertyListing from "components_i/ui/PropertyListing";
 import Footer from "components_i/ui/Footer";
 import Beneficit from "components_i/ui/Beneficit";
+import HeroSection from "components_i/ui/HeroSection"; // Importando o novo componente
 
 const LandingPage = () => {
   const [message, setMessage] = useState<string | null>(null);
@@ -34,63 +34,8 @@ const LandingPage = () => {
         }
       `}</style>
       <div className="flex min-h-screen flex-col items-center overflow-x-hidden">
-        {/* Main Column with Text and Navigation */}
-        <div className="flex w-full bg-[#F7F7FD] flex-col md:flex-row pt-20 md:pt-0">
-          {/* Left Column with Texts and Components */}
-          <div className="w-full md:w-1/2 flex flex-col justify-center p-6 md:p-10">
-            <h1 className="text-[28px] md:text-[64px] font-bold text-black mb-4 md:ml-36 leading-snug md:leading-[70px] text-center md:text-left">
-              Compre, venda ou alugue sua propriedade
-            </h1>
-            <p className="text-[14px] md:text-[20px] text-gray-600 mb-8 md:ml-36 text-center md:text-left">
-              Uma ótima plataforma para comprar, vender ou até mesmo alugar suas
-              propriedades sem qualquer comissão.
-            </p>
-
-            {/* Estatísticas para desktop, visíveis na resolução padrão e ocultas no mobile */}
-            <div className="hidden lg:flex lg:ml-36 space-x-8 items-center mb-8">
-              <div className="h-[64px] w-[3px] bg-[#E0DEF7]"></div>
-              <div className="items-start">
-                <h2 className="font-bold text-[#0053f8] text-[24px] md:text-[32px]">
-                  50k+
-                </h2>
-                <p className="text-sm text-gray-500">Inquilinos</p>
-              </div>
-              <div className="h-[64px] w-[3px] bg-[#E0DEF7]"></div>
-              <div className="items-start">
-                <h2 className="text-[24px] md:text-[32px] font-bold text-[#0053f8]">
-                  10k+
-                </h2>
-                <p className="text-sm text-gray-500">Propriedades</p>
-              </div>
-            </div>
-
-            {/* Componente BrowseProperties, ajustado para versão mobile e desktop */}
-            <div className="md:ml-36">
-              <BrowseProperties />
-            </div>
-
-            {/* Estatísticas para mobile, posicionadas abaixo do BrowseProperties */}
-            <div className="flex md:hidden w-full justify-between px-8 mt-4">
-              <div className="flex flex-col items-center">
-                <h2 className="font-bold text-[#0053f8] text-[24px]">50k+</h2>
-                <p className="text-sm text-gray-500">Inquilinos</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <h2 className="text-[24px] font-bold text-[#0053f8]">10k+</h2>
-                <p className="text-sm text-gray-500">Propriedades</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column with Map as an Image, hidden on mobile */}
-          <div className="hidden md:flex w-1/2 justify-center items-center mt-12">
-            <img
-              src="https://i.imgur.com/xjkS3Cu.png"
-              alt="Imagem do Mapa"
-              className="w-full h-auto object-cover"
-            />
-          </div>
-        </div>
+        {/* Hero Section */}
+        <HeroSection />
 
         <Beneficit />
 
