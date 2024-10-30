@@ -20,7 +20,7 @@ const HeroSection = () => {
   return (
     <motion.div
       ref={ref} // O componente será observado quando aparecer na tela
-      className="flex w-full bg-[#F7F7FD] flex-col md:flex-row pt-20 md:pt-0"
+      className="flex w-full bg-[#F7F7FD] flex-col md:flex-row pt-20 md:pt-0 md:mt-10"
       initial={{ opacity: 0, y: 50 }}
       animate={animationTriggered ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8 }}
@@ -71,7 +71,7 @@ const HeroSection = () => {
 
         {/* Componente BrowseProperties */}
         <motion.div
-          className="md:ml-36"
+          className="md:ml-36 relative z-10" // Adicionando z-index para sobrepor a imagem
           initial={{ opacity: 0, scale: 0.9 }}
           animate={animationTriggered ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.7 }}
