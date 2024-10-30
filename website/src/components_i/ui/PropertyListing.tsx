@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion"; // Importando o motion para a animação
 import HouseCard from "./HouseCard";
 import SegmentedControl from "./SegmentedControl";
 import SearchBar from "./SearchBar";
@@ -169,27 +170,33 @@ const PropertyListing = () => {
           <p>Carregando imóveis...</p>
         ) : displayedImoveis.length > 0 ? (
           displayedImoveis.map((imovel) => (
-            <HouseCard
-              id={imovel._id}
+            <motion.div
               key={imovel._id}
-              aluguelValor={
-                imovel.aluguelValor
-                  ? `R$${imovel.aluguelValor}`
-                  : imovel.valor
-                  ? `R$${imovel.valor}`
-                  : ""
-              }
-              titulo={imovel.titulo}
-              endereco={imovel.endereco}
-              cidadeEstado={imovel.cidadeEstado}
-              quarto={imovel.quarto}
-              banheiro={imovel.banheiro}
-              area={imovel.area}
-              numero={imovel.numero}
-              bairro={imovel.bairro}
-              imagemPrincipal={imovel.imagemPrincipal}
-              tipo={imovel.tipo}
-            />
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <HouseCard
+                id={imovel._id}
+                aluguelValor={
+                  imovel.aluguelValor
+                    ? `R$${imovel.aluguelValor}`
+                    : imovel.valor
+                    ? `R$${imovel.valor}`
+                    : ""
+                }
+                titulo={imovel.titulo}
+                endereco={imovel.endereco}
+                cidadeEstado={imovel.cidadeEstado}
+                quarto={imovel.quarto}
+                banheiro={imovel.banheiro}
+                area={imovel.area}
+                numero={imovel.numero}
+                bairro={imovel.bairro}
+                imagemPrincipal={imovel.imagemPrincipal}
+                tipo={imovel.tipo}
+              />
+            </motion.div>
           ))
         ) : (
           <p>Nenhum imóvel encontrado.</p>
