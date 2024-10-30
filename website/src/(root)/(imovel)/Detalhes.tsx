@@ -2,6 +2,7 @@ import Footer from "components_i/ui/Footer";
 import Navbar from "components_i/ui/Navbar";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Button } from "../../components_i/ui/Button";
 import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
@@ -35,6 +36,8 @@ const Detalhes: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Obtém o ID do imóvel da URL
   const [imovel, setImovel] = useState<Imovel | null>(null); // Estado para armazenar o imóvel
   const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o modal
+  const [activeIndex, setActiveIndex] = useState(0); // Estado para controlar o índice ativo da imagem
 
   // Função para buscar os detalhes do imóvel baseado no ID
   const fetchImovelDetails = async () => {
@@ -67,21 +70,31 @@ const Detalhes: React.FC = () => {
     return `${firstName.charAt(0)}${lastName ? lastName.charAt(0) : ""}`;
   };
 
+  // Função para avançar para a próxima imagem
+  const nextImage = () => {
+    if (imovel.outrasImagens) {
+      setActiveIndex((prevIndex) =>
+        prevIndex === imovel.outrasImagens!.length - 1 ? 0 : prevIndex + 1
+      );
+    }
+  };
+
+  // Função para voltar para a imagem anterior
+  const prevImage = () => {
+    if (imovel.outrasImagens) {
+      setActiveIndex((prevIndex) =>
+        prevIndex === 0 ? imovel.outrasImagens!.length - 1 : prevIndex - 1
+      );
+    }
+  };
+
   return (
     <>
       <Navbar />
       <div className="bg-[#F7F7FD] min-h-screen">
         <div className="container mx-auto px-4 py-8">
-          {/* Voltar ao mapa */}
-          <a
-            href="/map"
-            className="text-blue-600 hover:underline mb-4 inline-block"
-          >
-            &larr; Voltar ao mapa
-          </a>
-
           {/* Título e Endereço */}
-          <h1 className="text-4xl font-bold mt-8">{imovel.titulo}</h1>
+          <h1 className="text-4xl font-bold mt-16">{imovel.titulo}</h1>
           <p className="text-gray-600 text-lg mb-4">
             {imovel.endereco}, {imovel.cidadeEstado}
           </p>
@@ -98,25 +111,31 @@ const Detalhes: React.FC = () => {
             </div>
 
             {/* Imagens Secundárias */}
-            <div className="w-1/3 flex flex-col gap-4">
+            <div className="w-1/3 flex flex-col gap-4 relative">
               {imovel.outrasImagens && imovel.outrasImagens.length > 0 ? (
                 imovel.outrasImagens
-                  .slice(0, 4)
+                  .slice(0, 2)
                   .map((image, index) => (
                     <img
                       key={index}
                       src={image}
                       alt={`Imagem ${index + 1}`}
-                      className="w-full h-[120px] object-cover rounded-lg shadow-lg"
+                      className="w-full h-[240px] object-cover rounded-lg shadow-lg"
                     />
                   ))
               ) : (
                 <p>Nenhuma outra imagem disponível.</p>
               )}
-              {imovel.outrasImagens && imovel.outrasImagens.length > 4 && (
-                <button className="text-blue-600 hover:underline">
+
+              {imovel.outrasImagens && imovel.outrasImagens.length > 2 && (
+                <Button
+                  variant="default"
+                  size="md"
+                  className="absolute bottom-2 right-2"
+                  onClick={() => setIsModalOpen(true)}
+                >
                   Ver todas as fotos
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -184,12 +203,51 @@ const Detalhes: React.FC = () => {
                     : `R$${imovel.valor?.toLocaleString()}`}
                 </p>
               </div>
-              <button className="bg-blue-500 text-white w-full py-2 rounded-lg font-bold hover:bg-blue-600">
+              <Button variant="default" size="md" className="w-full">
                 Solicitar agora
-              </button>
+              </Button>
             </div>
           </div>
         </div>
+
+        {/* Modal para o carrossel */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+            <div className="relative">
+              {/* Botão Fechar no canto superior esquerdo, fora da imagem */}
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-2 left-2 bg-opacity-75 bg-blue-700 text-white rounded-full p-1 px-3 z-50"
+              >
+                x
+              </button>
+
+              {/* Carrossel de imagens com tamanho padronizado */}
+              <div className="relative w-full h-[500px]">
+                {imovel.outrasImagens && imovel.outrasImagens.length > 0 && (
+                  <img
+                    src={imovel.outrasImagens[activeIndex]}
+                    alt={`Imagem ${activeIndex + 1}`}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                )}
+                {/* Controles para navegação */}
+                <button
+                  onClick={prevImage}
+                  className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-opacity-50 bg-gray-700 text-white p-2 rounded-full"
+                >
+                  &#10094;
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-opacity-50 bg-gray-700 text-white p-2 rounded-full"
+                >
+                  &#10095;
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <Footer />
     </>
