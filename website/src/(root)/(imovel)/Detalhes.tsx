@@ -1,11 +1,12 @@
+import React, { useEffect, useState, useRef } from "react";
 import Footer from "components_i/ui/Footer";
 import Navbar from "components_i/ui/Navbar";
-import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components_i/ui/Button";
 import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
+import MapComponent from "components_i/ui/MapComponent";
 
 // Definição da interface de Imovel para o uso do tipo recebido da API
 interface Imovel {
@@ -13,7 +14,7 @@ interface Imovel {
   titulo: string;
   descricao?: string;
   endereco: string;
-  cep: number;
+  cep: string;
   area: number;
   quarto: number;
   banheiro: number;
@@ -39,6 +40,11 @@ const Detalhes: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o modal
   const [activeIndex, setActiveIndex] = useState(0); // Estado para controlar o índice ativo da imagem
 
+  // Refs para a descrição, o cliente e o mapa
+  const descricaoRef = useRef<HTMLDivElement>(null);
+  const clienteRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+
   // Função para buscar os detalhes do imóvel baseado no ID
   const fetchImovelDetails = async () => {
     try {
@@ -51,6 +57,27 @@ const Detalhes: React.FC = () => {
       setLoading(false); // Finaliza o carregamento
     }
   };
+
+  // Efeito para sincronizar a altura do mapa com a altura da descrição e do cliente
+  useEffect(() => {
+    const adjustMapHeight = () => {
+      if (descricaoRef.current && clienteRef.current && mapRef.current) {
+        const descricaoHeight = descricaoRef.current.offsetHeight;
+        const clienteHeight = clienteRef.current.offsetHeight;
+        const totalHeight = descricaoHeight + clienteHeight;
+        mapRef.current.style.height = `${totalHeight}px`;
+      }
+    };
+
+    if (imovel) {
+      adjustMapHeight();
+      window.addEventListener("resize", adjustMapHeight); // Ajusta em caso de redimensionamento
+    }
+
+    return () => {
+      window.removeEventListener("resize", adjustMapHeight);
+    };
+  }, [imovel]);
 
   useEffect(() => {
     fetchImovelDetails(); // Busca os detalhes do imóvel quando o componente é montado
@@ -169,13 +196,16 @@ const Detalhes: React.FC = () => {
               </div>
 
               {/* Descrição */}
-              <div className="mb-8">
+              <div className="mb-8" ref={descricaoRef}>
                 <h3 className="text-xl font-bold mb-2">Sobre este imóvel</h3>
                 <p className="text-gray-700">{imovel.descricao}</p>
               </div>
 
               {/* Informações do Cliente */}
-              <div className="bg-white p-6 rounded-lg shadow-md mb-6 max-w-4xl">
+              <div
+                className="bg-white p-6 rounded-lg shadow-md mb-6 max-w-4xl"
+                ref={clienteRef}
+              >
                 <h2 className="text-2xl font-bold mb-4">
                   Informações do Cliente
                 </h2>
@@ -193,19 +223,30 @@ const Detalhes: React.FC = () => {
               </div>
             </div>
 
-            {/* Coluna da Direita: Box de Preço */}
-            <div className="bg-white p-4 rounded-lg shadow-md max-w-sm h-36 flex flex-col justify-between">
-              <div>
-                <h3 className="text-gray-500">Preço</h3>
-                <p className="text-4xl font-bold text-blue-500">
-                  {imovel.tipo === "aluguel"
-                    ? `R$${imovel.aluguelValor?.toLocaleString()}/mês`
-                    : `R$${imovel.valor?.toLocaleString()}`}
-                </p>
+            {/* Coluna da Direita: Box de Preço e Mapa */}
+            <div>
+              {/* Box de Preço */}
+              <div className="bg-white p-4 rounded-lg shadow-md max-w-sm h-36 flex flex-col justify-between mb-4">
+                <div>
+                  <h3 className="text-gray-500">Preço</h3>
+                  <p className="text-4xl font-bold text-blue-500">
+                    {imovel.tipo === "aluguel"
+                      ? `R$${imovel.aluguelValor?.toLocaleString()}/mês`
+                      : `R$${imovel.valor?.toLocaleString()}`}
+                  </p>
+                </div>
+                <Button variant="default" size="md" className="w-full">
+                  Solicitar agora
+                </Button>
               </div>
-              <Button variant="default" size="md" className="w-full">
-                Solicitar agora
-              </Button>
+
+              {/* Mapa com o Pin */}
+              <div
+                className="bg-white p-4 rounded-lg shadow-md max-w-sm"
+                ref={mapRef}
+              >
+                <MapComponent imoveis={[imovel]} />
+              </div>
             </div>
           </div>
         </div>
