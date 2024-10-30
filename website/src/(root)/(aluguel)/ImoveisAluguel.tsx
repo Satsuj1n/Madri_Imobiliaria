@@ -1,4 +1,5 @@
 import React, { useEffect, useState, FC } from "react";
+import { motion } from "framer-motion"; // Importando o motion para animação
 import Footer from "components_i/ui/Footer";
 import Navbar from "components_i/ui/Navbar";
 import PropertySearch from "components_i/ui/PropertySearch";
@@ -31,7 +32,6 @@ const ImoveisAluguel: FC = () => {
   const [loading, setLoading] = useState<boolean>(true); // Estado para controlar o carregamento
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Para armazenar imóveis filtrados
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filters, setFilters] = useState({
     localizacao: "",
     faixaPreco: "R$0–R$2,500",
@@ -80,24 +80,12 @@ const ImoveisAluguel: FC = () => {
       const matchesRooms = imovel.quarto >= filters.quarto;
       const matchesBathrooms = imovel.banheiro >= filters.banheiro;
 
-      // Corrigindo a lógica de comparação de datas de entrada e saída
-      const matchesDate =
-        filters.dataEntrada && filters.dataSaida
-          ? imovel.dataInicioDisponivel && imovel.dataFimDisponivel
-            ? new Date(filters.dataEntrada) >=
-                new Date(imovel.dataInicioDisponivel.substring(0, 10)) &&
-              new Date(filters.dataSaida) <=
-                new Date(imovel.dataFimDisponivel.substring(0, 10))
-            : true // Se os dados de disponibilidade estiverem indefinidos, considera que passa no filtro
-          : true; // Se as datas não forem preenchidas, passa todos os imóveis
-
       return (
         withinPriceRange &&
         matchesLocation &&
         matchesCategory &&
         matchesRooms &&
-        matchesBathrooms &&
-        matchesDate
+        matchesBathrooms
       );
     });
   };
@@ -166,21 +154,27 @@ const ImoveisAluguel: FC = () => {
                 }}
               >
                 {filteredImoveis.map((imovel) => (
-                  <HouseCard
-                    id={imovel._id}
+                  <motion.div
                     key={imovel._id}
-                    aluguelValor={`R$ ${imovel.aluguelValor}`}
-                    titulo={imovel.titulo}
-                    bairro={imovel.bairro}
-                    numero={imovel.numero}
-                    endereco={imovel.endereco}
-                    cidadeEstado={imovel.cidadeEstado}
-                    quarto={imovel.quarto}
-                    banheiro={imovel.banheiro}
-                    area={imovel.area}
-                    imagemPrincipal={imovel.imagemPrincipal}
-                    tipo={imovel.tipo}
-                  />
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
+                    <HouseCard
+                      id={imovel._id}
+                      aluguelValor={`R$ ${imovel.aluguelValor}`}
+                      titulo={imovel.titulo}
+                      bairro={imovel.bairro}
+                      numero={imovel.numero}
+                      endereco={imovel.endereco}
+                      cidadeEstado={imovel.cidadeEstado}
+                      quarto={imovel.quarto}
+                      banheiro={imovel.banheiro}
+                      area={imovel.area}
+                      imagemPrincipal={imovel.imagemPrincipal}
+                      tipo={imovel.tipo}
+                    />
+                  </motion.div>
                 ))}
               </div>
             ) : (

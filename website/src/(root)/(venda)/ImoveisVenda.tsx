@@ -1,4 +1,5 @@
 import React, { useEffect, useState, FC } from "react";
+import { motion } from "framer-motion"; // Importando o motion para a animação
 import Footer from "components_i/ui/Footer";
 import Navbar from "components_i/ui/Navbar";
 import PropertySearch from "components_i/ui/PropertySearch";
@@ -32,7 +33,6 @@ const ImoveisVenda: FC = () => {
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Para armazenar imóveis filtrados
 
   // Filtros iniciais
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filters, setFilters] = useState({
     localizacao: "",
     precoMinimo: 0,
@@ -158,21 +158,27 @@ const ImoveisVenda: FC = () => {
                 }}
               >
                 {filteredImoveis.map((imovel) => (
-                  <HouseCard
-                    id={imovel._id}
+                  <motion.div
                     key={imovel._id}
-                    aluguelValor={`R$ ${imovel.valor}`} // valor para venda
-                    titulo={imovel.titulo}
-                    bairro={imovel.bairro}
-                    numero={imovel.numero}
-                    endereco={imovel.endereco}
-                    cidadeEstado={imovel.cidadeEstado}
-                    quarto={imovel.quarto}
-                    banheiro={imovel.banheiro}
-                    area={imovel.area}
-                    imagemPrincipal={imovel.imagemPrincipal}
-                    tipo={imovel.tipo}
-                  />
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
+                    <HouseCard
+                      id={imovel._id}
+                      aluguelValor={`R$ ${imovel.valor}`} // valor para venda
+                      titulo={imovel.titulo}
+                      bairro={imovel.bairro}
+                      numero={imovel.numero}
+                      endereco={imovel.endereco}
+                      cidadeEstado={imovel.cidadeEstado}
+                      quarto={imovel.quarto}
+                      banheiro={imovel.banheiro}
+                      area={imovel.area}
+                      imagemPrincipal={imovel.imagemPrincipal}
+                      tipo={imovel.tipo}
+                    />
+                  </motion.div>
                 ))}
               </div>
             ) : (
