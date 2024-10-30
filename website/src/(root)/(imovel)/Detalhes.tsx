@@ -59,15 +59,6 @@ const Detalhes: React.FC = () => {
     }
   };
 
-  // Função para verificar timeout do carregamento do mapa
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMapError(true); // Define erro caso o mapa não carregue após 10 segundos
-    }, 10000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   // Efeito para sincronizar a altura do mapa com a altura da descrição e do cliente
   useEffect(() => {
     const adjustMapHeight = () => {
