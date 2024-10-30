@@ -4,7 +4,7 @@ import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
 
-// Atualizamos a interface para lidar com imóveis de aluguel e venda
+// Interface para lidar com imóveis de aluguel e venda
 interface Imovel {
   _id: string;
   cep?: string; // Opcional para imóveis de venda
@@ -22,19 +22,12 @@ interface MapComponentProps {
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
-  console.log("MapComponent: renderizou o componente");
-
   const [coordinatesList, setCoordinatesList] = useState<
     { lat: number; lng: number; _id: string; preco: number }[]
   >([]);
-  const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(
-    null
-  );
+  const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
   const [selectedImovel, setSelectedImovel] = useState<Imovel | null>(null); // Estado para o imóvel selecionado
-  const [selectedPosition, setSelectedPosition] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null); // Posição do imóvel selecionado
+  const [selectedPosition, setSelectedPosition] = useState<{ lat: number; lng: number } | null>(null); // Posição do imóvel selecionado
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null); // Referência ao mapa
 
   const containerStyle = {
@@ -84,6 +77,13 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
     ],
   };
 
+  // Carregando a API do Google Maps com a chave da API
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "",
+    language: "pt-BR", // Adiciona o idioma português
+  });
+
+  // Função para buscar coordenadas com base no CEP
   const getCoordinatesFromCep = async (cep: string) => {
     console.log(`Buscando coordenadas para o CEP: ${cep}`);
     try {
@@ -102,8 +102,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
     }
   };
 
+  // Hook para buscar coordenadas de todos os imóveis
   useEffect(() => {
     const fetchCoordinates = async () => {
+      if (!window.google || !window.google.maps) {
+        console.error("Google Maps API não está carregada corretamente.");
+        return;
+      }
+
       console.log("Iniciando busca de coordenadas...");
       const newCoordinatesList: {
         lat: number;
@@ -111,7 +117,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
         _id: string;
         preco: number;
       }[] = [];
-      const bounds = new window.google.maps.LatLngBounds();
+      const bounds = new window.google.maps.LatLngBounds(); // Verifique se LatLngBounds está disponível
 
       for (const imovel of imoveis) {
         if (imovel.cep) {
@@ -124,7 +130,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
               preco,
             });
 
-            bounds.extend({ lat: coords.lat, lng: coords.lng });
+            bounds.extend({ lat: coords.lat, lng: coords.lng }); // Estende os limites do mapa
             console.log(
               `Coordenadas adicionadas para o imóvel ${imovel._id}:`,
               coords
@@ -135,29 +141,17 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
 
       setCoordinatesList(newCoordinatesList);
       if (newCoordinatesList.length > 0) {
-        setMapBounds(bounds);
+        setMapBounds(bounds); // Defina os limites do mapa
         console.log("Limites ajustados para o mapa:", bounds);
       }
     };
 
-    if (imoveis.length > 0) {
+    if (isLoaded && imoveis.length > 0) {
       fetchCoordinates();
     }
-  }, [imoveis]);
+  }, [imoveis, isLoaded]); // Agora o effect depende de `isLoaded`
 
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "",
-    language: "pt-BR", // Adiciona o idioma português
-  });
-
-  if (loadError) {
-    return <p>Erro ao carregar o Google Maps.</p>;
-  }
-
-  if (!isLoaded) {
-    return <p>Carregando o Google Maps...</p>;
-  }
-
+  // Função para manipular cliques em marcadores
   const handleMarkerClick = (imovelId: string, lat: number, lng: number) => {
     const imovel = imoveis.find((item) => item._id === imovelId);
     if (imovel && mapInstance) {
@@ -174,6 +168,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
     setSelectedPosition(null);
     console.log("Fechando o card do imóvel selecionado.");
   };
+
+  if (loadError) {
+    return <p>Erro ao carregar o Google Maps.</p>;
+  }
+
+  if (!isLoaded) {
+    return <p>Carregando o Google Maps...</p>;
+  }
 
   return (
     <div className="relative w-full h-full">
