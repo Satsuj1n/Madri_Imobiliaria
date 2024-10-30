@@ -131,7 +131,7 @@ const Detalhes: React.FC = () => {
                 <Button
                   variant="default"
                   size="md"
-                  className="absolute bottom-2 right-2"
+                  className="absolute bottom-3 right-2"
                   onClick={() => setIsModalOpen(true)}
                 >
                   Ver todas as fotos
@@ -234,13 +234,13 @@ const Detalhes: React.FC = () => {
                 {/* Controles para navegação */}
                 <button
                   onClick={prevImage}
-                  className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-opacity-50 bg-gray-700 text-white p-2 rounded-full"
+                  className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-opacity-50 bg-blue-700 text-white p-1 px-3 rounded-full"
                 >
                   &#10094;
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-opacity-50 bg-gray-700 text-white p-2 rounded-full"
+                  className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-opacity-50 bg-blue-700 text-white p-1 px-3 rounded-full"
                 >
                   &#10095;
                 </button>
