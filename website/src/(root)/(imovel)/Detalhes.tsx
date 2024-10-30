@@ -39,6 +39,7 @@ const Detalhes: React.FC = () => {
   const [loading, setLoading] = useState(true); // Estado de carregamento
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o modal
   const [activeIndex, setActiveIndex] = useState(0); // Estado para controlar o índice ativo da imagem
+  const [mapError, setMapError] = useState(false); // Estado para tratar erro do mapa
 
   // Refs para a descrição, o cliente e o mapa
   const descricaoRef = useRef<HTMLDivElement>(null);
@@ -57,6 +58,15 @@ const Detalhes: React.FC = () => {
       setLoading(false); // Finaliza o carregamento
     }
   };
+
+  // Função para verificar timeout do carregamento do mapa
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMapError(true); // Define erro caso o mapa não carregue após 10 segundos
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Efeito para sincronizar a altura do mapa com a altura da descrição e do cliente
   useEffect(() => {
@@ -245,7 +255,11 @@ const Detalhes: React.FC = () => {
                 className="bg-white p-4 rounded-lg shadow-md max-w-sm"
                 ref={mapRef}
               >
-                <MapComponent imoveis={[imovel]} />
+                {!mapError ? (
+                  <MapComponent imoveis={[imovel]} />
+                ) : (
+                  <p>Não foi possível carregar o mapa.</p>
+                )}
               </div>
             </div>
           </div>

@@ -41,17 +41,23 @@ const HouseCard: React.FC<HouseCardProps> = ({
 
   return (
     <div
-      className="border rounded-lg shadow-md bg-white cursor-pointer"
+      className="border rounded-lg shadow-md bg-white cursor-pointer h-[400px] w-[350px] flex flex-col justify-between" // Altura fixa para uniformidade
       onClick={handleCardClick}
     >
       {/* Imagem da Casa */}
-      <img
-        src={imagemPrincipal}
-        alt={titulo}
-        className="rounded-t-lg w-full h-[200px] object-cover"
-      />
+      <div className="h-[200px] w-full overflow-hidden rounded-t-lg">
+        {" "}
+        {/* Container com altura fixa */}
+        <img
+          src={imagemPrincipal}
+          alt={titulo}
+          className="w-full h-full object-cover" // Garante que a imagem preencha o container sem distorção
+        />
+      </div>
 
-      <div className="p-6">
+      <div className="p-6 flex flex-col justify-between">
+        {" "}
+        {/* Conteúdo ajustado */}
         {/* Preço */}
         <div className="text-[#0053f8] font-bold text-2xl">
           {aluguelValor}
@@ -62,22 +68,18 @@ const HouseCard: React.FC<HouseCardProps> = ({
             </span>
           )}
         </div>
-
         {/* Nome da Propriedade */}
-        <h4 className="text-[#000929] font-bold text-xl mt-2 whitespace-nowrap">
+        <h4 className="text-[#000929] font-bold text-xl mt-2 whitespace-nowrap overflow-hidden overflow-ellipsis">
           {titulo}
         </h4>
-
         {/* Localização */}
         <p className="text-[#6C727F] font-normal text-sm mt-1">
           {endereco}, {numero}, {bairro}
           <br />
           {cidadeEstado}
         </p>
-
         {/* Linha separadora */}
         <div className="border-t mt-4 mb-4 border-gray-200"></div>
-
         {/* Ícones com informações */}
         <div className="flex items-center justify-start gap-6">
           <div className="flex items-center">
