@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion"; // Importando o motion para a animação
 import HouseCard from "./HouseCard";
 import SegmentedControl from "./SegmentedControl";
 import SearchBar from "./SearchBar";
@@ -10,8 +9,8 @@ interface Imovel {
   tipo: string;
   titulo: string;
   descricao: string;
-  valor?: number; // Para imóveis de venda
-  aluguelValor?: number; // Para imóveis de aluguel
+  valor?: number;
+  aluguelValor?: number;
   endereco: string;
   cep: string;
   numero: string;
@@ -22,24 +21,25 @@ interface Imovel {
   banheiro: number;
   area: number;
   imagemPrincipal: string;
+  outrasImagens?: string[];
 }
 
 const PropertyListing = () => {
-  const [imoveis, setImoveis] = useState<Imovel[]>([]); // Todos os imóveis carregados da API
-  const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]); // Imóveis filtrados com base nos critérios
-  const [displayedImoveis, setDisplayedImoveis] = useState<Imovel[]>([]); // Imóveis atualmente exibidos
+  const [imoveis, setImoveis] = useState<Imovel[]>([]);
+  const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]);
+  const [displayedImoveis, setDisplayedImoveis] = useState<Imovel[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState<string>(""); // Para a busca geral
-  const [selectedType, setSelectedType] = useState<string | null>(null); // Para o filtro de tipo de imóvel
-  const itemsPerPage = 6; // Número de imóveis por página
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const itemsPerPage = 6;
 
-  // Função para buscar todos os imóveis do banco de dados
   const fetchImoveis = async () => {
     setLoading(true);
     try {
       const response = await fetch(`http://localhost:5000/api/imoveis`);
       const data = await response.json();
+
       console.log("Dados recebidos da API:", data);
 
       if (Array.isArray(data)) {
@@ -66,24 +66,19 @@ const PropertyListing = () => {
     fetchImoveis();
   }, []);
 
-  // Aplica os filtros automaticamente ao mudar tipo ou localização
   useEffect(() => {
     applyFilters();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedType, searchQuery]); // Reage a mudanças no tipo ou na busca
+  }, [selectedType, searchQuery]);
 
-  // Função para aplicar os filtros de tipo de imóvel e busca
   const applyFilters = () => {
     let filtered = imoveis;
 
-    // Filtro por tipo de imóvel
     if (selectedType === "Alugar") {
       filtered = filtered.filter((imovel) => imovel.aluguelValor);
     } else if (selectedType === "Comprar") {
       filtered = filtered.filter((imovel) => imovel.valor);
     }
 
-    // Filtro por busca geral (título, descrição, endereço, cep, bairro, regiao)
     if (searchQuery) {
       const lowercasedQuery = searchQuery.toLowerCase();
       filtered = filtered.filter((imovel) =>
@@ -102,33 +97,29 @@ const PropertyListing = () => {
     }
 
     setFilteredImoveis(filtered);
-    setDisplayedImoveis(filtered.slice(0, itemsPerPage)); // Reseta a exibição inicial após aplicar os filtros
-    setCurrentPage(1); // Reseta a página para a primeira
+    setDisplayedImoveis(filtered.slice(0, itemsPerPage));
+    setCurrentPage(1);
   };
 
-  // Atualiza o tipo de imóvel ao clicar no SegmentedControl
   const handleTypeChange = (type: string | null) => {
     setSelectedType(type);
   };
 
-  // Atualiza a busca geral
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
-  // Função para carregar mais imóveis conforme a página, sem duplicar
   const loadMoreImoveis = () => {
     const startIndex = currentPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const nextImoveis = filteredImoveis.slice(startIndex, endIndex); // Pega mais imóveis filtrados
+    const nextImoveis = filteredImoveis.slice(startIndex, endIndex);
 
-    setDisplayedImoveis((prevDisplayed) => [...prevDisplayed, ...nextImoveis]); // Adiciona novos imóveis
+    setDisplayedImoveis((prevDisplayed) => [...prevDisplayed, ...nextImoveis]);
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Título e subtítulo */}
       <div className="text-center mt-8">
         <h2
           className="text-[#000929] font-bold"
@@ -142,40 +133,26 @@ const PropertyListing = () => {
         </h2>
         <p
           className="text-[#6C727F] mt-2 mb-6 md:mt-6 md:mb-16"
-          style={{
-            fontSize: "16px",
-            lineHeight: "24px",
-          }}
+          style={{ fontSize: "16px", lineHeight: "24px" }}
         >
           Algumas das nossas propriedades selecionadas perto de você.
         </p>
       </div>
 
-      {/* Barra de controle e busca */}
       <div className="flex flex-col md:flex-row justify-between w-full max-w-[1120px] mt-4 px-4 mb-4 space-y-2 md:space-y-0">
-        <div className="w-full md:w-auto">
-          <SegmentedControl
-            selectedType={selectedType}
-            onTypeChange={handleTypeChange}
-          />
-        </div>
-        <div className="w-full md:w-auto">
-          <SearchBar onSearch={handleSearch} />
-        </div>
+        <SegmentedControl
+          selectedType={selectedType}
+          onTypeChange={handleTypeChange}
+        />
+        <SearchBar onSearch={handleSearch} />
       </div>
 
-      {/* Propriedades carregadas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-8 w-full max-w-[1120px] px-4 mb-14">
         {loading ? (
           <p>Carregando imóveis...</p>
         ) : displayedImoveis.length > 0 ? (
           displayedImoveis.map((imovel) => (
-            <motion.div
-              key={imovel._id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
+            <div key={imovel._id}>
               <HouseCard
                 id={imovel._id}
                 aluguelValor={
@@ -194,16 +171,16 @@ const PropertyListing = () => {
                 numero={imovel.numero}
                 bairro={imovel.bairro}
                 imagemPrincipal={imovel.imagemPrincipal}
+                outrasImagens={imovel.outrasImagens}
                 tipo={imovel.tipo}
               />
-            </motion.div>
+            </div>
           ))
         ) : (
           <p>Nenhum imóvel encontrado.</p>
         )}
       </div>
 
-      {/* Botão de "Ver Mais Propriedades" */}
       <div className="mb-28">
         {currentPage * itemsPerPage < filteredImoveis.length && (
           <Button variant="large" size="large" onClick={loadMoreImoveis}>

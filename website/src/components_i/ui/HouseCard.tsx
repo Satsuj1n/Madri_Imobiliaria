@@ -1,11 +1,11 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate para redirecionamento
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
 
 interface HouseCardProps {
-  id: string; // Adicionei o id para ser usado no redirecionamento
+  id: string;
   aluguelValor: string;
   titulo: string;
   endereco: string;
@@ -16,7 +16,8 @@ interface HouseCardProps {
   banheiro: number;
   area: number;
   imagemPrincipal: string;
-  tipo: string; // Adicionada nova prop para indicar o tipo do imóvel (aluguel ou venda)
+  outrasImagens?: string[];
+  tipo: string;
 }
 
 const HouseCard: React.FC<HouseCardProps> = ({
@@ -31,56 +32,106 @@ const HouseCard: React.FC<HouseCardProps> = ({
   banheiro,
   area,
   imagemPrincipal,
+  outrasImagens = [],
   tipo,
 }) => {
-  const navigate = useNavigate(); // Hook para redirecionar
+  const navigate = useNavigate();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [imagens, setImagens] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadedImages = [imagemPrincipal, ...outrasImagens];
+    setImagens(loadedImages);
+    console.log("Imagens carregadas no componente:", loadedImages);
+  }, []);
 
   const handleCardClick = () => {
-    navigate(`/imovel/${id}`); // Redireciona para a página de detalhes usando o id do imóvel
+    navigate(`/imovel/${id}`);
+  };
+
+  const nextImage = () => {
+    setActiveIndex((prevIndex) => (prevIndex + 1) % imagens.length);
+    console.log("Próxima imagem. Índice ativo:", activeIndex, "Total de imagens:", imagens.length);
+  };
+
+  const prevImage = () => {
+    setActiveIndex((prevIndex) =>
+      prevIndex === 0 ? imagens.length - 1 : prevIndex - 1
+    );
+    console.log("Imagem anterior. Índice ativo:", activeIndex, "Total de imagens:", imagens.length);
   };
 
   return (
     <div
-      className="border rounded-lg shadow-md bg-white cursor-pointer h-[400px] w-[350px] flex flex-col justify-between" // Altura fixa para uniformidade
+      className="border rounded-lg shadow-md bg-white cursor-pointer h-[400px] w-[350px] flex flex-col justify-between"
       onClick={handleCardClick}
     >
-      {/* Imagem da Casa */}
-      <div className="h-[200px] w-full overflow-hidden rounded-t-lg">
-        {" "}
-        {/* Container com altura fixa */}
+      {/* Carrossel de Imagens */}
+      <div className="h-[200px] w-full overflow-hidden rounded-t-lg relative">
         <img
-          src={imagemPrincipal}
+          src={imagens[activeIndex]}
           alt={titulo}
-          className="w-full h-full object-cover" // Garante que a imagem preencha o container sem distorção
+          className="w-full h-full object-cover"
         />
+
+        {/* Botões de navegação apenas se houver mais de uma imagem */}
+        {imagens.length > 1 && (
+          <>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                prevImage();
+              }}
+              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-600 bg-opacity-50 text-white p-2 rounded-full z-10 h-8 w-8 flex items-center justify-center"
+            >
+              &#10094;
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                nextImage();
+              }}
+              className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-600 bg-opacity-50 text-white p-2 rounded-full z-10 h-8 w-8 flex items-center justify-center"
+            >
+              &#10095;
+            </button>
+          </>
+        )}
+
+        {/* Indicadores de imagem (bolinhas) */}
+        {imagens.length > 1 && (
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+            {imagens.map((_, index) => (
+              <span
+                key={index}
+                className={`h-2 w-2 rounded-full ${
+                  activeIndex === index ? "bg-[#0053f8]" : "bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="p-6 flex flex-col justify-between">
-        {" "}
-        {/* Conteúdo ajustado */}
-        {/* Preço */}
         <div className="text-[#0053f8] font-bold text-2xl">
           {aluguelValor}
-          {tipo === "aluguel" && ( // Exibe "/mês" apenas se for aluguel
+          {tipo === "aluguel" && (
             <span className="text-[#000929] text-base font-normal opacity-50">
               {" "}
               / mês
             </span>
           )}
         </div>
-        {/* Nome da Propriedade */}
         <h4 className="text-[#000929] font-bold text-xl mt-2 whitespace-nowrap overflow-hidden overflow-ellipsis">
           {titulo}
         </h4>
-        {/* Localização */}
         <p className="text-[#6C727F] font-normal text-sm mt-1">
           {endereco}, {numero}, {bairro}
           <br />
           {cidadeEstado}
         </p>
-        {/* Linha separadora */}
         <div className="border-t mt-4 mb-4 border-gray-200"></div>
-        {/* Ícones com informações */}
         <div className="flex items-center justify-start gap-6">
           <div className="flex items-center">
             <BedIcon />
