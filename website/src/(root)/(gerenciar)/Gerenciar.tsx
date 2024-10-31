@@ -29,10 +29,11 @@ interface Imovel {
 const Gerenciar: React.FC = () => {
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [imovelToDelete, setImovelToDelete] = useState<string | null>(null);
 
   const getAllImoveis = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/imoveis"); // URL da API para buscar os imóveis
+      const response = await fetch("http://localhost:5000/api/imoveis");
       const data = await response.json();
       return data;
     } catch (error) {
@@ -49,6 +50,22 @@ const Gerenciar: React.FC = () => {
     };
     fetchImoveis();
   }, []);
+
+  const handleDeleteImovel = async (id: string) => {
+    try {
+      await fetch(`http://localhost:5000/api/imoveis/${id}`, {
+        method: "DELETE",
+      });
+      setImoveis((prevImoveis) =>
+        prevImoveis.filter((imovel) => imovel._id !== id)
+      );
+      setImovelToDelete(null);
+      alert("Imóvel deletado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao deletar imóvel:", error);
+      alert("Erro ao deletar imóvel. Tente novamente.");
+    }
+  };
 
   return (
     <>
@@ -86,6 +103,7 @@ const Gerenciar: React.FC = () => {
                   imagemPrincipal={imovel.imagemPrincipal}
                   dataDisponivelInicio={imovel.dataDisponivelInicio}
                   dataDisponivelFim={imovel.dataDisponivelFim}
+                  onDelete={() => setImovelToDelete(imovel._id)} // Define o imóvel a ser deletado
                 />
               ))}
             </div>
@@ -97,6 +115,33 @@ const Gerenciar: React.FC = () => {
         </div>
       </div>
       <Footer />
+
+      {/* Pop-up de Confirmação */}
+      {imovelToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg text-center shadow-lg">
+            <p className="text-lg font-semibold">Tem certeza?</p>
+            <p className="text-sm text-gray-600 mt-2">
+              Esta ação removerá o imóvel permanentemente e não poderá ser
+              desfeita.
+            </p>
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                onClick={() => handleDeleteImovel(imovelToDelete)}
+              >
+                Confirmar
+              </button>
+              <button
+                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+                onClick={() => setImovelToDelete(null)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
