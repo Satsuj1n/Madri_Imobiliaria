@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
+import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg";
+import { ReactComponent as DeleteIcon } from "../../assets/icons/delete.svg";
 
 interface HouseCardHorizontalProps {
   id: string;
@@ -54,7 +56,24 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row border rounded-lg shadow-md bg-white h-auto sm:h-[300px] w-full">
+    <div className="relative flex flex-col sm:flex-row border rounded-lg shadow-md bg-white h-auto sm:h-[300px] w-full">
+      {/* Ícone de editar e excluir à direita */}
+      <div className="absolute bottom-4 right-4 flex items-center gap-4 text-gray-600">
+        <div className="relative group flex items-center">
+          <EditIcon className="w-7 h-7 cursor-pointer" />
+          <span className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100">
+            Editar
+          </span>
+        </div>
+
+        <div className="relative group flex items-center">
+          <DeleteIcon className="w-7 h-7 cursor-pointer" />
+          <span className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100">
+            Deletar
+          </span>
+        </div>
+      </div>
+
       {/* Imagem maior horizontalmente com redirecionamento */}
       <div
         className="w-full sm:w-[300px] h-[200px] sm:h-full overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-t-none cursor-pointer"
