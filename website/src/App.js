@@ -12,6 +12,7 @@ import ImoveisAluguel from "./(root)/(aluguel)/ImoveisAluguel"; // Página de al
 import ImoveisVenda from "./(root)/(venda)/ImoveisVenda";
 
 import Detalhes from "./(root)/(imovel)/Detalhes"; // Página de detalhes do imóvel
+import Gerenciar from "./(root)/(gerenciar)/Gerenciar"; // Página de gerenciar imóveis
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/aluguel" element={<ImoveisAluguel />} />{" "}
         <Route path="/venda" element={<ImoveisVenda />} />{" "}
         <Route path="/imovel/:id" element={<Detalhes />} />{" "}
+        <Route path="/gerenciar" element={<Gerenciar />} />{" "}
       </Routes>
     </Router>
   );

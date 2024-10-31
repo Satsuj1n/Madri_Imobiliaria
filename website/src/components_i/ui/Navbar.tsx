@@ -135,7 +135,10 @@ const Navbar = () => {
           >
             Vender
           </a>
-          <a href="#" className="text-sm md:text-base lg:text-md text-gray-700">
+          <a
+            href="/gerenciar"
+            className="text-sm md:text-base lg:text-md text-gray-700"
+          >
             Gerenciar
           </a>
         </div>
@@ -247,7 +250,7 @@ const Navbar = () => {
             <a href="/criar-imovel/1" className="text-sm">
               Vender
             </a>
-            <a href="#" className="text-sm">
+            <a href="/gerenciar" className="text-sm">
               Gerenciar Propriedade
             </a>
 
