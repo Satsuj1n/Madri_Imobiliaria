@@ -29,10 +29,11 @@ interface Imovel {
 const Gerenciar: React.FC = () => {
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [imovelToDelete, setImovelToDelete] = useState<string | null>(null);
 
   const getAllImoveis = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/imoveis"); // URL da API para buscar os imóveis
+      const response = await fetch("http://localhost:5000/api/imoveis");
       const data = await response.json();
       return data;
     } catch (error) {
@@ -49,6 +50,57 @@ const Gerenciar: React.FC = () => {
     };
     fetchImoveis();
   }, []);
+
+  const handleDeleteImovel = async (id: string) => {
+    let token = localStorage.getItem("token"); // Obtém o token do localStorage
+
+    // Verifica se o token já começa com "Bearer " e, se não, adiciona o prefixo
+    if (token && !token.startsWith("Bearer ")) {
+      token = `Bearer ${token}`;
+    }
+
+    console.log("Token formatado para envio:", token);
+
+    if (!token) {
+      alert("Você não está autenticado. Faça login novamente.");
+      return;
+    }
+
+    try {
+      console.log("Iniciando requisição DELETE para ID do imóvel:", id);
+
+      const response = await fetch(`http://localhost:5000/api/imoveis/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token, // Envia o token formatado
+        },
+      });
+
+      // Log do status da resposta
+      console.log("Status da resposta:", response.status);
+      console.log("Resposta completa:", response);
+
+      if (response.ok) {
+        console.log("Imóvel deletado com sucesso no servidor.");
+        setImoveis((prevImoveis) =>
+          prevImoveis.filter((imovel) => imovel._id !== id)
+        );
+        setImovelToDelete(null);
+        alert("Imóvel deletado com sucesso!");
+      } else if (response.status === 401) {
+        console.log("Erro 401: Sessão expirada ou token inválido");
+        alert("Sessão expirada. Por favor, faça login novamente.");
+        localStorage.removeItem("token"); // Remove o token inválido
+      } else {
+        console.log("Erro ao deletar imóvel. Status:", response.status);
+        alert("Erro ao deletar imóvel. Tente novamente.");
+      }
+    } catch (error) {
+      console.error("Erro ao deletar imóvel:", error);
+      alert("Erro ao deletar imóvel. Tente novamente.");
+    }
+  };
 
   return (
     <>
@@ -86,6 +138,7 @@ const Gerenciar: React.FC = () => {
                   imagemPrincipal={imovel.imagemPrincipal}
                   dataDisponivelInicio={imovel.dataDisponivelInicio}
                   dataDisponivelFim={imovel.dataDisponivelFim}
+                  onDelete={() => setImovelToDelete(imovel._id)} // Define o imóvel a ser deletado
                 />
               ))}
             </div>
@@ -97,6 +150,33 @@ const Gerenciar: React.FC = () => {
         </div>
       </div>
       <Footer />
+
+      {/* Pop-up de Confirmação */}
+      {imovelToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg text-center shadow-lg">
+            <p className="text-lg font-semibold">Tem certeza?</p>
+            <p className="text-sm text-gray-600 mt-2">
+              Esta ação removerá o imóvel permanentemente e não poderá ser
+              desfeita.
+            </p>
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                onClick={() => handleDeleteImovel(imovelToDelete)}
+              >
+                Confirmar
+              </button>
+              <button
+                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+                onClick={() => setImovelToDelete(null)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

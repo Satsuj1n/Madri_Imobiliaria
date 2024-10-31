@@ -26,6 +26,7 @@ interface HouseCardHorizontalProps {
   imagemPrincipal: string;
   dataDisponivelInicio?: Date;
   dataDisponivelFim?: Date;
+  onDelete: () => void; // Prop para lidar com a exclusão
 }
 
 const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
@@ -48,6 +49,7 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
   imagemPrincipal,
   dataDisponivelInicio,
   dataDisponivelFim,
+  onDelete,
 }) => {
   const navigate = useNavigate();
 
@@ -59,14 +61,17 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
     <div className="relative flex flex-col sm:flex-row border rounded-lg shadow-md bg-white h-auto sm:h-[300px] w-full">
       {/* Ícone de editar e excluir à direita */}
       <div className="absolute bottom-4 right-4 flex items-center gap-4 text-gray-600">
-        <div className="relative group flex items-center">
+        <div className="relative group flex items-center cursor-pointer">
           <EditIcon className="w-7 h-7 cursor-pointer" />
           <span className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100">
             Editar
           </span>
         </div>
 
-        <div className="relative group flex items-center">
+        <div
+          className="relative group flex items-center cursor-pointer"
+          onClick={onDelete}
+        >
           <DeleteIcon className="w-7 h-7 cursor-pointer" />
           <span className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100">
             Deletar
@@ -82,7 +87,7 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
         <img
           src={imagemPrincipal}
           alt={titulo}
-          className="w-full h-full object-cover rounded-tl-md"
+          className="w-full h-full object-cover rounded-tl-md cursor-pointer"
         />
       </div>
 
