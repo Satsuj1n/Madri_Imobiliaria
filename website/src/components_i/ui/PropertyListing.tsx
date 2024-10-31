@@ -124,18 +124,18 @@ const PropertyListing = () => {
         <h2
           className="text-[#000929] font-bold"
           style={{
-            fontSize: "48px",
+            fontSize: "44px",
             lineHeight: "56px",
             letterSpacing: "-0.4px",
           }}
         >
-          Baseado na sua localização
+          Propriedades Selecionas para Você
         </h2>
         <p
           className="text-[#6C727F] mt-2 mb-6 md:mt-6 md:mb-16"
           style={{ fontSize: "16px", lineHeight: "24px" }}
         >
-          Algumas das nossas propriedades selecionadas perto de você.
+          Veja aqui todas as propriedades disponíveis 
         </p>
       </div>
 
