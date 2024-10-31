@@ -49,17 +49,17 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
+  const handleImageClick = () => {
     navigate(`/imovel/${id}`);
   };
 
   return (
-    <div
-      className="flex flex-col sm:flex-row border rounded-lg shadow-md bg-white cursor-pointer h-auto sm:h-[300px] w-full"
-      onClick={handleCardClick}
-    >
-      {/* Imagem maior horizontalmente */}
-      <div className="w-full sm:w-[300px] h-[200px] sm:h-full overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-t-none">
+    <div className="flex flex-col sm:flex-row border rounded-lg shadow-md bg-white h-auto sm:h-[300px] w-full">
+      {/* Imagem maior horizontalmente com redirecionamento */}
+      <div
+        className="w-full sm:w-[300px] h-[200px] sm:h-full overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-t-none cursor-pointer"
+        onClick={handleImageClick}
+      >
         <img
           src={imagemPrincipal}
           alt={titulo}
@@ -90,9 +90,9 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
 
         {/* Localização */}
         <p className="text-sm text-[#6C727F] mt-2">
-          <span className="text-[#0053f8] font-semibold">Endereço:</span>
-          {endereco}- <span className="text-[#0053f8] font-semibold">CEP:</span>{" "}
-          {cep}
+          <span className="text-[#0053f8] font-semibold">Endereço:</span>{" "}
+          {endereco} -{" "}
+          <span className="text-[#0053f8] font-semibold">CEP:</span> {cep}
         </p>
 
         {/* Informações principais */}
@@ -130,7 +130,7 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
         </div>
 
         {/* Valor ou Aluguel */}
-        <div className="mt-3 text-[#0053f8] text-lg font-bold">
+        <div className="mt-3 text-[#0053f8] text-2xl font-bold">
           {tipo === "aluguel" ? `R$ ${aluguelValor} /mês` : `R$ ${valor}`}
         </div>
 
@@ -141,7 +141,8 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
           <br />
           <span className="text-[#0053f8] font-semibold">
             IPTU Mensal:
-          </span> : {IPTUMensal ? `R$ ${IPTUMensal}` : "N/A"}
+          </span>{" "}
+          {IPTUMensal ? `R$ ${IPTUMensal}` : "N/A"}
         </div>
 
         {/* Datas de Disponibilidade - apenas para aluguel */}

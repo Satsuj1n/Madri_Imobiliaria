@@ -68,7 +68,11 @@ export interface ImovelDocument extends Document {
 
 const ImovelSchema: Schema = new Schema({
   titulo: { type: String, required: true },
-  situacao: { type: String, enum: ["disponivel", "ocupado"] },
+  situacao: {
+    type: String,
+    enum: ["Ocupado", "Disponivel", "Reformando"],
+    default: "Disponivel",
+  },
   descricao: { type: String },
   endereco: { type: String, required: true },
   cep: { type: Number, required: true },
