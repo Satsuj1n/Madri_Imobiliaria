@@ -1,4 +1,5 @@
 import React, { useEffect, useState, FC } from "react";
+import { useLocation } from "react-router-dom";
 import Footer from "components_i/ui/Footer";
 import Navbar from "components_i/ui/Navbar";
 import PropertySearch from "components_i/ui/PropertySearch";
@@ -30,7 +31,9 @@ const ImoveisVenda: FC = () => {
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]);
-
+  
+  const location = useLocation();
+  
   const [filters, setFilters] = useState({
     localizacao: "",
     precoMinimo: 0,
@@ -44,7 +47,6 @@ const ImoveisVenda: FC = () => {
     try {
       const response = await fetch("http://localhost:5000/api/imoveis");
       const data = await response.json();
-      console.log("Dados recebidos da API:", data);
       return data;
     } catch (error) {
       console.error("Erro ao buscar imóveis:", error);
@@ -52,42 +54,16 @@ const ImoveisVenda: FC = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchImoveis = async () => {
-      const todosImoveis = await getAllImoveis();
-      const imoveisVenda = todosImoveis.filter(
-        (imovel: Imovel) => imovel.tipo === "venda"
-      );
-      setImoveis(imoveisVenda);
-      setFilteredImoveis(imoveisVenda);
-      setLoading(false);
-    };
-
-    fetchImoveis();
-  }, []);
-
-  const handleSearch = (newFilters: any) => {
-    const updatedFilters = {
-      ...newFilters,
-      categoria: newFilters.categoria || "",
-      quarto: newFilters.quarto || 1,
-      banheiro: newFilters.banheiro || 1,
-    };
-
-    setFilters(updatedFilters);
-    const filtrados = applyFilters(imoveis, updatedFilters);
-    setFilteredImoveis(filtrados);
-  };
-
   const applyFilters = (imoveis: Imovel[], filters: any) => {
+    console.log("Aplicando filtros:", filters);
+  
     return imoveis.filter((imovel) => {
       const withinPriceRange =
         (!filters.precoMinimo ||
-          (imovel.valor !== undefined &&
-            imovel.valor >= filters.precoMinimo)) &&
+          (imovel.valor !== undefined && imovel.valor >= filters.precoMinimo)) &&
         (!filters.precoMaximo ||
           (imovel.valor !== undefined && imovel.valor <= filters.precoMaximo));
-
+  
       const matchesLocation = filters.localizacao
         ? imovel.cidadeEstado
             .toLowerCase()
@@ -96,14 +72,16 @@ const ImoveisVenda: FC = () => {
             .toLowerCase()
             .includes(filters.localizacao.toLowerCase())
         : true;
+  
+      const matchesCategory =
+        filters.categoria.length === 0 ||
+        filters.categoria.split(",").some((cat: string) =>
+          imovel.categoria.toLowerCase().includes(cat.trim().toLowerCase())
+        );
 
-      const matchesCategory = filters.categoria
-        ? imovel.categoria.toLowerCase() === filters.categoria.toLowerCase()
-        : true;
-
-      const matchesRooms = imovel.quarto >= (filters.quarto || 1);
-      const matchesBathrooms = imovel.banheiro >= (filters.banheiro || 1);
-
+      const matchesRooms = filters.quarto !== undefined ? imovel.quarto >= filters.quarto : true;
+      const matchesBathrooms = filters.banheiro !== undefined ? imovel.banheiro >= filters.banheiro : true;
+  
       return (
         withinPriceRange &&
         matchesLocation &&
@@ -114,6 +92,34 @@ const ImoveisVenda: FC = () => {
     });
   };
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const localizacao = params.get("localizacao") || "";
+    const categoria = params.get("categoria") || "";
+
+    setFilters((prev) => ({
+      ...prev,
+      localizacao,
+      categoria,
+    }));
+  }, [location.search]);
+
+  useEffect(() => {
+    const fetchImoveis = async () => {
+      const todosImoveis = await getAllImoveis();
+      const imoveisVenda = todosImoveis.filter(
+        (imovel: Imovel) => imovel.tipo === "venda"
+      );
+      const filtrados = applyFilters(imoveisVenda, filters);
+      
+      setImoveis(imoveisVenda);
+      setFilteredImoveis(filtrados);
+      setLoading(false);
+    };
+
+    fetchImoveis();
+  }, [filters]);
+
   return (
     <>
       <Navbar />
@@ -123,7 +129,7 @@ const ImoveisVenda: FC = () => {
             Imóveis para Venda
           </h1>
           <div className="flex items-center justify-center">
-            <PropertySearch onSearch={handleSearch} maxPrice={10000000} isVenda={true} />
+            <PropertySearch onSearch={(newFilters) => setFilters(newFilters)} maxPrice={10000000} isVenda={true} />
           </div>
 
           <div className="container mx-auto py-8">
