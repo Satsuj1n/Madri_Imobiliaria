@@ -52,15 +52,50 @@ const Gerenciar: React.FC = () => {
   }, []);
 
   const handleDeleteImovel = async (id: string) => {
+    let token = localStorage.getItem("token"); // Obtém o token do localStorage
+
+    // Verifica se o token já começa com "Bearer " e, se não, adiciona o prefixo
+    if (token && !token.startsWith("Bearer ")) {
+      token = `Bearer ${token}`;
+    }
+
+    console.log("Token formatado para envio:", token);
+
+    if (!token) {
+      alert("Você não está autenticado. Faça login novamente.");
+      return;
+    }
+
     try {
-      await fetch(`http://localhost:5000/api/imoveis/${id}`, {
+      console.log("Iniciando requisição DELETE para ID do imóvel:", id);
+
+      const response = await fetch(`http://localhost:5000/api/imoveis/${id}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token, // Envia o token formatado
+        },
       });
-      setImoveis((prevImoveis) =>
-        prevImoveis.filter((imovel) => imovel._id !== id)
-      );
-      setImovelToDelete(null);
-      alert("Imóvel deletado com sucesso!");
+
+      // Log do status da resposta
+      console.log("Status da resposta:", response.status);
+      console.log("Resposta completa:", response);
+
+      if (response.ok) {
+        console.log("Imóvel deletado com sucesso no servidor.");
+        setImoveis((prevImoveis) =>
+          prevImoveis.filter((imovel) => imovel._id !== id)
+        );
+        setImovelToDelete(null);
+        alert("Imóvel deletado com sucesso!");
+      } else if (response.status === 401) {
+        console.log("Erro 401: Sessão expirada ou token inválido");
+        alert("Sessão expirada. Por favor, faça login novamente.");
+        localStorage.removeItem("token"); // Remove o token inválido
+      } else {
+        console.log("Erro ao deletar imóvel. Status:", response.status);
+        alert("Erro ao deletar imóvel. Tente novamente.");
+      }
     } catch (error) {
       console.error("Erro ao deletar imóvel:", error);
       alert("Erro ao deletar imóvel. Tente novamente.");
