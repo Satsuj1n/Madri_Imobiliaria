@@ -53,8 +53,6 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
     navigate(`/imovel/${id}`);
   };
 
-  const areaTotal = (areaInterna || 0) + (areaExterna || 0); // Calcula a área total
-
   return (
     <div
       className="flex flex-col sm:flex-row border rounded-lg shadow-md bg-white cursor-pointer h-auto sm:h-[300px] w-full"
@@ -77,6 +75,7 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
             {titulo}
           </h4>
           <span className="text-sm text-[#6C727F] font-normal mt-1 sm:mt-0">
+            <span className="text-[#0053f8] font-semibold">Situação:</span>{" "}
             {situacao || "Desconhecido"}
           </span>
         </div>
@@ -91,7 +90,9 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
 
         {/* Localização */}
         <p className="text-sm text-[#6C727F] mt-2">
-          {endereco}, CEP: {cep}
+          <span className="text-[#0053f8] font-semibold">Endereço:</span>
+          {endereco}- <span className="text-[#0053f8] font-semibold">CEP:</span>{" "}
+          {cep}
         </p>
 
         {/* Informações principais */}
@@ -111,7 +112,19 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
           <div className="flex items-center">
             <SizeIcon />
             <span className="ml-2 text-[#6C727F] text-sm">
-              Área Total: {areaTotal} m²
+              Área Total: {area} m²
+            </span>
+          </div>
+          <div className="flex items-center">
+            <SizeIcon />
+            <span className="ml-2 text-[#6C727F] text-sm">
+              Área Interna: {areaInterna || "N/A"} m²
+            </span>
+          </div>
+          <div className="flex items-center">
+            <SizeIcon />
+            <span className="ml-2 text-[#6C727F] text-sm">
+              Área Externa: {areaExterna || "N/A"} m²
             </span>
           </div>
         </div>
@@ -123,15 +136,18 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
 
         {/* IPTU */}
         <div className="text-sm text-[#6C727F] mt-2">
-          IPTU Anual: {IPTUAnual ? `R$ ${IPTUAnual}` : "N/A"}
+          <span className="text-[#0053f8] font-semibold">IPTU Anual:</span>{" "}
+          {IPTUAnual ? `R$ ${IPTUAnual}` : "N/A"}
           <br />
-          IPTU Mensal: {IPTUMensal ? `R$ ${IPTUMensal}` : "N/A"}
+          <span className="text-[#0053f8] font-semibold">
+            IPTU Mensal:
+          </span> : {IPTUMensal ? `R$ ${IPTUMensal}` : "N/A"}
         </div>
 
         {/* Datas de Disponibilidade - apenas para aluguel */}
         {tipo === "aluguel" && (
           <div className="text-sm text-[#6C727F] mt-2">
-            Disponível de:{" "}
+            <span className="text-[#0053f8] font-semibold">Disponível de:</span>{" "}
             {dataDisponivelInicio
               ? new Date(dataDisponivelInicio).toLocaleDateString()
               : "Indisponível"}{" "}
