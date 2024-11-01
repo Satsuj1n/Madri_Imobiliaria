@@ -8,7 +8,7 @@ import { ProgressBar } from "components_i/ui/ProgressBar";
 
 interface PropertyInfo {
   titulo: string;
-  situacao?: string;
+  situacao: "Ocupado" | "Disponivel" | "Reformando";
   descricao: string;
   valor?: string;
   aluguelValor?: string;
@@ -41,7 +41,7 @@ const EditarInfo: React.FC = () => {
 
   const [propertyInfo, setPropertyInfo] = useState<PropertyInfo>({
     titulo: "",
-    situacao: "",
+    situacao: "Disponivel",
     descricao: "",
     valor: "",
     aluguelValor: "",
@@ -75,7 +75,7 @@ const EditarInfo: React.FC = () => {
 
         setPropertyInfo({
           titulo: data.titulo,
-          situacao: data.situacao || "",
+          situacao: data.situacao || "Disponivel",
           descricao: data.descricao,
           valor: data.valor?.toString() || "",
           aluguelValor: data.aluguelValor?.toString() || "",
@@ -117,6 +117,10 @@ const EditarInfo: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setPropertyInfo({ ...propertyInfo, [name]: value });
+  };
+
+  const handleVoltar = () => {
+    navigate("/gerenciar");
   };
 
   const handleLazerChange = (lazerOption: string, isChecked: boolean) => {
@@ -163,14 +167,17 @@ const EditarInfo: React.FC = () => {
 
               <div>
                 <label>Situação</label>
-                <input
-                  type="text"
+                <select
                   name="situacao"
                   value={propertyInfo.situacao}
                   onChange={handleChange}
-                  placeholder="Situação do imóvel"
                   className="border p-2 w-full rounded"
-                />
+                  required
+                >
+                  <option value="Disponivel">Disponível</option>
+                  <option value="Ocupado">Ocupado</option>
+                  <option value="Reformando">Reformando</option>
+                </select>
               </div>
 
               <div>
@@ -222,6 +229,124 @@ const EditarInfo: React.FC = () => {
                 />
               </div>
 
+              <div>
+                <label>Categoria</label>
+                <select
+                  name="categoria"
+                  value={propertyInfo.categoria}
+                  onChange={handleChange}
+                  className="border p-2 w-full rounded"
+                  required
+                >
+                  <option value="andar corrido">Andar Corrido</option>
+                  <option value="apartamento">Apartamento</option>
+                  <option value="área privativa">Área Privativa</option>
+                  <option value="casa">Casa</option>
+                  <option value="chácara">Chácara</option>
+                  <option value="cobertura">Cobertura</option>
+                  <option value="fazenda">Fazenda</option>
+                  <option value="flat">Flat</option>
+                  <option value="galpão">Galpão</option>
+                  <option value="garagem">Garagem</option>
+                  <option value="kitnet">Kitnet</option>
+                  <option value="loja">Loja</option>
+                  <option value="lote">Lote</option>
+                  <option value="lote em condomínio">Lote em Condomínio</option>
+                  <option value="prédio">Prédio</option>
+                  <option value="sala">Sala</option>
+                  <option value="salão">Salão</option>
+                  <option value="sítio">Sítio</option>
+                </select>
+              </div>
+
+              <div>
+                <label>Área (m²)*</label>
+                <input
+                  type="number"
+                  name="area"
+                  value={propertyInfo.area}
+                  onChange={handleChange}
+                  placeholder="Área total do imóvel"
+                  className="border p-2 w-full rounded"
+                  required
+                />
+              </div>
+
+              <div>
+                <label>Quartos*</label>
+                <input
+                  type="number"
+                  name="quarto"
+                  value={propertyInfo.quarto}
+                  onChange={handleChange}
+                  placeholder="Quantidade de quartos"
+                  className="border p-2 w-full rounded"
+                  required
+                />
+              </div>
+
+              <div>
+                <label>Banheiros*</label>
+                <input
+                  type="number"
+                  name="banheiro"
+                  value={propertyInfo.banheiro}
+                  onChange={handleChange}
+                  placeholder="Quantidade de banheiros"
+                  className="border p-2 w-full rounded"
+                  required
+                />
+              </div>
+
+              <div>
+                <label>Área Externa (m²)</label>
+                <input
+                  type="number"
+                  name="areaExterna"
+                  value={propertyInfo.areaExterna}
+                  onChange={handleChange}
+                  placeholder="Área externa"
+                  className="border p-2 w-full rounded"
+                />
+              </div>
+
+              <div>
+                <label>Área Interna (m²)</label>
+                <input
+                  type="number"
+                  name="areaInterna"
+                  value={propertyInfo.areaInterna}
+                  onChange={handleChange}
+                  placeholder="Área interna"
+                  className="border p-2 w-full rounded"
+                />
+              </div>
+
+              <div>
+                <label>IPTU Anual (R$)</label>
+                <input
+                  type="number"
+                  name="IPTUAnual"
+                  value={propertyInfo.IPTUAnual}
+                  onChange={handleChange}
+                  placeholder="IPTU Anual"
+                  className="border p-2 w-full rounded"
+                />
+              </div>
+
+              <div>
+                <label>IPTU Mensal (R$)</label>
+                <input
+                  type="number"
+                  name="IPTUMensal"
+                  value={propertyInfo.IPTUMensal}
+                  onChange={handleChange}
+                  placeholder="IPTU Mensal"
+                  className="border p-2 w-full rounded"
+                />
+              </div>
+
+              {/* Datas de Disponibilidade - apenas para aluguel */}
               {propertyInfo.tipo === "aluguel" && (
                 <>
                   <div>
@@ -286,7 +411,7 @@ const EditarInfo: React.FC = () => {
             </div>
 
             <div className="mt-8 flex justify-between">
-              <Button variant="default" onClick={() => navigate(-1)}>
+              <Button variant="default" onClick={handleVoltar}>
                 Voltar
               </Button>
               <Button
