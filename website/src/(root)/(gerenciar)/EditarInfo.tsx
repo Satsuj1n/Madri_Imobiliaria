@@ -476,9 +476,9 @@ const EditarInfo: React.FC = () => {
               <Button variant="default" onClick={handleVoltar}>
                 Voltar
               </Button>
-              <Button variant="default" type="button" onClick={updateProperty}>
-                Salvar Alterações
-              </Button>
+                <Button variant="default" type="button" onClick={updateProperty}>
+                Próximo
+                </Button>
             </div>
           </form>
         )}
