@@ -85,7 +85,7 @@ const LandingPage = () => {
         <div
           style={{
             position: "fixed",
-            bottom: "20px",
+            top: "80px",
             right: "20px",
             backgroundColor: "#0053f8",
             fontWeight: "bold",

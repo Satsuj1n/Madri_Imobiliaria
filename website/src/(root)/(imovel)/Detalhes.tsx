@@ -40,6 +40,7 @@ const Detalhes: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o modal
   const [activeIndex, setActiveIndex] = useState(0); // Estado para controlar o índice ativo da imagem
   const [mapError, setMapError] = useState(false); // Estado para tratar erro do mapa
+  const [message, setMessage] = useState<string | null>(null); // Estado para a mensagem de sucesso
 
   // Refs para a descrição, o cliente e o mapa
   const descricaoRef = useRef<HTMLDivElement>(null);
@@ -58,6 +59,20 @@ const Detalhes: React.FC = () => {
       setLoading(false); // Finaliza o carregamento
     }
   };
+
+  useEffect(() => {
+    // Verifica se há uma mensagem de sucesso no sessionStorage
+    const successMessage = sessionStorage.getItem("messageSucesso");
+    if (successMessage) {
+      setMessage(successMessage);
+      sessionStorage.removeItem("messageSucesso"); // Remove a mensagem após exibir
+
+      // Remove a mensagem da tela após 3 segundos
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+    }
+  }, []);
 
   // Efeito para sincronizar a altura do mapa com a altura da descrição e do cliente
   useEffect(() => {
@@ -153,6 +168,25 @@ const Detalhes: React.FC = () => {
                   ))
               ) : (
                 <p>Nenhuma outra imagem disponível.</p>
+              )}
+
+              {message && (
+                <div
+                  style={{
+                    position: "fixed",
+                    top: "80px",
+                    right: "20px",
+                    backgroundColor: "#0053f8",
+                    color: "white",
+                    padding: "10px 20px",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+                    zIndex: 1000, // High z-index value
+                  }}
+                >
+                  {message}
+                </div>
               )}
 
               {imovel.outrasImagens && imovel.outrasImagens.length > 2 && (
