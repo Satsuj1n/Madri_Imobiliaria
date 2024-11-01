@@ -199,13 +199,23 @@ export const getImovelById = async (req: Request, res: Response) => {
 
 export const updateImovel = async (req: Request, res: Response) => {
   try {
+    // Verificar o conteúdo do req.body
+    console.log("Dados recebidos para atualização:", req.body);
+
     const imovel = await Imovel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      new: true, // Retorna o documento atualizado
+      runValidators: true, // Executa validações do schema
     });
-    if (!imovel)
+
+    if (!imovel) {
+      console.log("Imóvel não encontrado com ID:", req.params.id);
       return res.status(404).json({ error: "Imóvel não encontrado" });
+    }
+
+    console.log("Imóvel atualizado com sucesso:", imovel);
     res.json(imovel);
   } catch (err) {
+    console.error("Erro ao atualizar imóvel:", err);
     res.status(500).json({ error: "Erro ao atualizar imóvel" });
   }
 };

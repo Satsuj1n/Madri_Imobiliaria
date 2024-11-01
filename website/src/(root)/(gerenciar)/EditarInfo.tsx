@@ -34,6 +34,16 @@ interface PropertyInfo {
   dataDisponivelFim?: string;
 }
 
+// Função para formatar a data no padrão yyyy-MM-dd
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 const EditarInfo: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -98,8 +108,8 @@ const EditarInfo: React.FC = () => {
           IPTUAnual: data.IPTUAnual?.toString() || "",
           IPTUMensal: data.IPTUMensal?.toString() || "",
           lazer: data.lazer || [],
-          dataDisponivelInicio: data.dataDisponivelInicio || "",
-          dataDisponivelFim: data.dataDisponivelFim || "",
+          dataDisponivelInicio: formatDate(data.dataDisponivelInicio),
+          dataDisponivelFim: formatDate(data.dataDisponivelFim),
         });
         setLoading(false);
       } catch (error) {
