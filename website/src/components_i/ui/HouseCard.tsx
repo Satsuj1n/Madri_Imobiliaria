@@ -63,7 +63,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
 
   return (
     <div
-      className="border rounded-lg shadow-md bg-white cursor-pointer h-[400px] w-[350px] flex flex-col justify-between"
+      className="border rounded-lg shadow-md bg-white cursor-pointer h-[400px] w-[350px] flex flex-col justify-between z-10"
       onClick={handleCardClick}
     >
       {/* Carrossel de Imagens */}
@@ -82,7 +82,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
                 e.stopPropagation();
                 prevImage();
               }}
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-600 bg-opacity-50 text-white p-2 rounded-full z-10 h-8 w-8 flex items-center justify-center"
+              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-600 bg-opacity-50 text-white p-2 rounded-full z-15 h-8 w-8 flex items-center justify-center"
             >
               &#10094;
             </button>
@@ -91,7 +91,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
                 e.stopPropagation();
                 nextImage();
               }}
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-600 bg-opacity-50 text-white p-2 rounded-full z-10 h-8 w-8 flex items-center justify-center"
+              className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-600 bg-opacity-50 text-white p-2 rounded-full z-15 h-8 w-8 flex items-center justify-center"
             >
               &#10095;
             </button>
