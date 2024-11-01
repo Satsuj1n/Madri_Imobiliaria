@@ -33,7 +33,13 @@ const HeroSection = () => {
           animate={animationTriggered ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          Compre, venda ou alugue sua propriedade
+          <span style={{ display: "block", marginLeft: "" }}>Compre,</span>
+          <span style={{ display: "block", marginLeft: "" }}>
+            venda ou alugue
+          </span>
+          <span style={{ display: "block", marginLeft: "" }}>
+            sua propriedade
+          </span>
         </motion.h1>
 
         <motion.p

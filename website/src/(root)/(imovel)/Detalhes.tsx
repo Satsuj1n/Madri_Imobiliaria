@@ -258,35 +258,45 @@ const Detalhes: React.FC = () => {
 
         {/* Modal para o carrossel */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
-            <div className="relative">
-              {/* Botão Fechar no canto superior esquerdo, fora da imagem */}
+          <div className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50">
+            <div className="relative w-auto max-w-full max-h-full">
+              {/* Botão Fechar no canto superior esquerdo da tela */}
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-2 left-2 bg-opacity-75 bg-blue-700 text-white rounded-full p-1 px-3 z-50"
+                className="fixed top-4 left-8 bg-opacity-20 bg-blue-700 text-white rounded-full p-2 px-4 z-50 text-lg"
               >
-                x
+                Fechar
               </button>
 
+              {/* Contador de imagens no topo da tela, centralizado */}
+              <div className="absolute top-4 right-8  font-bold bg-opacity-50 bg-blue-700 text-white rounded-full  p-2 px-4 text-lg z-50">
+                {activeIndex + 1} /{" "}
+                {imovel.outrasImagens ? imovel.outrasImagens.length : 1}
+                {/* Conta a imagem principal */}
+              </div>
+
               {/* Carrossel de imagens com tamanho padronizado */}
-              <div className="relative w-full h-[500px]">
+              <div className="relative flex items-center justify-center">
                 {imovel.outrasImagens && imovel.outrasImagens.length > 0 && (
                   <img
                     src={imovel.outrasImagens[activeIndex]}
                     alt={`Imagem ${activeIndex + 1}`}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="max-w-full max-h-screen object-contain rounded-lg"
                   />
                 )}
-                {/* Controles para navegação */}
+
+                {/* Controle para imagem anterior - no canto esquerdo da tela */}
                 <button
                   onClick={prevImage}
-                  className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-opacity-50 bg-blue-700 text-white p-1 px-3 rounded-full"
+                  className="fixed left-10 top-1/2 transform -translate-y-1/2 bg-opacity-20 bg-blue-700 text-white p-3 px-5 rounded-full text-3xl z-50"
                 >
                   &#10094;
                 </button>
+
+                {/* Controle para próxima imagem - no canto direito da tela */}
                 <button
                   onClick={nextImage}
-                  className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-opacity-50 bg-blue-700 text-white p-1 px-3 rounded-full"
+                  className="fixed right-10 top-1/2 transform -translate-y-1/2 bg-opacity-20 bg-blue-700 text-white p-3 px-5 rounded-full text-3xl z-50"
                 >
                   &#10095;
                 </button>
