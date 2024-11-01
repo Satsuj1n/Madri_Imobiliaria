@@ -117,7 +117,6 @@ const EditarImagem: React.FC = () => {
       }
 
       console.log("Imagem removida com sucesso no backend");
-      alert("Imagem removida com sucesso!");
     } catch (error) {
       console.error("Erro ao remover imagem:", error);
       alert("Erro ao remover imagem. Tente novamente.");
@@ -264,64 +263,64 @@ const EditarImagem: React.FC = () => {
         {/* Conteúdo do formulário de edição de imagens */}
         {!loading && (
           <div>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <h2 className="font-bold mb-2">Imagem Principal</h2>
-                {imagePrincipal ? (
-                  <div className="relative">
+            <div className="mb-4 w-full max-w-md text-center mx-auto">
+              <h2 className="font-bold mb-2">Imagem Principal</h2>
+              {imagePrincipal ? (
+                <div className="relative">
+                  <img
+                    src={imagePrincipal.url}
+                    alt="Imagem Principal"
+                    className="w-full h-80 object-cover rounded-lg shadow-md"
+                  />
+                  <button
+                    onClick={() => handleRemoveImage(imagePrincipal)}
+                    className="absolute top-2 left-2 bg-red-600 text-white font-bold rounded-full p-1 px-2"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <label className="block border-2 border-dashed border-blue-500 rounded-lg p-6 text-center cursor-pointer">
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handleAddImage(e, true)}
+                    accept="image/*"
+                  />
+                  Clique aqui para selecionar a imagem principal
+                </label>
+              )}
+            </div>
+            <div className="col-span-2 mt-8">
+              <h2 className="font-bold mb-2 text-center">
+                Outras Imagens (Máximo de 10)
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                {secondaryImages.map((image, index) => (
+                  <div key={index} className="relative">
                     <img
-                      src={imagePrincipal.url}
-                      alt="Imagem Principal"
-                      className="w-full h-64 object-cover rounded"
+                      src={image.url}
+                      alt="Imagem Secundária"
+                      className="w-full h-48 object-cover rounded-lg shadow-md"
                     />
                     <button
-                      onClick={() => handleRemoveImage(imagePrincipal)}
-                      className="absolute top-2 left-2 bg-red-600 text-white rounded-full p-1"
+                      onClick={() => handleRemoveImage(image)}
+                      className="absolute top-2 left-2 bg-red-600 text-white rounded-full p-1 px-2"
                     >
-                      X
+                      ✕
                     </button>
                   </div>
-                ) : (
-                  <label className="block border border-gray-300 rounded p-4 text-center cursor-pointer">
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => handleAddImage(e, true)}
-                      accept="image/*"
-                    />
-                    Adicionar Imagem Principal
-                  </label>
-                )}
-              </div>
-              <div className="col-span-2">
-                <h2 className="font-bold mb-2">Imagens Secundárias</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {secondaryImages.map((image, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={image.url}
-                        alt="Imagem Secundária"
-                        className="w-full h-32 object-cover rounded"
-                      />
-                      <button
-                        onClick={() => handleRemoveImage(image)}
-                        className="absolute top-2 left-2 bg-red-600 text-white rounded-full p-1"
-                      >
-                        X
-                      </button>
-                    </div>
-                  ))}
-                  <label className="block border border-gray-300 rounded p-4 text-center cursor-pointer">
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => handleAddImage(e, false)}
-                      accept="image/*"
-                      multiple
-                    />
-                    Adicionar Imagens Secundárias
-                  </label>
-                </div>
+                ))}
+                <label className="block border-2 border-dashed border-blue-500 rounded-lg p-6 text-center cursor-pointer">
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handleAddImage(e, false)}
+                    accept="image/*"
+                    multiple
+                  />
+                  Clique aqui para selecionar várias imagens
+                </label>
               </div>
             </div>
             <div className="mt-8 flex justify-center">
