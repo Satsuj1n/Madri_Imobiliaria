@@ -143,7 +143,7 @@ const EditarInfo: React.FC = () => {
         <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center mt-24">
           Editar Imóvel
         </h1>
-        <ProgressBar step={2} />
+        <ProgressBar step={2} mode="editar" />
 
         {loading ? (
           <p className="text-center text-gray-500">Carregando...</p>
