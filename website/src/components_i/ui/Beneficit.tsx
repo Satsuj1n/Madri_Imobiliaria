@@ -41,8 +41,8 @@ const Beneficit = () => {
       ref={ref} // O componente será observado quando aparecer na tela
       className="bg-[#F7F7FD] border border-[#E0DEF7] rounded-lg w-[90%] md:w-full lg:w-[90%] xl:w-[1120px] h-auto flex flex-col lg:flex-row my-8 lg:my-24 p-4 lg:p-8 mx-auto"
     >
-      {/* Left Column with text and icons with padding applied */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 lg:px-10 py-4 lg:py-8">
+      {/* Coluna da Esquerda com o texto e os ícones */}
+      <div className="w-full lg:w-1/2 flex flex-col items-center text-center lg:items-start lg:text-left justify-center px-4 lg:px-10 py-4 lg:py-8">
         <div className="flex flex-col space-y-4">
           {/* Animação de revelação para o título */}
           <motion.h2
@@ -81,7 +81,7 @@ const Beneficit = () => {
           </motion.p>
         </div>
 
-        {/* Icons and Statistics within the left side */}
+        {/* Ícones e Estatísticas no lado esquerdo */}
         <div className="flex justify-around mt-8">
           {/* Primeiro bloco com o ícone e as informações */}
           <div className="flex flex-col items-center">
@@ -241,7 +241,7 @@ const Beneficit = () => {
         </div>
       </div>
 
-      {/* Image occupying half the box on the right side */}
+      {/* Imagem ocupando a metade direita da caixa */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={cardAnimationComplete ? { opacity: 1, scale: 1 } : {}}
