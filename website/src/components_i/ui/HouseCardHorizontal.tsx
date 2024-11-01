@@ -53,6 +53,10 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
 }) => {
   const navigate = useNavigate();
 
+  const handleEditClick = () => {
+    navigate(`/editar-info/${id}`); // Redireciona para a página de edição do imóvel
+  };
+
   const handleImageClick = () => {
     navigate(`/imovel/${id}`);
   };
@@ -61,7 +65,10 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
     <div className="relative flex flex-col sm:flex-row border rounded-lg shadow-md bg-white h-auto sm:h-[300px] w-full">
       {/* Ícone de editar e excluir à direita */}
       <div className="absolute bottom-4 right-4 flex items-center gap-4 text-gray-600">
-        <div className="relative group flex items-center cursor-pointer">
+        <div
+          className="relative group flex items-center cursor-pointer"
+          onClick={handleEditClick}
+        >
           <EditIcon className="w-7 h-7 cursor-pointer" />
           <span className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100">
             Editar
