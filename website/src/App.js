@@ -13,7 +13,8 @@ import ImoveisVenda from "./(root)/(venda)/ImoveisVenda";
 
 import Detalhes from "./(root)/(imovel)/Detalhes"; // Página de detalhes do imóvel
 import Gerenciar from "./(root)/(gerenciar)/Gerenciar"; // Página de gerenciar imóveis
-import EditarInfo from "./(root)/(gerenciar)/EditarInfo"; // Página de editar informações do imóvel
+import EditarInfo from "./(root)/(gerenciar)/EditarInfo"; // Página de editar informações do imóvel\
+import EditarImagem from "./(root)/(gerenciar)/EditarImagem"; // Página de editar imagens do imóvel
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/imovel/:id" element={<Detalhes />} />{" "}
         <Route path="/gerenciar" element={<Gerenciar />} />{" "}
         <Route path="/editar-info/:id" element={<EditarInfo />} />{" "}
+        <Route path="/editar-imagem/:id" element={<EditarImagem />} />{" "}
       </Routes>
     </Router>
   );
