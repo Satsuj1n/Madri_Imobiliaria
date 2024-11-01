@@ -198,6 +198,15 @@ export const getImovelById = async (req: Request, res: Response) => {
 };
 
 export const updateImovel = async (req: Request, res: Response) => {
+  // Verifica se a requisição tem arquivos e ignora a execução se tiver
+  if (req.files) {
+    console.log(
+      "Ignorando atualização de dados pois a requisição contém arquivos."
+    );
+    return res
+      .status(400)
+      .json({ error: "Esta rota não suporta upload de imagens" });
+  }
   try {
     // Verificar o conteúdo do req.body
     console.log("Dados recebidos para atualização:", req.body);

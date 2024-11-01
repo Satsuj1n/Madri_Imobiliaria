@@ -53,11 +53,13 @@ router.put(
 
 // Rota para atualizar um imóvel existente
 router.put(
-  "/:id",
+  "/:id/editar",
   auth,
-  asyncHandler((req: Request, res: Response) =>
-    imovelController.updateImovel(req, res)
-  )
+  asyncHandler((req: Request, res: Response) => {
+    console.log("Recebendo requisição para atualizar dados do imóvel...");
+    console.log("Dados do corpo da requisição:", req.body);
+    imovelController.updateImovel(req, res);
+  })
 );
 
 // Rota para deletar um imóvel

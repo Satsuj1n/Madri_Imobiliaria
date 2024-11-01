@@ -146,6 +146,58 @@ const EditarInfo: React.FC = () => {
       : "Valor do Aluguel (R$)*";
   };
 
+  // Função para realizar a atualização do imóvel
+  const updateProperty = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Token não encontrado!");
+      alert("Você não está autenticado. Faça login novamente.");
+      navigate("/login");
+      return;
+    }
+
+    const formattedToken = token.startsWith("Bearer ")
+      ? token
+      : `Bearer ${token}`;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/imoveis/${id}/editar`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: formattedToken,
+          },
+          body: JSON.stringify(propertyInfo),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Imóvel atualizado:", data);
+        navigate(`/editar-imagem/${id}`);
+      } else if (response.status === 401) {
+        console.error(
+          "Token inválido ou expirado. Redirecionando para o login."
+        );
+        alert("Sessão expirada. Por favor, faça login novamente.");
+        localStorage.removeItem("token");
+        navigate("/login");
+      } else {
+        const errorData = await response.json();
+        console.error("Erro ao atualizar imóvel:", errorData);
+        alert(
+          "Erro ao atualizar imóvel. Verifique os dados e tente novamente."
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar imóvel:", error);
+      alert("Erro ao atualizar imóvel. Tente novamente mais tarde.");
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -424,11 +476,7 @@ const EditarInfo: React.FC = () => {
               <Button variant="default" onClick={handleVoltar}>
                 Voltar
               </Button>
-              <Button
-                variant="default"
-                type="button"
-                onClick={() => alert("Implementar função de atualização")}
-              >
+              <Button variant="default" type="button" onClick={updateProperty}>
                 Salvar Alterações
               </Button>
             </div>
