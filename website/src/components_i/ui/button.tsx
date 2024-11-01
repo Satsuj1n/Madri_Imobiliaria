@@ -30,6 +30,7 @@ const buttonVariants = cva(
         sm: "h-8 px-3 rounded-md font-bold text-[14px] leading-[1.4] font-['Plus Jakarta Sans']",
         md: "h-10 px-4 rounded-md font-bold text-[14px] leading-[1.4] font-['Plus Jakarta Sans']",
         lg: "h-12 px-6 rounded-lg font-bold text-[14px] leading-[1.4] font-['Plus Jakarta Sans']",
+        lg_text_large:"h-12 px-6 rounded-lg font-bold text-[17px] leading-[1.4] font-['Plus Jakarta Sans']",
         icon: "h-10 w-10 flex items-center justify-center font-bold text-[14px] leading-[1.4] font-['Plus Jakarta Sans']",
         large:
           "h-14 px-8 py-3 rounded-lg text-lg leading-[1.5] font-bold font-['Plus Jakarta Sans']",

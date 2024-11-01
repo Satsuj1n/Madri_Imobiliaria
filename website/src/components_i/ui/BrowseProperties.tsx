@@ -35,7 +35,7 @@ const BrowseProperties = () => {
 
   const capitalize = (text: string) => {
     return text
-      .toLowerCase() // Transforma tudo para minúsculas para evitar letras aleatórias maiúsculas
+      .toLowerCase()
       .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
@@ -68,10 +68,9 @@ const BrowseProperties = () => {
       selectedCategories.length > 0 &&
       !selectedCategories.includes("Todos os tipos")
     ) {
-      query.append("categoria", selectedCategories.join(",")); // Passar como string com vírgulas
+      query.append("categoria", selectedCategories.join(","));
     }
-  
-    // Redirecionamento com os parâmetros de filtro aplicados
+
     if (selectedOption === "Alugar") {
       navigate(`/aluguel?${query.toString()}`);
     } else if (selectedOption === "Comprar") {
@@ -79,7 +78,6 @@ const BrowseProperties = () => {
     }
   };
 
-  // Função para definir o texto do botão de categoria
   const getCategoryText = () => {
     if (selectedCategories.length === 0 || selectedCategories.includes("Todos os tipos")) {
       return "Selecionar Tipo";
@@ -107,6 +105,56 @@ const BrowseProperties = () => {
             )}
           </div>
         ))}
+      </div>
+
+      <div className="md:hidden bg-white p-4 rounded-b-lg shadow-md w-full flex flex-col items-center space-y-4">
+        <div className="flex flex-col w-full space-y-2">
+          <p className="text-gray-700 font-bold text-[16px]">Localização</p>
+          <input
+            type="text"
+            placeholder="Digite uma localização"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="font-bold text-[18px] text-black focus:outline-none w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+
+        <div className="flex flex-col w-full space-y-2 relative">
+          <p className="text-gray-700 font-bold  text-[16px]">Tipo</p>
+          <div
+            onClick={handleDropdownToggle}
+            className="flex justify-between items-center cursor-pointer border border-gray-300 rounded-md p-2"
+          >
+            <span className="font-bold text-[18px] text-gray-400">
+              {getCategoryText()}
+            </span>
+            <ArrowIcon className="ml-2" />
+          </div>
+          {isDropdownOpen && (
+            <div className="absolute top-full mt-2 left-0 bg-white shadow-lg border border-gray-200 rounded-md p-4 w-full max-h-64 overflow-y-auto z-20">
+              {categories.map((category) => (
+                <div key={category} className="flex items-center mb-2">
+                  <Checkbox
+                    checked={
+                      category === "Todos os tipos"
+                        ? selectedCategories.length === categories.length
+                        : selectedCategories.includes(category)
+                    }
+                    onCheckedChange={() => toggleCategory(category)}
+                    className="mr-2"
+                  />
+                  <label htmlFor={category} className="text-gray-700">
+                    {capitalize(category)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <Button variant="large" size="lg_text_large" onClick={handleSearch} className="w-full">
+          Buscar Propriedades
+        </Button>
       </div>
 
       <div className="hidden md:flex bg-white p-6 rounded-b-lg shadow-md w-full md:w-[980px]">
