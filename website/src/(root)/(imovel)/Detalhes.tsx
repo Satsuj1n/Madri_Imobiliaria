@@ -115,20 +115,19 @@ const Detalhes: React.FC = () => {
 
   // Função para avançar para a próxima imagem
   const nextImage = () => {
-    if (imovel.outrasImagens) {
-      setActiveIndex((prevIndex) =>
-        prevIndex === imovel.outrasImagens!.length - 1 ? 0 : prevIndex + 1
-      );
-    }
+    const totalImages = imovel.outrasImagens ? imovel.outrasImagens.length + 1 : 1;
+    setActiveIndex((prevIndex) => (prevIndex + 1) % totalImages);
   };
 
   // Função para voltar para a imagem anterior
   const prevImage = () => {
-    if (imovel.outrasImagens) {
-      setActiveIndex((prevIndex) =>
-        prevIndex === 0 ? imovel.outrasImagens!.length - 1 : prevIndex - 1
-      );
-    }
+    const totalImages = imovel.outrasImagens ? imovel.outrasImagens.length + 1 : 1;
+    setActiveIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
+  };
+
+  const openModalAtIndex = (index: number) => {
+    setActiveIndex(index);
+    setIsModalOpen(true);
   };
 
   return (
@@ -144,16 +143,16 @@ const Detalhes: React.FC = () => {
 
           {/* Imagem Principal e Galeria de Imagens */}
           <div className="flex gap-4 mb-8">
-            {/* Imagem Principal */}
+            {/* Imagem Principal com onClick para abrir o carrossel */}
             <div className="w-2/3">
               <img
                 src={imovel.imagemPrincipal}
                 alt={imovel.titulo}
-                className="w-full h-[500px] object-cover rounded-lg shadow-lg"
+                className="w-full h-[500px] object-cover rounded-lg shadow-lg cursor-pointer"
+                onClick={() => openModalAtIndex(0)}
               />
             </div>
 
-            {/* Imagens Secundárias */}
             <div className="w-1/3 flex flex-col gap-4 relative">
               {imovel.outrasImagens && imovel.outrasImagens.length > 0 ? (
                 imovel.outrasImagens
@@ -163,7 +162,8 @@ const Detalhes: React.FC = () => {
                       key={index}
                       src={image}
                       alt={`Imagem ${index + 1}`}
-                      className="w-full h-[240px] object-cover rounded-lg shadow-lg"
+                      className="w-full h-[240px] object-cover rounded-lg shadow-lg cursor-pointer"
+                      onClick={() => openModalAtIndex(index + 1)}
                     />
                   ))
               ) : (
@@ -303,21 +303,23 @@ const Detalhes: React.FC = () => {
               </button>
 
               {/* Contador de imagens no topo da tela, centralizado */}
-              <div className="absolute top-4 right-8  font-bold bg-opacity-50 bg-blue-700 text-white rounded-full  p-2 px-4 text-lg z-50">
+              <div className="absolute top-4 right-8 font-bold bg-opacity-50 bg-blue-700 text-white rounded-full p-2 px-4 text-lg z-50">
                 {activeIndex + 1} /{" "}
-                {imovel.outrasImagens ? imovel.outrasImagens.length : 1}
+                {imovel.outrasImagens ? imovel.outrasImagens.length + 1 : 1}
                 {/* Conta a imagem principal */}
               </div>
 
               {/* Carrossel de imagens com tamanho padronizado */}
               <div className="relative flex items-center justify-center">
-                {imovel.outrasImagens && imovel.outrasImagens.length > 0 && (
-                  <img
-                    src={imovel.outrasImagens[activeIndex]}
-                    alt={`Imagem ${activeIndex + 1}`}
-                    className="max-w-full max-h-screen object-contain rounded-lg"
-                  />
-                )}
+                <img
+                  src={
+                    activeIndex === 0
+                      ? imovel.imagemPrincipal
+                      : imovel.outrasImagens![activeIndex - 1]
+                  }
+                  alt={`Imagem ${activeIndex + 1}`}
+                  className="max-w-full max-h-screen object-contain rounded-lg"
+                />
 
                 {/* Controle para imagem anterior - no canto esquerdo da tela */}
                 <button
