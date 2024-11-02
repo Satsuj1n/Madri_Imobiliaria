@@ -25,9 +25,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
   const [coordinatesList, setCoordinatesList] = useState<
     { lat: number; lng: number; _id: string; preco: number }[]
   >([]);
-  const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
+  const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(
+    null
+  );
   const [selectedImovel, setSelectedImovel] = useState<Imovel | null>(null); // Estado para o imóvel selecionado
-  const [selectedPosition, setSelectedPosition] = useState<{ lat: number; lng: number } | null>(null); // Posição do imóvel selecionado
+  const [selectedPosition, setSelectedPosition] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null); // Posição do imóvel selecionado
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null); // Referência ao mapa
 
   const containerStyle = {
@@ -181,7 +186,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
     <div className="relative w-full h-full">
       <GoogleMap
         mapContainerStyle={containerStyle}
-        zoom={selectedPosition ? 18 : 16} // Mantém o zoom padrão se não houver posição selecionada
+        zoom={selectedPosition ? 15 : 14} // Mantém o zoom padrão se não houver posição selecionada
         center={
           selectedPosition
             ? selectedPosition
