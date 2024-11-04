@@ -1,10 +1,12 @@
 import React, { FC, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
 
 interface PropertyCardProps {
   imovel: {
+    _id: string; // Adicione o ID do imóvel
     titulo: string;
     descricao?: string;
     imagemPrincipal?: string;
@@ -21,6 +23,7 @@ interface PropertyCardProps {
 const PropertyCard: FC<PropertyCardProps> = ({ imovel, onClose }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [imagens, setImagens] = useState<string[]>([]);
+  const navigate = useNavigate(); // Hook para navegar
 
   useEffect(() => {
     const loadedImages = [imovel.imagemPrincipal, ...(imovel.outrasImagens || [])].filter(Boolean) as string[];
@@ -35,12 +38,23 @@ const PropertyCard: FC<PropertyCardProps> = ({ imovel, onClose }) => {
     setActiveIndex((prevIndex) => (prevIndex === 0 ? imagens.length - 1 : prevIndex - 1));
   };
 
+  // Função para redirecionar para a página de detalhes do imóvel
+  const handleCardClick = () => {
+    navigate(`/imovel/${imovel._id}`); // Redireciona para a página de detalhes usando o ID do imóvel
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-lg w-80 relative">
+    <div
+      className="bg-white rounded-lg shadow-lg w-80 relative cursor-pointer"
+      onClick={handleCardClick} // Adiciona o redirecionamento ao clicar no card
+    >
       {/* Botão de fechamento no canto superior direito */}
       <button
         className="absolute top-2 right-2 text-blue-700 text-2xl font-bold hover:text-blue-500 z-10"
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation(); // Previne que o clique no botão feche o card e redirecione
+          onClose();
+        }}
         style={{
           background: "transparent",
           border: "none",
