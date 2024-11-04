@@ -4,6 +4,8 @@ import Footer from "components_i/ui/Footer";
 import loadingIcon from "../../assets/icons/loading.svg";
 import HouseCardHorizontal from "components_i/ui/HouseCardHorizontal";
 import axios from "axios";
+import { Button } from "components_i/ui/Button";
+import { useNavigate } from "react-router-dom";
 
 interface Imovel {
   _id: string;
@@ -32,6 +34,7 @@ const Gerenciar: React.FC = () => {
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [imovelToDelete, setImovelToDelete] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Função para buscar o email do cliente logado
   const getClienteEmail = async () => {
@@ -182,9 +185,20 @@ const Gerenciar: React.FC = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center">
-              Nenhum imóvel cadastrado no momento.
-            </p>
+            <div>
+              <p className="text-gray-500 text-center mt-32">
+                Você não tem nenhum imóvel cadastrado no momento.
+              </p>
+              <div className="flex justify-center mt-32">
+                <Button
+                  variant="extraLarge"
+                  size="extraLarge"
+                  onClick={() => navigate("/criar-imovel/1")}
+                >
+                  Criar Imóvel
+                </Button>
+              </div>
+            </div>
           )}
         </div>
       </div>
