@@ -28,10 +28,20 @@ router.get(
   )
 );
 
+// Rota para buscar todos os imóveis
 router.get(
   "/",
   asyncHandler((req: Request, res: Response) =>
     imovelController.getAllImoveis(req, res)
+  )
+);
+
+// Nova rota para buscar imóveis por email do cliente
+router.get(
+  "/cliente/:email",
+  auth,
+  asyncHandler((req: Request, res: Response) =>
+    imovelController.getImoveisByClienteEmail(req, res)
   )
 );
 

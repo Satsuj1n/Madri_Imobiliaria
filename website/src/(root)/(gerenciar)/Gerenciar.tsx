@@ -3,6 +3,7 @@ import Navbar from "components_i/ui/Navbar";
 import Footer from "components_i/ui/Footer";
 import loadingIcon from "../../assets/icons/loading.svg";
 import HouseCardHorizontal from "components_i/ui/HouseCardHorizontal";
+import axios from "axios";
 
 interface Imovel {
   _id: string;
@@ -24,6 +25,7 @@ interface Imovel {
   imagemPrincipal: string;
   dataDisponivelInicio?: Date;
   dataDisponivelFim?: Date;
+  cliente: { email: string };
 }
 
 const Gerenciar: React.FC = () => {
@@ -31,35 +33,81 @@ const Gerenciar: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [imovelToDelete, setImovelToDelete] = useState<string | null>(null);
 
-  const getAllImoveis = async () => {
+  // Função para buscar o email do cliente logado
+  const getClienteEmail = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.log("Token não encontrado. Redirecionando para login.");
+      return null;
+    }
+
     try {
-      const response = await fetch("http://localhost:5000/api/imoveis");
-      const data = await response.json();
-      return data;
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const userId = payload.id;
+      console.log("ID do usuário decodificado do token:", userId);
+
+      const response = await axios.get(
+        `http://localhost:5000/api/clientes/${userId}`,
+        {
+          headers: {
+            Authorization: token.startsWith("Bearer ")
+              ? token
+              : `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Dados do cliente carregados:", response.data);
+      return response.data.email;
     } catch (error) {
-      console.error("Erro ao buscar imóveis:", error);
+      console.error("Erro ao obter o email do cliente logado:", error);
+      return null;
+    }
+  };
+
+  // Função para buscar os imóveis do cliente logado pelo email
+  const getImoveisByClienteEmail = async (email: string) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/imoveis/cliente/${email}`,
+        {
+          headers: {
+            Authorization:
+              token && token.startsWith("Bearer ") ? token : `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Imóveis carregados:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar imóveis do cliente:", error);
       return [];
     }
   };
 
   useEffect(() => {
     const fetchImoveis = async () => {
-      const todosImoveis = await getAllImoveis();
-      setImoveis(todosImoveis);
+      setLoading(true);
+
+      const email = await getClienteEmail();
+      if (email) {
+        const imoveisDoCliente = await getImoveisByClienteEmail(email);
+        setImoveis(imoveisDoCliente);
+      } else {
+        console.log("Cliente não autenticado.");
+      }
+
       setLoading(false);
     };
+
     fetchImoveis();
   }, []);
 
   const handleDeleteImovel = async (id: string) => {
-    let token = localStorage.getItem("token"); // Obtém o token do localStorage
+    let token = localStorage.getItem("token");
 
-    // Verifica se o token já começa com "Bearer " e, se não, adiciona o prefixo
-    if (token && !token.startsWith("Bearer ")) {
-      token = `Bearer ${token}`;
-    }
-
-    console.log("Token formatado para envio:", token);
+    token = token && token.startsWith("Bearer ") ? token : `Bearer ${token}`;
 
     if (!token) {
       alert("Você não está autenticado. Faça login novamente.");
@@ -67,33 +115,24 @@ const Gerenciar: React.FC = () => {
     }
 
     try {
-      console.log("Iniciando requisição DELETE para ID do imóvel:", id);
-
       const response = await fetch(`http://localhost:5000/api/imoveis/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: token, // Envia o token formatado
+          Authorization: token,
         },
       });
 
-      // Log do status da resposta
-      console.log("Status da resposta:", response.status);
-      console.log("Resposta completa:", response);
-
       if (response.ok) {
-        console.log("Imóvel deletado com sucesso no servidor.");
         setImoveis((prevImoveis) =>
           prevImoveis.filter((imovel) => imovel._id !== id)
         );
         setImovelToDelete(null);
         alert("Imóvel deletado com sucesso!");
       } else if (response.status === 401) {
-        console.log("Erro 401: Sessão expirada ou token inválido");
         alert("Sessão expirada. Por favor, faça login novamente.");
-        localStorage.removeItem("token"); // Remove o token inválido
+        localStorage.removeItem("token");
       } else {
-        console.log("Erro ao deletar imóvel. Status:", response.status);
         alert("Erro ao deletar imóvel. Tente novamente.");
       }
     } catch (error) {
@@ -138,7 +177,7 @@ const Gerenciar: React.FC = () => {
                   imagemPrincipal={imovel.imagemPrincipal}
                   dataDisponivelInicio={imovel.dataDisponivelInicio}
                   dataDisponivelFim={imovel.dataDisponivelFim}
-                  onDelete={() => setImovelToDelete(imovel._id)} // Define o imóvel a ser deletado
+                  onDelete={() => setImovelToDelete(imovel._id)}
                 />
               ))}
             </div>
@@ -151,7 +190,6 @@ const Gerenciar: React.FC = () => {
       </div>
       <Footer />
 
-      {/* Pop-up de Confirmação */}
       {imovelToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg text-center shadow-lg">

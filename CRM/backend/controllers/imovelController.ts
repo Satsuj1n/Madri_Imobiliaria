@@ -238,6 +238,26 @@ export const getAllImoveis = async (req: Request, res: Response) => {
   }
 };
 
+export const getImoveisByClienteEmail = async (req: Request, res: Response) => {
+  const { email } = req.params;
+  console.log("Requisição para buscar imóveis pelo email:", email);
+  try {
+    // Busca imóveis cujo cliente tem o email especificado
+    const imoveis = await Imovel.find({ "cliente.email": email });
+
+    if (imoveis.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Nenhum imóvel encontrado para esse cliente" });
+    }
+
+    res.json(imoveis);
+  } catch (err) {
+    console.error("Erro ao buscar imóveis:", err);
+    res.status(500).json({ error: "Erro ao buscar imóveis" });
+  }
+};
+
 export const deleteImovel = async (req: Request, res: Response) => {
   try {
     const imovel = await Imovel.findByIdAndDelete(req.params.id);
@@ -430,6 +450,7 @@ export const aprovarImovel = async (req: Request, res: Response) => {
 };
 
 module.exports = {
+  getImoveisByClienteEmail,
   adicionarImagens,
   getAllImoveis,
   createImovel,
