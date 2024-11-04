@@ -32,7 +32,7 @@ interface PropertySearchProps {
 
 const PropertySearch: React.FC<PropertySearchProps> = ({
   onSearch,
-  maxPrice = 50000,
+  maxPrice = 500000,
   isVenda = false, // O padrão é false, ou seja, não é venda
 }) => {
   const [localizacao, setLocalizacao] = useState("");
@@ -67,7 +67,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
   const clearFilters = () => {
     setLocalizacao("");
     setPrecoMinimo(0);
-    setPrecoMaximo(isVenda ? 10000000 : 50000);
+    setPrecoMaximo(isVenda ? 10000000 : 500000);
     setCategoria("");
     setQuarto("Qualquer");
     setBanheiro("Qualquer");
