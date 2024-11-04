@@ -36,8 +36,8 @@ const Gerenciar: React.FC = () => {
   const [imovelToDelete, setImovelToDelete] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Função para buscar o email do cliente logado
-  const getClienteEmail = async () => {
+  // Função para buscar os dados do cliente logado, incluindo se ele é admin
+  const getClienteData = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.log("Token não encontrado. Redirecionando para login.");
@@ -60,10 +60,29 @@ const Gerenciar: React.FC = () => {
         }
       );
       console.log("Dados do cliente carregados:", response.data);
-      return response.data.email;
+      return response.data;
     } catch (error) {
-      console.error("Erro ao obter o email do cliente logado:", error);
+      console.error("Erro ao obter os dados do cliente logado:", error);
       return null;
+    }
+  };
+
+  // Função para buscar todos os imóveis (apenas para admin)
+  const getAllImoveis = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.get(`http://localhost:5000/api/imoveis`, {
+        headers: {
+          Authorization:
+            token && token.startsWith("Bearer ") ? token : `Bearer ${token}`,
+        },
+      });
+      console.log("Todos os imóveis carregados:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar todos os imóveis:", error);
+      return [];
     }
   };
 
@@ -81,7 +100,7 @@ const Gerenciar: React.FC = () => {
           },
         }
       );
-      console.log("Imóveis carregados:", response.data);
+      console.log("Imóveis do cliente carregados:", response.data);
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar imóveis do cliente:", error);
@@ -93,10 +112,19 @@ const Gerenciar: React.FC = () => {
     const fetchImoveis = async () => {
       setLoading(true);
 
-      const email = await getClienteEmail();
-      if (email) {
-        const imoveisDoCliente = await getImoveisByClienteEmail(email);
-        setImoveis(imoveisDoCliente);
+      const clienteData = await getClienteData();
+      if (clienteData) {
+        if (clienteData.isAdmin) {
+          // Se o usuário for admin, buscar todos os imóveis
+          const todosImoveis = await getAllImoveis();
+          setImoveis(todosImoveis);
+        } else {
+          // Caso contrário, buscar apenas os imóveis do cliente logado
+          const imoveisDoCliente = await getImoveisByClienteEmail(
+            clienteData.email
+          );
+          setImoveis(imoveisDoCliente);
+        }
       } else {
         console.log("Cliente não autenticado.");
       }

@@ -220,8 +220,11 @@ const EditarImagem: React.FC = () => {
       });
 
       if (response.ok) {
-        sessionStorage.setItem("messageSucesso", "Imagens atualizadas com sucesso");
-        navigate(`/imovel/${id}`); 
+        sessionStorage.setItem(
+          "messageSucesso",
+          "Imovel atualizado com sucesso"
+        );
+        navigate(`/imovel/${id}`);
       } else if (response.status === 401) {
         console.error(
           "Token inválido ou expirado. Redirecionando para o login."
