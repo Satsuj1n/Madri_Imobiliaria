@@ -31,6 +31,7 @@ interface Imovel {
   outrasImagens?: string[];
   status: string;
   cidadeEstado?: string;
+  lazer?: string[];
 }
 
 const Detalhes: React.FC = () => {
@@ -47,6 +48,7 @@ const Detalhes: React.FC = () => {
   const descricaoRef = useRef<HTMLDivElement>(null);
   const clienteRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
+  const lazerRef = useRef<HTMLDivElement>(null);
 
   // Função para buscar os detalhes do imóvel baseado no ID
   const fetchImovelDetails = async () => {
@@ -78,10 +80,16 @@ const Detalhes: React.FC = () => {
   // Efeito para sincronizar a altura do mapa com a altura da descrição e do cliente
   useEffect(() => {
     const adjustMapHeight = () => {
-      if (descricaoRef.current && clienteRef.current && mapRef.current) {
+      if (
+        descricaoRef.current &&
+        clienteRef.current &&
+        mapRef.current &&
+        lazerRef.current
+      ) {
         const descricaoHeight = descricaoRef.current.offsetHeight;
         const clienteHeight = clienteRef.current.offsetHeight;
-        const totalHeight = descricaoHeight + clienteHeight;
+        const lazerHeight = lazerRef.current.offsetHeight;
+        const totalHeight = descricaoHeight + clienteHeight + lazerHeight + 8;
         mapRef.current.style.height = `${totalHeight}px`;
       }
     };
@@ -98,7 +106,7 @@ const Detalhes: React.FC = () => {
 
   useEffect(() => {
     fetchImovelDetails(); // Busca os detalhes do imóvel quando o componente é montado
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (loading) {
@@ -241,6 +249,18 @@ const Detalhes: React.FC = () => {
                 <h3 className="text-xl font-bold mb-2">Sobre este imóvel</h3>
                 <p className="text-gray-700">{imovel.descricao}</p>
               </div>
+
+              {/* Lazer (se houver) */}
+              {imovel.lazer && imovel.lazer.length > 0 && (
+                <div className="mb-10" ref={lazerRef}>
+                  <h2 className="text-2xl font-bold mb-4">Lazer</h2>
+                  <ul className="list-disc list-inside text-gray-700 columns-2">
+                    {imovel.lazer.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Informações do Cliente */}
               <div
