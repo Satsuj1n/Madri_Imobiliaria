@@ -83,12 +83,11 @@ const Detalhes: React.FC = () => {
       if (
         descricaoRef.current &&
         clienteRef.current &&
-        mapRef.current &&
-        lazerRef.current
+        mapRef.current
       ) {
         const descricaoHeight = descricaoRef.current.offsetHeight;
         const clienteHeight = clienteRef.current.offsetHeight;
-        const lazerHeight = lazerRef.current.offsetHeight;
+        const lazerHeight = lazerRef.current ? lazerRef.current.offsetHeight : (-40);
         const totalHeight = descricaoHeight + clienteHeight + lazerHeight + 8;
         mapRef.current.style.height = `${totalHeight}px`;
       }
