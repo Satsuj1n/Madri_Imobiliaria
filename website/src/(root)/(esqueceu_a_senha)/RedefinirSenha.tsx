@@ -5,10 +5,12 @@ import { Button } from "../../components_i/ui/Button";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import loadingSvg from "../../assets/icons/loading.svg"; // Verifique se o caminho do ícone de carregamento está correto
 
 const RedefinirSenha = () => {
   const [senha, setSenha] = useState(""); // Usar 'senha' como o campo para a nova senha
   const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [loading, setLoading] = useState(false); // Estado de carregamento
   const navigate = useNavigate();
 
   const handleResetPassword = async () => {
@@ -28,6 +30,8 @@ const RedefinirSenha = () => {
       senha,
     });
 
+    setLoading(true); // Inicia o carregamento
+
     try {
       const response = await axios.put(
         `http://localhost:5000/api/clientes/redefinir-senha/${clienteId}`, // Inclui o ID do cliente na URL
@@ -37,6 +41,8 @@ const RedefinirSenha = () => {
       navigate("/confirmacao");
     } catch (error) {
       console.error("Erro ao redefinir senha:", error);
+    } finally {
+      setLoading(false); // Finaliza o carregamento
     }
   };
 
@@ -110,8 +116,17 @@ const RedefinirSenha = () => {
               size="lg"
               className="w-full mb-4"
               type="submit"
+              disabled={loading} // Desabilita o botão enquanto carrega
             >
-              Redefinir Senha
+              {loading ? (
+                <img
+                  src={loadingSvg}
+                  alt="Carregando..."
+                  className="inline-block w-5 h-5"
+                />
+              ) : (
+                "Redefinir Senha"
+              )}
             </Button>
           </form>
         </div>
