@@ -115,13 +115,17 @@ const Detalhes: React.FC = () => {
 
   // Função para avançar para a próxima imagem
   const nextImage = () => {
-    const totalImages = imovel.outrasImagens ? imovel.outrasImagens.length + 1 : 1;
+    const totalImages = imovel.outrasImagens
+      ? imovel.outrasImagens.length + 1
+      : 1;
     setActiveIndex((prevIndex) => (prevIndex + 1) % totalImages);
   };
 
   // Função para voltar para a imagem anterior
   const prevImage = () => {
-    const totalImages = imovel.outrasImagens ? imovel.outrasImagens.length + 1 : 1;
+    const totalImages = imovel.outrasImagens
+      ? imovel.outrasImagens.length + 1
+      : 1;
     setActiveIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
   };
 
@@ -281,7 +285,7 @@ const Detalhes: React.FC = () => {
                 ref={mapRef}
               >
                 {!mapError ? (
-                  <MapComponent imoveis={[imovel]} />
+                  <MapComponent imoveis={[imovel]} disableClick={true} />
                 ) : (
                   <p>Não foi possível carregar o mapa.</p>
                 )}

@@ -21,15 +21,24 @@ interface Imovel {
 
 interface MapComponentProps {
   imoveis: Imovel[];
+  disableClick?: boolean; // Propriedade para desabilitar o clique
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
+const MapComponent: React.FC<MapComponentProps> = ({
+  imoveis,
+  disableClick = false,
+}) => {
   const [coordinatesList, setCoordinatesList] = useState<
     { lat: number; lng: number; _id: string; preco: number }[]
   >([]);
-  const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
+  const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(
+    null
+  );
   const [selectedImovel, setSelectedImovel] = useState<Imovel | null>(null); // Estado para o imóvel selecionado
-  const [selectedPosition, setSelectedPosition] = useState<{ lat: number; lng: number } | null>(null); // Posição do imóvel selecionado
+  const [selectedPosition, setSelectedPosition] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null); // Posição do imóvel selecionado
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null); // Referência ao mapa
 
   const containerStyle = {
@@ -133,7 +142,10 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
             });
 
             bounds.extend({ lat: coords.lat, lng: coords.lng });
-            console.log(`Coordenadas adicionadas para o imóvel ${imovel._id}:`, coords);
+            console.log(
+              `Coordenadas adicionadas para o imóvel ${imovel._id}:`,
+              coords
+            );
           }
         }
       }
@@ -152,6 +164,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
 
   // Função para manipular cliques em marcadores
   const handleMarkerClick = (imovelId: string, lat: number, lng: number) => {
+    if (disableClick) return; // Se o clique estiver desabilitado, não faz nada
     const imovel = imoveis.find((item) => item._id === imovelId);
     if (imovel && mapInstance) {
       setSelectedImovel(imovel);
@@ -206,7 +219,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ imoveis }) => {
             <div
               className="price-box bg-white text-[#0053f8] p-2 flex justify-center items-center text-center rounded-lg shadow-lg font-bold cursor-pointer px-6"
               style={{ minWidth: `${coords.preco.toString().length * 10}px` }}
-              onClick={() => handleMarkerClick(coords._id, coords.lat, coords.lng)}
+              onClick={() =>
+                handleMarkerClick(coords._id, coords.lat, coords.lng)
+              }
             >
               R${coords.preco.toLocaleString("pt-BR")}
             </div>
