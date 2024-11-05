@@ -4,28 +4,31 @@ import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoveryContext } from "./RecoveryContext";
+import loadingSvg from "../../assets/icons/loading.svg"; // Certifique-se de que o caminho para o SVG está correto
 
 const EsqueciSenha = () => {
-  const { setEmail, setOtp } = useRecoveryContext(); // Inclui setOtp aqui
+  const { setEmail, setOtp } = useRecoveryContext();
   const [emailInput, setEmailInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailInput) return alert("Por favor, insira seu email.");
 
+    setLoading(true); // Inicia o carregamento
+
     try {
       // Envia a requisição para enviar o e-mail de recuperação
       const response = await axios.post(
         "http://localhost:5000/api/clientes/send_recovery_email",
-        {
-          email: emailInput,
-        }
+        { email: emailInput }
       );
 
       // Armazena o email e o OTP no contexto
       setEmail(emailInput);
-      setOtp(response.data.otp); // Armazena o OTP recebido no contexto
+      setOtp(response.data.otp);
 
       // Armazena o ID do cliente no localStorage
       if (response.data.id) {
@@ -34,19 +37,27 @@ const EsqueciSenha = () => {
           "ID do cliente armazenado no localStorage:",
           response.data.id
         );
+
+        // Navega para a página de verificação de OTP
+        navigate("/verificar-otp");
       } else {
         console.error("ID do cliente não encontrado na resposta.");
       }
-
-      // Navega para a página de verificação de OTP
-      navigate("/verificar-otp");
     } catch (error) {
       console.error("Erro ao enviar e-mail de recuperação:", error);
+      if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
+        // Exibe o pop-up de erro se o status for 404 (Cliente não encontrado)
+        setShowErrorPopup(true);
+      } else {
+        alert("Ocorreu um erro inesperado. Tente novamente.");
+      }
+    } finally {
+      setLoading(false); // Finaliza o carregamento
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-white">
+    <div className="min-h-screen flex flex-col items-center bg-white relative">
       <header className="bg-white w-full shadow-md border-b border-gray-200 px-8 py-4 flex items-center justify-start">
         <div className="flex items-center gap-2 cursor-pointer">
           <Logo className="h-8" />
@@ -90,12 +101,35 @@ const EsqueciSenha = () => {
               size="lg"
               className="w-full mb-4"
               type="submit"
+              disabled={loading}
             >
-              Enviar Código
+              {loading ? (
+                <img
+                  src={loadingSvg}
+                  alt="Carregando..."
+                  className="inline-block w-5 h-5"
+                />
+              ) : (
+                "Enviar Código"
+              )}
             </Button>
           </form>
         </div>
       </div>
+
+      {/* Pop-up de erro para e-mail não encontrado */}
+      {showErrorPopup && (
+        <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-md shadow-md text-center">
+            <p className="text-black font-bold mb-4">
+              Email não encontrado no sistema
+            </p>
+            <Button variant="default" onClick={() => setShowErrorPopup(false)}>
+              OK
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
