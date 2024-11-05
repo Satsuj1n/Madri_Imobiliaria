@@ -39,6 +39,7 @@ const Detalhes: React.FC = () => {
   const [loading, setLoading] = useState(true); // Estado de carregamento
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o modal
   const [activeIndex, setActiveIndex] = useState(0); // Estado para controlar o índice ativo da imagem
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [mapError, setMapError] = useState(false); // Estado para tratar erro do mapa
   const [message, setMessage] = useState<string | null>(null); // Estado para a mensagem de sucesso
 
@@ -97,6 +98,7 @@ const Detalhes: React.FC = () => {
 
   useEffect(() => {
     fetchImovelDetails(); // Busca os detalhes do imóvel quando o componente é montado
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (loading) {

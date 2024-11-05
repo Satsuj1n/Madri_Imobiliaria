@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, useJsApiLoader, OverlayView } from "@react-google-maps/api";
 import PropertyCard from "./PropertyCard"; // Importe o novo componente
-import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
-import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
-import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
 
 // Interface para lidar com imóveis de aluguel e venda
 interface Imovel {
@@ -218,7 +215,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
             mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
           >
             <div
-              className="price-box bg-white text-[#0053f8] p-2 flex justify-center items-center text-center rounded-lg shadow-lg font-bold cursor-pointer px-6"
+              className="price-box bg-[#0053f8af] text-white p-2 flex justify-center items-center text-center rounded-lg shadow-lg font-bold cursor-pointer px-8"
               style={{ minWidth: `${coords.preco.toString().length * 10}px` }}
               onClick={() =>
                 handleMarkerClick(coords._id, coords.lat, coords.lng)
