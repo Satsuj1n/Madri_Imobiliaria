@@ -54,6 +54,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     mapTypeControl: false, // Desativa o controle de tipo de mapa
     scaleControl: false, // Desativa a escala do mapa
     rotateControl: false, // Desativa a rotação do mapa
+    disableDoubleClickZoom: true, // Desativa o zoom ao dar duplo clique
     styles: [
       {
         featureType: "all",
