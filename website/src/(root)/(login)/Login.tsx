@@ -78,6 +78,10 @@ const Login = () => {
   const handleLogoClick = () => {
     navigate("/");
   };
+  const handleEsqueciSenhaClick = () => {
+    navigate("/esqueci-senha");
+  };
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-white">
@@ -164,6 +168,7 @@ const Login = () => {
             <a
               href="#"
               className="text-sm text-[#0053f8] mb-4 inline-block text-center"
+              onClick={handleEsqueciSenhaClick}
             >
               Esqueceu a senha?
             </a>
