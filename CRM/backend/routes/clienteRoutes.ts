@@ -18,8 +18,14 @@ router.put(
 );
 
 // Nova rota para enviar o e-mail de recuperação de senha
-router.post("/send_recovery_email", asyncHandler(clienteController.sendRecoveryEmail));
+router.post(
+  "/send_recovery_email",
+  asyncHandler(clienteController.sendRecoveryEmail)
+);
 // Nova rota para redefinir senha usando o e-mail
-router.put("/redefinir-senha", asyncHandler(clienteController.redefinirSenha));
+router.put(
+  "/redefinir-senha/:id",
+  asyncHandler(clienteController.redefinirSenha)
+);
 
 export default router;

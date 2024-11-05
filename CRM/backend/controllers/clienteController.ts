@@ -2,8 +2,10 @@ import { Request, Response } from "express";
 import Cliente from "../models/cliente";
 import nodemailer from "nodemailer";
 
-
-export const sendRecoveryEmail = async (req: Request, res: Response): Promise<Response | void> => {
+export const sendRecoveryEmail = async (
+  req: Request,
+  res: Response
+): Promise<Response | void> => {
   try {
     const { email } = req.body;
     console.log("E-mail recebido para recuperação:", email);
@@ -40,9 +42,13 @@ export const sendRecoveryEmail = async (req: Request, res: Response): Promise<Re
     await transporter.sendMail(mailOptions);
     console.log("E-mail enviado com sucesso para:", email);
 
-    // Enviar o OTP de volta para o frontend
-    res.status(200).json({ message: "Email de recuperação enviado com sucesso", otp });
-    console.log("OTP enviado ao frontend:", otp); // Confirmar que o OTP está sendo enviado
+    // Enviar o OTP e o ID do cliente de volta para o frontend
+    res.status(200).json({
+      message: "Email de recuperação enviado com sucesso",
+      otp,
+      id: cliente._id, // Incluindo o ID do cliente na resposta
+    });
+    console.log("OTP e ID enviados ao frontend:", otp, cliente._id); // Confirmação de que o ID está sendo enviado
   } catch (err) {
     console.error("Erro ao enviar e-mail de recuperação:", err);
     res.status(500).json({ error: "Erro ao enviar e-mail de recuperação" });
@@ -61,20 +67,29 @@ export const getAllClientes = async (
   }
 };
 
-// Função para redefinir a senha com base no e-mail
-export const redefinirSenha = async (req: Request, res: Response): Promise<Response | void> => {
+// Função para redefinir a senha com base no ID do cliente
+export const redefinirSenha = async (
+  req: Request,
+  res: Response
+): Promise<Response | void> => {
   try {
-    const { email, novaSenha } = req.body;
+    const { id } = req.params; // Pega o ID do cliente dos parâmetros da URL
+    const { senha } = req.body; // Pega a nova senha do corpo da requisição
 
-    // Buscar cliente pelo e-mail
-    const cliente = await Cliente.findOne({ email });
+    console.log("ID recebido:", id);
+    console.log("Nova senha recebida:", senha);
+
+    // Buscar cliente pelo ID
+    const cliente = await Cliente.findById(id);
     if (!cliente) {
+      console.log("Cliente não encontrado com o ID:", id);
       return res.status(404).json({ error: "Cliente não encontrado" });
     }
 
     // Atualizar a senha do cliente
-    cliente.senha = novaSenha;
+    cliente.senha = senha; // Atribui diretamente ao campo "senha"
     await cliente.save();
+    console.log("Senha redefinida com sucesso para o cliente ID:", id);
 
     return res.json({ message: "Senha redefinida com sucesso" });
   } catch (err: any) {
@@ -82,7 +97,6 @@ export const redefinirSenha = async (req: Request, res: Response): Promise<Respo
     return res.status(500).json({ error: "Erro ao redefinir senha" });
   }
 };
-
 
 // Função para criar um novo cliente
 export const createCliente = async (

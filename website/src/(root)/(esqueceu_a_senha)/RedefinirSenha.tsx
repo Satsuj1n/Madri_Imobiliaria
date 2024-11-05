@@ -1,24 +1,39 @@
+// RedefinirSenha.tsx
+
 import React, { useState } from "react";
 import { Button } from "../../components_i/ui/Button";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useRecoveryContext } from "./RecoveryContext";
 
 const RedefinirSenha = () => {
-  const { email } = useRecoveryContext();
-  const [novaSenha, setNovaSenha] = useState("");
+  const [senha, setSenha] = useState(""); // Usar 'senha' como o campo para a nova senha
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const navigate = useNavigate();
 
   const handleResetPassword = async () => {
-    if (novaSenha !== confirmarSenha) return alert("Senhas não coincidem.");
+    const clienteId = localStorage.getItem("clienteId"); // Recupera o ID do cliente do localStorage
+    if (!clienteId) {
+      alert("ID do cliente não encontrado. Tente novamente.");
+      return;
+    }
+
+    if (senha !== confirmarSenha) {
+      alert("Senhas não coincidem.");
+      return;
+    }
+
+    console.log("Chamando a API de redefinir-senha com:", {
+      id: clienteId,
+      senha,
+    });
 
     try {
-      await axios.put("http://localhost:5000/api/clientes/alterar-senha", {
-        email,
-        novaSenha,
-      });
+      const response = await axios.put(
+        `http://localhost:5000/api/clientes/redefinir-senha/${clienteId}`, // Inclui o ID do cliente na URL
+        { senha } // Envia a nova senha no corpo da requisição
+      );
+      console.log("Resposta do servidor:", response.data);
       navigate("/confirmacao");
     } catch (error) {
       console.error("Erro ao redefinir senha:", error);
@@ -45,25 +60,37 @@ const RedefinirSenha = () => {
             Insira e confirme sua nova senha.
           </p>
 
-          <form className="w-full space-y-4" onSubmit={(e) => { e.preventDefault(); handleResetPassword(); }}>
+          <form
+            className="w-full space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleResetPassword();
+            }}
+          >
             <div>
-              <label className="block text-gray-700 text-sm mb-2" htmlFor="novaSenha">
+              <label
+                className="block text-gray-700 text-sm mb-2"
+                htmlFor="senha"
+              >
                 Nova Senha
               </label>
               <input
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0053f8] bg-[#f9fbff]"
                 type="password"
-                id="novaSenha"
-                name="novaSenha"
+                id="senha"
+                name="senha"
                 placeholder="Digite a nova senha"
-                value={novaSenha}
-                onChange={(e) => setNovaSenha(e.target.value)}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-gray-700 text-sm mb-2" htmlFor="confirmarSenha">
+              <label
+                className="block text-gray-700 text-sm mb-2"
+                htmlFor="confirmarSenha"
+              >
                 Confirmar Senha
               </label>
               <input
@@ -78,7 +105,12 @@ const RedefinirSenha = () => {
               />
             </div>
 
-            <Button variant="default" size="lg" className="w-full mb-4" type="submit">
+            <Button
+              variant="default"
+              size="lg"
+              className="w-full mb-4"
+              type="submit"
+            >
               Redefinir Senha
             </Button>
           </form>

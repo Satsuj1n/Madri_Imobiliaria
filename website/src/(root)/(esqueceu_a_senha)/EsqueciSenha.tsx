@@ -16,14 +16,27 @@ const EsqueciSenha = () => {
 
     try {
       // Envia a requisição para enviar o e-mail de recuperação
-      const response = await axios.post("http://localhost:5000/api/clientes/send_recovery_email", {
-        email: emailInput,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/clientes/send_recovery_email",
+        {
+          email: emailInput,
+        }
+      );
 
       // Armazena o email e o OTP no contexto
       setEmail(emailInput);
       setOtp(response.data.otp); // Armazena o OTP recebido no contexto
-      console.log("OTP recebido e armazenado no contexto:", response.data.otp); // Para depuração
+
+      // Armazena o ID do cliente no localStorage
+      if (response.data.id) {
+        localStorage.setItem("clienteId", response.data.id);
+        console.log(
+          "ID do cliente armazenado no localStorage:",
+          response.data.id
+        );
+      } else {
+        console.error("ID do cliente não encontrado na resposta.");
+      }
 
       // Navega para a página de verificação de OTP
       navigate("/verificar-otp");
@@ -54,7 +67,10 @@ const EsqueciSenha = () => {
 
           <form className="w-full space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-gray-700 text-sm mb-2" htmlFor="email">
+              <label
+                className="block text-gray-700 text-sm mb-2"
+                htmlFor="email"
+              >
                 Email
               </label>
               <input
@@ -69,7 +85,12 @@ const EsqueciSenha = () => {
               />
             </div>
 
-            <Button variant="default" size="lg" className="w-full mb-4" type="submit">
+            <Button
+              variant="default"
+              size="lg"
+              className="w-full mb-4"
+              type="submit"
+            >
               Enviar Código
             </Button>
           </form>
