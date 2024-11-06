@@ -72,6 +72,16 @@ const HouseCard: React.FC<HouseCardProps> = ({
     setIsImageLoading(false);
   };
 
+  // Formatar valor de aluguel com separação de milhares
+  const formatPrice = (price: string) => {
+    const priceNumber = parseFloat(price.replace("R$", "").replace(",", "."));
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 0,
+    }).format(priceNumber);
+  };
+
   return (
     <div
       className="border rounded-lg shadow-md bg-white cursor-pointer flex flex-col justify-between z-10 w-full max-w-[350px] mx-auto h-auto sm:h-[450px]"
@@ -134,7 +144,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
 
       <div className="p-4 sm:p-6 flex flex-col justify-between">
         <div className="text-[#0053f8] font-bold text-lg sm:text-2xl">
-          {aluguelValor}
+          {formatPrice(aluguelValor)}
           {tipo === "aluguel" && (
             <span className="text-[#000929] text-sm sm:text-base font-normal opacity-50">
               {" "}
