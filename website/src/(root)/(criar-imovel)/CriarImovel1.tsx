@@ -4,6 +4,7 @@ import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
 import { Button } from "../../components_i/ui/Button";
 import { ProgressBar } from "components_i/ui/ProgressBar";
+import loadingIcon from "../../assets/icons/loading.svg";
 
 const CriarImovel1 = () => {
   const navigate = useNavigate();
@@ -17,11 +18,20 @@ const CriarImovel1 = () => {
     cidadeEstado: "",
     complemento: "",
   });
-
   const [error, setError] = useState<string | null>(null);
+  const [loadingAuth, setLoadingAuth] = useState<boolean>(true); // Estado de carregamento de autenticação
+  const [debouncedCep, setDebouncedCep] = useState(""); // Estado de debounce para CEP
 
-  // Debounce state to delay the CEP fetch
-  const [debouncedCep, setDebouncedCep] = useState("");
+  // Verifica se o usuário está autenticado ao carregar a página
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.log("Token não encontrado. Redirecionando para login.");
+      navigate("/login");
+    } else {
+      setLoadingAuth(false); // Marca a autenticação como concluída
+    }
+  }, [navigate]);
 
   // Atualiza o CEP com debounce para evitar que a busca ocorra antes de o usuário terminar de digitar
   useEffect(() => {
@@ -49,8 +59,8 @@ const CriarImovel1 = () => {
               endereco: data.logradouro,
               bairro: data.bairro,
               cidadeEstado: `${data.localidade} - ${data.uf}`,
-              regiao: data.regiao || "", // Supondo que tenha "região"
-              subRegiao: data.subRegiao || "", // Supondo que tenha "sub-região"
+              regiao: data.regiao || "",
+              subRegiao: data.subRegiao || "",
             }));
           } else {
             setError("CEP não encontrado.");
@@ -69,7 +79,6 @@ const CriarImovel1 = () => {
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (/^\d*$/.test(value)) {
-      // Aceita apenas números
       setPropertyInfo({ ...propertyInfo, cep: value });
     }
   };
@@ -100,6 +109,15 @@ const CriarImovel1 = () => {
     navigate("/");
   };
 
+  // Exibe um ícone de carregamento enquanto verifica a autenticação
+  if (loadingAuth) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <img src={loadingIcon} alt="Loading" className="w-20 h-20" />
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar />
@@ -112,7 +130,6 @@ const CriarImovel1 = () => {
 
         <div>
           <div className="grid grid-cols-2 gap-4">
-            {/* CEP */}
             <div>
               <label>CEP*</label>
               <input
@@ -122,12 +139,10 @@ const CriarImovel1 = () => {
                 onChange={handleCepChange}
                 placeholder="Digite o CEP (apenas números)"
                 className="border p-2 w-full rounded"
-                maxLength={8} // Limita a 8 caracteres
+                maxLength={8}
                 required
               />
             </div>
-
-            {/* Endereço */}
             <div>
               <label>Endereço*</label>
               <input
@@ -140,8 +155,6 @@ const CriarImovel1 = () => {
                 required
               />
             </div>
-
-            {/* Número */}
             <div>
               <label>Número*</label>
               <input
@@ -154,8 +167,6 @@ const CriarImovel1 = () => {
                 required
               />
             </div>
-
-            {/* Bairro */}
             <div>
               <label>Bairro*</label>
               <input
@@ -168,8 +179,6 @@ const CriarImovel1 = () => {
                 required
               />
             </div>
-
-            {/* Região */}
             <div>
               <label>Região*</label>
               <input
@@ -182,8 +191,6 @@ const CriarImovel1 = () => {
                 required
               />
             </div>
-
-            {/* Sub-região */}
             <div>
               <label>Sub-região</label>
               <input
@@ -195,8 +202,6 @@ const CriarImovel1 = () => {
                 className="border p-2 w-full rounded"
               />
             </div>
-
-            {/* Cidade - Estado */}
             <div>
               <label>Cidade - Estado*</label>
               <input
@@ -209,8 +214,6 @@ const CriarImovel1 = () => {
                 required
               />
             </div>
-
-            {/* Complemento */}
             <div>
               <label>Complemento</label>
               <input
