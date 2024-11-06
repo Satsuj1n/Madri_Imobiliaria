@@ -84,7 +84,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
 
   return (
     <div
-      className="border rounded-lg shadow-md bg-white cursor-pointer flex flex-col justify-between z-10 w-full max-w-[350px] mx-auto h-auto sm:h-[450px]"
+      className="border rounded-lg shadow-md bg-white cursor-pointer flex flex-col justify-between z-10 w-full max-w-[350px] mx-auto h-auto sm:h-[450px] min-w-[350px]"
       onClick={handleCardClick}
     >
       {/* Carrossel de Imagens */}
