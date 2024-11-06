@@ -311,14 +311,6 @@ const Register = () => {
             >
               Cadastrar-se
             </Button>
-            <Button
-              variant="google"
-              size="google"
-              className="w-full flex items-center justify-center"
-            >
-              <GoogleIcon className="h-5 w-5 mr-2" />
-              Cadastrar-se com o Google
-            </Button>
 
             <p className="mt-6 text-sm text-gray-500 text-center">
               Já tem uma conta?{" "}
