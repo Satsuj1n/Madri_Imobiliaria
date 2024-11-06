@@ -33,14 +33,15 @@ interface Imovel {
 const Gerenciar: React.FC = () => {
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingAuth, setLoadingAuth] = useState<boolean>(true); // Estado para verificar autenticação
   const [imovelToDelete, setImovelToDelete] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Função para buscar os dados do cliente logado, incluindo se ele é admin
   const getClienteData = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.log("Token não encontrado. Redirecionando para login.");
+      navigate("/login"); // Redireciona para login
       return null;
     }
 
@@ -63,11 +64,11 @@ const Gerenciar: React.FC = () => {
       return response.data;
     } catch (error) {
       console.error("Erro ao obter os dados do cliente logado:", error);
+      navigate("/login"); // Redireciona para login em caso de erro
       return null;
     }
   };
 
-  // Função para buscar todos os imóveis (apenas para admin)
   const getAllImoveis = async () => {
     const token = localStorage.getItem("token");
 
@@ -86,7 +87,6 @@ const Gerenciar: React.FC = () => {
     }
   };
 
-  // Função para buscar os imóveis do cliente logado pelo email
   const getImoveisByClienteEmail = async (email: string) => {
     const token = localStorage.getItem("token");
 
@@ -110,16 +110,14 @@ const Gerenciar: React.FC = () => {
 
   useEffect(() => {
     const fetchImoveis = async () => {
-      setLoading(true);
+      setLoadingAuth(true);
 
       const clienteData = await getClienteData();
       if (clienteData) {
         if (clienteData.isAdmin) {
-          // Se o usuário for admin, buscar todos os imóveis
           const todosImoveis = await getAllImoveis();
           setImoveis(todosImoveis);
         } else {
-          // Caso contrário, buscar apenas os imóveis do cliente logado
           const imoveisDoCliente = await getImoveisByClienteEmail(
             clienteData.email
           );
@@ -127,13 +125,15 @@ const Gerenciar: React.FC = () => {
         }
       } else {
         console.log("Cliente não autenticado.");
+        navigate("/login"); // Redireciona se o cliente não estiver autenticado
       }
 
       setLoading(false);
+      setLoadingAuth(false);
     };
 
     fetchImoveis();
-  }, []);
+  }, [navigate]);
 
   const handleDeleteImovel = async (id: string) => {
     let token = localStorage.getItem("token");
@@ -163,6 +163,7 @@ const Gerenciar: React.FC = () => {
       } else if (response.status === 401) {
         alert("Sessão expirada. Por favor, faça login novamente.");
         localStorage.removeItem("token");
+        navigate("/login");
       } else {
         alert("Erro ao deletar imóvel. Tente novamente.");
       }
@@ -171,6 +172,14 @@ const Gerenciar: React.FC = () => {
       alert("Erro ao deletar imóvel. Tente novamente.");
     }
   };
+
+  if (loadingAuth) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <img src={loadingIcon} alt="Loading" className="w-20 h-20" />
+      </div>
+    );
+  }
 
   return (
     <>
