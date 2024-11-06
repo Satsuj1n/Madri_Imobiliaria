@@ -40,22 +40,18 @@ const PropertyListing = () => {
       const response = await fetch(`http://localhost:5000/api/imoveis`);
       const data = await response.json();
 
-      console.log("Dados recebidos da API:", data);
-
       if (Array.isArray(data)) {
         setImoveis(data);
-        setFilteredImoveis(data); // Inicializa com todos os imóveis
-        setDisplayedImoveis(data.slice(0, itemsPerPage)); // Exibe os primeiros imóveis
+        setFilteredImoveis(data);
+        setDisplayedImoveis(data.slice(0, itemsPerPage));
       } else if (data.imoveis && Array.isArray(data.imoveis)) {
         setImoveis(data.imoveis);
-        setFilteredImoveis(data.imoveis); // Inicializa com todos os imóveis
-        setDisplayedImoveis(data.imoveis.slice(0, itemsPerPage)); // Exibe os primeiros imóveis
+        setFilteredImoveis(data.imoveis);
+        setDisplayedImoveis(data.imoveis.slice(0, itemsPerPage));
       } else {
-        console.error("Formato inesperado da resposta da API:", data);
         setImoveis([]);
       }
     } catch (error) {
-      console.error("Erro ao buscar imóveis:", error);
       setImoveis([]);
     } finally {
       setLoading(false);
@@ -119,68 +115,64 @@ const PropertyListing = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full px-4">
       <div className="text-center mt-8">
-        <h2
-          className="text-[#000929] font-bold"
-          style={{
-            fontSize: "44px",
-            lineHeight: "56px",
-            letterSpacing: "-0.4px",
-          }}
-        >
-          Propriedades Selecionas para Você
+        <h2 className="text-[#000929] font-bold text-3xl md:text-5xl leading-tight">
+          Propriedades Selecionadas para Você
         </h2>
-        <p
-          className="text-[#6C727F] mt-2 mb-6 md:mt-6 md:mb-16"
-          style={{ fontSize: "16px", lineHeight: "24px" }}
-        >
+        <p className="text-[#6C727F] mt-2 mb-6 md:mt-6 md:mb-16 text-sm md:text-base">
           Veja aqui todas as propriedades disponíveis 
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between w-full max-w-[1120px] mt-4 px-4 mb-4 space-y-2 md:space-y-0">
-        <SegmentedControl
-          selectedType={selectedType}
-          onTypeChange={handleTypeChange}
-        />
-        <SearchBar onSearch={handleSearch} />
+      {/* Controles de Segmentação e Busca */}
+      <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-[1120px] space-y-2 md:space-y-0 md:space-x-4 mt-4 mb-4">
+        <div className="w-full md:w-auto md:mr-auto">
+          <SegmentedControl
+            selectedType={selectedType}
+            onTypeChange={handleTypeChange}
+          />
+        </div>
+        <div className="w-full md:w-auto md:ml-auto">
+          <SearchBar onSearch={handleSearch} />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-8 w-full max-w-[1120px] px-4 mb-14">
+      {/* Listagem de Imóveis */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-8 w-full max-w-[1120px] mb-14">
         {loading ? (
           <p>Carregando imóveis...</p>
         ) : displayedImoveis.length > 0 ? (
           displayedImoveis.map((imovel) => (
-            <div key={imovel._id}>
-              <HouseCard
-                id={imovel._id}
-                aluguelValor={
-                  imovel.aluguelValor
-                    ? `R$${imovel.aluguelValor}`
-                    : imovel.valor
-                    ? `R$${imovel.valor}`
-                    : ""
-                }
-                titulo={imovel.titulo}
-                endereco={imovel.endereco}
-                cidadeEstado={imovel.cidadeEstado}
-                quarto={imovel.quarto}
-                banheiro={imovel.banheiro}
-                area={imovel.area}
-                numero={imovel.numero}
-                bairro={imovel.bairro}
-                imagemPrincipal={imovel.imagemPrincipal}
-                outrasImagens={imovel.outrasImagens}
-                tipo={imovel.tipo}
-              />
-            </div>
+            <HouseCard
+              key={imovel._id}
+              id={imovel._id}
+              aluguelValor={
+                imovel.aluguelValor
+                  ? `R$${imovel.aluguelValor}`
+                  : imovel.valor
+                  ? `R$${imovel.valor}`
+                  : ""
+              }
+              titulo={imovel.titulo}
+              endereco={imovel.endereco}
+              cidadeEstado={imovel.cidadeEstado}
+              quarto={imovel.quarto}
+              banheiro={imovel.banheiro}
+              area={imovel.area}
+              numero={imovel.numero}
+              bairro={imovel.bairro}
+              imagemPrincipal={imovel.imagemPrincipal}
+              outrasImagens={imovel.outrasImagens}
+              tipo={imovel.tipo}
+            />
           ))
         ) : (
           <p>Nenhum imóvel encontrado.</p>
         )}
       </div>
 
+      {/* Botão de Carregar Mais */}
       <div className="mb-28">
         {currentPage * itemsPerPage < filteredImoveis.length && (
           <Button variant="large" size="large" onClick={loadMoreImoveis}>

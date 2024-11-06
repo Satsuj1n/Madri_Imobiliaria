@@ -55,11 +55,15 @@ const EsqueciSenha = () => {
       setLoading(false); // Finaliza o carregamento
     }
   };
+  const handleClickLanding = () => {
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-white relative">
       <header className="bg-white w-full shadow-md border-b border-gray-200 px-8 py-4 flex items-center justify-start">
-        <div className="flex items-center gap-2 cursor-pointer">
+        <div className="flex items-center gap-2 cursor-pointer"
+        onClick={handleClickLanding}>
           <Logo className="h-8" />
           <span className="text-[#100A55] font-bold text-xl whitespace-nowrap">
             Madri Imobiliária
