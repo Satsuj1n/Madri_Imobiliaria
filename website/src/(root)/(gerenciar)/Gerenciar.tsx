@@ -33,7 +33,7 @@ interface Imovel {
 const Gerenciar: React.FC = () => {
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [loadingAuth, setLoadingAuth] = useState<boolean>(true); // Estado para verificar autenticação
+  const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
   const [imovelToDelete, setImovelToDelete] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ const Gerenciar: React.FC = () => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.log("Token não encontrado. Redirecionando para login.");
-      navigate("/login"); // Redireciona para login
+      navigate("/login");
       return null;
     }
 
@@ -64,7 +64,7 @@ const Gerenciar: React.FC = () => {
       return response.data;
     } catch (error) {
       console.error("Erro ao obter os dados do cliente logado:", error);
-      navigate("/login"); // Redireciona para login em caso de erro
+      navigate("/login");
       return null;
     }
   };
@@ -79,11 +79,15 @@ const Gerenciar: React.FC = () => {
             token && token.startsWith("Bearer ") ? token : `Bearer ${token}`,
         },
       });
-      console.log("Todos os imóveis carregados:", response.data);
       return response.data;
     } catch (error) {
-      console.error("Erro ao buscar todos os imóveis:", error);
-      return [];
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        console.log("Nenhum imóvel encontrado para o usuário."); // Mensagem esperada e tratada
+        return [];
+      } else {
+        console.error("Erro ao buscar todos os imóveis:", error);
+        return [];
+      }
     }
   };
 
@@ -100,11 +104,16 @@ const Gerenciar: React.FC = () => {
           },
         }
       );
-      console.log("Imóveis do cliente carregados:", response.data);
+      console.log("Todos os imóveis carregados:", response.data);
       return response.data;
     } catch (error) {
-      console.error("Erro ao buscar imóveis do cliente:", error);
-      return [];
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        console.log("Nenhum imóvel encontrado para o cliente."); // Mensagem esperada e tratada
+        return [];
+      } else {
+        console.error("Erro ao buscar imóveis do cliente:", error);
+        return [];
+      }
     }
   };
 
@@ -125,7 +134,7 @@ const Gerenciar: React.FC = () => {
         }
       } else {
         console.log("Cliente não autenticado.");
-        navigate("/login"); // Redireciona se o cliente não estiver autenticado
+        navigate("/login");
       }
 
       setLoading(false);
@@ -137,7 +146,6 @@ const Gerenciar: React.FC = () => {
 
   const handleDeleteImovel = async (id: string) => {
     let token = localStorage.getItem("token");
-
     token = token && token.startsWith("Bearer ") ? token : `Bearer ${token}`;
 
     if (!token) {
