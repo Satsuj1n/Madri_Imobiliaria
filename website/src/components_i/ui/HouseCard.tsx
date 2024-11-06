@@ -40,10 +40,10 @@ const HouseCard: React.FC<HouseCardProps> = ({
   const [imagens, setImagens] = useState<string[]>([]);
 
   useEffect(() => {
+    // Carrega as imagens principais e adicionais (se existirem)
     const loadedImages = [imagemPrincipal, ...outrasImagens];
     setImagens(loadedImages);
-    console.log("Imagens carregadas no componente:", loadedImages);
-  }, []);
+  }, [imagemPrincipal, outrasImagens]);
 
   const handleCardClick = () => {
     navigate(`/imovel/${id}`);
@@ -51,23 +51,21 @@ const HouseCard: React.FC<HouseCardProps> = ({
 
   const nextImage = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % imagens.length);
-    console.log("Próxima imagem. Índice ativo:", activeIndex, "Total de imagens:", imagens.length);
   };
 
   const prevImage = () => {
     setActiveIndex((prevIndex) =>
       prevIndex === 0 ? imagens.length - 1 : prevIndex - 1
     );
-    console.log("Imagem anterior. Índice ativo:", activeIndex, "Total de imagens:", imagens.length);
   };
 
   return (
     <div
-      className="border rounded-lg shadow-md bg-white cursor-pointer h-[400px] w-[350px] flex flex-col justify-between z-10"
+      className="border rounded-lg shadow-md bg-white cursor-pointer h-[450px] w-[350px] flex flex-col justify-between z-10"
       onClick={handleCardClick}
     >
       {/* Carrossel de Imagens */}
-      <div className="h-[200px] w-full overflow-hidden rounded-t-lg relative">
+      <div className="h-[250px] w-full overflow-hidden rounded-t-lg relative">
         <img
           src={imagens[activeIndex]}
           alt={titulo}
@@ -126,7 +124,7 @@ const HouseCard: React.FC<HouseCardProps> = ({
         <h4 className="text-[#000929] font-bold text-xl mt-2 whitespace-nowrap overflow-hidden overflow-ellipsis">
           {titulo}
         </h4>
-        <p className="text-[#6C727F] font-normal text-sm mt-1">
+        <p className="text-[#6C727F] font-normal text-sm mt-1 whitespace-nowrap overflow-hidden overflow-ellipsis">
           {endereco}, {numero}, {bairro}
           <br />
           {cidadeEstado}
