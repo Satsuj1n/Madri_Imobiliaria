@@ -162,7 +162,9 @@ const HouseCardHorizontal: React.FC<HouseCardHorizontalProps> = ({
 
         {/* Valor ou Aluguel */}
         <div className="mt-3 text-[#0053f8] text-2xl font-bold">
-          {tipo === "aluguel" ? `R$ ${aluguelValor} /mês` : `R$ ${valor}`}
+          {tipo === "aluguel"
+            ? `R$ ${aluguelValor ? parseFloat(aluguelValor.toString()).toLocaleString("pt-BR") : "N/A"} /mês`
+            : `R$ ${valor ? parseFloat(valor.toString()).toLocaleString("pt-BR") : "N/A"}`}
         </div>
 
         {/* IPTU */}
