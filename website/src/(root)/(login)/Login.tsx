@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { Button } from "../../components_i/ui/Button";
-import { ReactComponent as GoogleIcon } from "../../assets/icons/googleIcon.svg";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Importando Axios para as requisições

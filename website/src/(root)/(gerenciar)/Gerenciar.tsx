@@ -142,6 +142,7 @@ const Gerenciar: React.FC = () => {
     };
 
     fetchImoveis();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const handleDeleteImovel = async (id: string) => {

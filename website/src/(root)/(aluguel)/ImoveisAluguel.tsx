@@ -29,6 +29,7 @@ interface Imovel {
 }
 
 const ImoveisAluguel: FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [filteredImoveis, setFilteredImoveis] = useState<Imovel[]>([]);
