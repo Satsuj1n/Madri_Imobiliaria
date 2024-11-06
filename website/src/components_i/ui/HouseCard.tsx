@@ -38,11 +38,17 @@ const HouseCard: React.FC<HouseCardProps> = ({
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [imagens, setImagens] = useState<string[]>([]);
+  const [isImageLoading, setIsImageLoading] = useState(false);
 
   useEffect(() => {
-    // Carrega as imagens principais e adicionais (se existirem)
     const loadedImages = [imagemPrincipal, ...outrasImagens];
     setImagens(loadedImages);
+
+    // Pré-carregar as imagens
+    loadedImages.forEach((imageUrl) => {
+      const img = new Image();
+      img.src = imageUrl;
+    });
   }, [imagemPrincipal, outrasImagens]);
 
   const handleCardClick = () => {
@@ -50,13 +56,20 @@ const HouseCard: React.FC<HouseCardProps> = ({
   };
 
   const nextImage = () => {
+    setIsImageLoading(true);
     setActiveIndex((prevIndex) => (prevIndex + 1) % imagens.length);
   };
 
   const prevImage = () => {
+    setIsImageLoading(true);
     setActiveIndex((prevIndex) =>
       prevIndex === 0 ? imagens.length - 1 : prevIndex - 1
     );
+  };
+
+  // Quando a imagem é carregada, remove o estado de carregamento
+  const handleImageLoad = () => {
+    setIsImageLoading(false);
   };
 
   return (
@@ -66,10 +79,18 @@ const HouseCard: React.FC<HouseCardProps> = ({
     >
       {/* Carrossel de Imagens */}
       <div className="h-[250px] w-full overflow-hidden rounded-t-lg relative">
+        {isImageLoading && (
+          <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+            <span>Carregando...</span>
+          </div>
+        )}
         <img
           src={imagens[activeIndex]}
           alt={titulo}
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover transition-opacity duration-500 ${
+            isImageLoading ? "opacity-0" : "opacity-100"
+          }`}
+          onLoad={handleImageLoad}
         />
 
         {/* Botões de navegação apenas se houver mais de uma imagem */}
