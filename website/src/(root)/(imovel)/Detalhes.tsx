@@ -80,14 +80,12 @@ const Detalhes: React.FC = () => {
   // Efeito para sincronizar a altura do mapa com a altura da descrição e do cliente
   useEffect(() => {
     const adjustMapHeight = () => {
-      if (
-        descricaoRef.current &&
-        clienteRef.current &&
-        mapRef.current
-      ) {
+      if (descricaoRef.current && clienteRef.current && mapRef.current) {
         const descricaoHeight = descricaoRef.current.offsetHeight;
         const clienteHeight = clienteRef.current.offsetHeight;
-        const lazerHeight = lazerRef.current ? lazerRef.current.offsetHeight : (-40);
+        const lazerHeight = lazerRef.current
+          ? lazerRef.current.offsetHeight
+          : -40;
         const totalHeight = descricaoHeight + clienteHeight + lazerHeight + 8;
         mapRef.current.style.height = `${totalHeight}px`;
       }
@@ -156,7 +154,6 @@ const Detalhes: React.FC = () => {
 
           {/* Imagem Principal e Galeria de Imagens */}
           <div className="flex gap-4 mb-8">
-            {/* Imagem Principal com onClick para abrir o carrossel */}
             <div className="w-2/3">
               <img
                 src={imovel.imagemPrincipal}
@@ -195,7 +192,7 @@ const Detalhes: React.FC = () => {
                     borderRadius: "8px",
                     fontWeight: "bold",
                     boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-                    zIndex: 1000, // High z-index value
+                    zIndex: 1000,
                   }}
                 >
                   {message}
@@ -215,11 +212,38 @@ const Detalhes: React.FC = () => {
             </div>
           </div>
 
-          {/* Conteúdo dividido em duas colunas */}
+          {/* Preço e Mapa em Mobile */}
+          <div className="sm:hidden mb-8">
+            <div className="bg-white p-4 rounded-lg shadow-md h-36 flex flex-col justify-between mb-4">
+              <div>
+                <h3 className="text-gray-500">Preço</h3>
+                <p className="text-3xl font-bold text-blue-500">
+                  {imovel.tipo === "aluguel"
+                    ? `R$${imovel.aluguelValor?.toLocaleString()}/mês`
+                    : `R$${imovel.valor?.toLocaleString()}`}
+                </p>
+              </div>
+              <Button variant="default" size="md" className="w-full">
+                Entrar em Contato
+              </Button>
+            </div>
+
+            <div
+              className="bg-white p-4 rounded-lg shadow-md"
+              style={{ height: "250px" }}
+            >
+              {imovel && imovel.endereco ? (
+                <MapComponent imoveis={[imovel]} disableClick={true} />
+              ) : (
+                <p>Não foi possível carregar o mapa.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Conteúdo dividido em duas colunas para desktop */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Coluna da Esquerda */}
             <div className="col-span-2">
-              {/* Características do Imóvel */}
               <div className="bg-white p-6 rounded-lg shadow-md mb-6 max-w-4xl">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center space-x-2">
@@ -243,13 +267,11 @@ const Detalhes: React.FC = () => {
                 </div>
               </div>
 
-              {/* Descrição */}
               <div className="mb-8" ref={descricaoRef}>
                 <h3 className="text-xl font-bold mb-2">Sobre este imóvel</h3>
                 <p className="text-gray-700">{imovel.descricao}</p>
               </div>
 
-              {/* Lazer (se houver) */}
               {imovel.lazer && imovel.lazer.length > 0 && (
                 <div className="mb-10" ref={lazerRef}>
                   <h2 className="text-2xl font-bold mb-4">Lazer</h2>
@@ -261,7 +283,6 @@ const Detalhes: React.FC = () => {
                 </div>
               )}
 
-              {/* Informações do Cliente */}
               <div
                 className="bg-white p-6 rounded-lg shadow-md mb-6 max-w-4xl"
                 ref={clienteRef}
@@ -270,7 +291,6 @@ const Detalhes: React.FC = () => {
                   Informações do Cliente
                 </h2>
                 <div className="flex items-center space-x-4">
-                  {/* Foto gerada com as iniciais do cliente */}
                   <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white text-lg font-bold">
                     {getClientInitials(imovel.cliente.nome)}
                   </div>
@@ -283,29 +303,28 @@ const Detalhes: React.FC = () => {
               </div>
             </div>
 
-            {/* Coluna da Direita: Box de Preço e Mapa */}
-            <div>
-              {/* Box de Preço */}
+            {/* Box de Preço e Mapa em dispositivos maiores */}
+            <div className="hidden sm:block">
               <div className="bg-white p-4 rounded-lg shadow-md max-w-sm h-36 flex flex-col justify-between mb-4">
                 <div>
                   <h3 className="text-gray-500">Preço</h3>
-                  <p className="text-4xl font-bold text-blue-500">
+                  <p className="text-3xl font-bold text-blue-500">
                     {imovel.tipo === "aluguel"
                       ? `R$${imovel.aluguelValor?.toLocaleString()}/mês`
                       : `R$${imovel.valor?.toLocaleString()}`}
                   </p>
                 </div>
                 <Button variant="default" size="md" className="w-full">
-                  Solicitar agora
+                  Entrar em Contato
                 </Button>
               </div>
 
-              {/* Mapa com o Pin */}
+              {/* Definindo a largura máxima para o mapa */}
               <div
                 className="bg-white p-4 rounded-lg shadow-md max-w-sm"
                 ref={mapRef}
               >
-                {!mapError ? (
+                {imovel && imovel.endereco ? (
                   <MapComponent imoveis={[imovel]} disableClick={true} />
                 ) : (
                   <p>Não foi possível carregar o mapa.</p>
@@ -319,7 +338,6 @@ const Detalhes: React.FC = () => {
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50">
             <div className="relative w-auto max-w-full max-h-full">
-              {/* Botão Fechar no canto superior esquerdo da tela */}
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="fixed top-4 left-8 bg-opacity-20 bg-blue-700 text-white rounded-full p-2 px-4 z-50 text-lg"
@@ -327,14 +345,11 @@ const Detalhes: React.FC = () => {
                 Fechar
               </button>
 
-              {/* Contador de imagens no topo da tela, centralizado */}
               <div className="absolute top-4 right-8 font-bold bg-opacity-50 bg-blue-700 text-white rounded-full p-2 px-4 text-lg z-50">
                 {activeIndex + 1} /{" "}
                 {imovel.outrasImagens ? imovel.outrasImagens.length + 1 : 1}
-                {/* Conta a imagem principal */}
               </div>
 
-              {/* Carrossel de imagens com tamanho padronizado */}
               <div className="relative flex items-center justify-center">
                 <img
                   src={
@@ -346,7 +361,6 @@ const Detalhes: React.FC = () => {
                   className="max-w-full max-h-screen object-contain rounded-lg"
                 />
 
-                {/* Controle para imagem anterior - no canto esquerdo da tela */}
                 <button
                   onClick={prevImage}
                   className="fixed left-10 top-1/2 transform -translate-y-1/2 bg-opacity-20 bg-blue-700 text-white p-3 px-5 rounded-full text-3xl z-50"
@@ -354,7 +368,6 @@ const Detalhes: React.FC = () => {
                   &#10094;
                 </button>
 
-                {/* Controle para próxima imagem - no canto direito da tela */}
                 <button
                   onClick={nextImage}
                   className="fixed right-10 top-1/2 transform -translate-y-1/2 bg-opacity-20 bg-blue-700 text-white p-3 px-5 rounded-full text-3xl z-50"
