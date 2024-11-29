@@ -2,6 +2,77 @@ import { Request, Response } from "express";
 import Cliente from "../models/cliente";
 import jwt from "jsonwebtoken";
 
+export const getUserDetails = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    console.log("Iniciando `getUserDetails`...");
+
+    // Obtenha o token do cabeçalho da requisição
+    let token = req.headers.authorization;
+    console.log("Cabeçalho de autorização recebido:", token);
+
+    if (!token) {
+      console.warn("Token não foi fornecido no cabeçalho.");
+      return res.status(401).json({ message: "Token não fornecido" });
+    }
+
+    // Corrige casos de duplicação do prefixo 'Bearer'
+    if (token.startsWith("Bearer Bearer")) {
+      token = token.replace("Bearer Bearer ", "");
+    } else if (token.startsWith("Bearer")) {
+      token = token.replace("Bearer ", "");
+    }
+
+    console.log("Token após correção:", token);
+
+    // Verifique se o token é válido após a correção
+    if (!token) {
+      console.warn("Token inválido após a correção.");
+      return res.status(401).json({ message: "Token inválido após correção" });
+    }
+
+    // Verifique e decodifique o token
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET as string
+      ) as jwt.JwtPayload;
+      console.log("Token decodificado com sucesso:", decoded);
+
+      // Encontre o cliente pelo ID extraído do token
+      const cliente = await Cliente.findById(decoded.id);
+
+      if (!cliente) {
+        console.warn("Cliente não encontrado no banco de dados:", decoded.id);
+        return res.status(404).json({ message: "Cliente não encontrado" });
+      }
+
+      console.log("Cliente encontrado no banco de dados:", cliente);
+
+      // Retorne os detalhes do cliente
+      return res.status(200).json({
+        id: cliente._id,
+        email: cliente.email,
+        nomeRazaoSocial: cliente.nomeRazaoSocial,
+        telefone: cliente.telefone,
+        relacionamento: cliente.relacionamento,
+      });
+    } catch (verifyErr) {
+      console.error("Erro na validação do token JWT:", verifyErr);
+      return res.status(401).json({ message: "Token inválido ou expirado" });
+    }
+  } catch (err) {
+    console.error("Erro ao obter os detalhes do cliente:", err);
+    return res
+      .status(500)
+      .json({ message: "Erro ao obter os detalhes do cliente" });
+  }
+};
+
+
+
 // Função de Registro com bcrypt habilitado no modelo
 export const signup = async (
   req: Request,

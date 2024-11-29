@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import Footer from "components_i/ui/Footer";
 import Navbar from "components_i/ui/Navbar";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "../../components_i/ui/Button";
 import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
 import MapComponent from "components_i/ui/MapComponent";
+
+
 
 // Definição da interface de Imovel para o uso do tipo recebido da API
 interface Imovel {
@@ -36,6 +38,7 @@ interface Imovel {
 
 const Detalhes: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Obtém o ID do imóvel da URL
+  const navigate = useNavigate();
   const [imovel, setImovel] = useState<Imovel | null>(null); // Estado para armazenar o imóvel
   const [loading, setLoading] = useState(true); // Estado de carregamento
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o modal
@@ -62,38 +65,120 @@ const Detalhes: React.FC = () => {
       setLoading(false); // Finaliza o carregamento
     }
   };
-
-  useEffect(() => {
-    // Verifica se há uma mensagem de sucesso no sessionStorage
-    const successMessage = sessionStorage.getItem("messageSucesso");
-    if (successMessage) {
-      setMessage(successMessage);
-      sessionStorage.removeItem("messageSucesso"); // Remove a mensagem após exibir
-
-      // Remove a mensagem da tela após 3 segundos
-      setTimeout(() => {
-        setMessage(null);
-      }, 3000);
+  const restoreNavigation = () => {
+    const redirectInfo = sessionStorage.getItem("redirectInfo");
+    if (redirectInfo) {
+      const parsedInfo = JSON.parse(redirectInfo);
+      navigate(parsedInfo.returnTo);
+      sessionStorage.removeItem("redirectInfo");
     }
-  }, []);
+  };
 
-  // Efeito para sincronizar a altura do mapa com a altura da descrição e do cliente
-  useEffect(() => {
-    const adjustMapHeight = () => {
-      if (descricaoRef.current && clienteRef.current && mapRef.current) {
-        const descricaoHeight = descricaoRef.current.offsetHeight;
-        const clienteHeight = clienteRef.current.offsetHeight;
-        const lazerHeight = lazerRef.current
-          ? lazerRef.current.offsetHeight
-          : -40;
-        const totalHeight = descricaoHeight + clienteHeight + lazerHeight + 8;
-        mapRef.current.style.height = `${totalHeight}px`;
+  const adjustMapHeight = () => {
+    if (descricaoRef.current && clienteRef.current && mapRef.current) {
+      const descricaoHeight = descricaoRef.current.offsetHeight;
+      const clienteHeight = clienteRef.current.offsetHeight;
+      const lazerHeight = lazerRef.current ? lazerRef.current.offsetHeight : -40;
+      const totalHeight = descricaoHeight + clienteHeight + lazerHeight + 8;
+      mapRef.current.style.height = `${totalHeight}px`;
+    }
+  };
+
+  const handleEntrarEmContato = async () => {
+    // Validação: certifique-se de que os dados necessários estão disponíveis
+    if (!imovel || !id) {
+      console.error("Dados do imóvel ou ID estão ausentes.");
+      alert("Ocorreu um erro ao processar sua solicitação.");
+      return;
+    }
+  
+    try {
+      // Obtém o token do cliente logado
+      const token = localStorage.getItem("token");
+  
+      if (!token) {
+        alert("Você precisa estar logado para entrar em contato.");
+        navigate("/login");
+        return;
       }
-    };
+  
+      // Obtém os dados do cliente logado do endpoint /me
+      const response = await fetch("http://localhost:5000/api/auth/me", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) {
+        console.error("Erro ao buscar informações do cliente logado:", response);
+        alert("Ocorreu um erro ao obter os dados do cliente.");
+        return;
+      }
+  
+      const clienteLogado = await response.json();
+  
+      // Dados para salvar o interesse
+      const clienteData = {
+        idImovel: id,
+        tituloImovel: imovel.titulo,
+        nomeCliente: clienteLogado.nomeRazaoSocial,
+        telefoneCliente: clienteLogado.telefone,
+        emailCliente: clienteLogado.email,
+      };
+  
+      // Salva o interesse no backend
+      const interesseResponse = await fetch(
+        "http://localhost:5000/api/interesses",
+        {
+          method: "POST",
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(clienteData),
+        }
+      );
+  
+      if (!interesseResponse.ok) {
+        console.error("Erro ao salvar o interesse:", interesseResponse);
+        alert("Ocorreu um erro ao salvar o interesse.");
+        return;
+      }
+  
+      console.log("Interesse salvo com sucesso:", clienteData);
+  
+      // Redireciona para o WhatsApp com a mensagem
+      const telefoneEmpresa = "5561998680702"; // Número do WhatsApp para redirecionamento
+      const mensagem = `Olá, tenho interesse no imóvel "${imovel.titulo}". Poderia me fornecer mais informações?`;
+  
+      window.location.href = `https://wa.me/${telefoneEmpresa}?text=${encodeURIComponent(
+        mensagem
+      )}`;
+    } catch (error) {
+      console.error("Erro ao salvar o interesse:", error);
+      alert("Ocorreu um erro ao registrar o interesse. Tente novamente.");
+    }
+  };
 
+  
+  // Efeito para restaurar navegação após login
+  useEffect(() => {
+    restoreNavigation();
+  }, [navigate]);
+
+  // Efeito para buscar os detalhes do imóvel
+  useEffect(() => {
+    fetchImovelDetails(); // Busca os detalhes do imóvel quando o componente é montado
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  // Efeito para sincronizar a altura do mapa
+  useEffect(() => {
     if (imovel) {
       adjustMapHeight();
-      window.addEventListener("resize", adjustMapHeight); // Ajusta em caso de redimensionamento
+      window.addEventListener("resize", adjustMapHeight);
     }
 
     return () => {
@@ -101,26 +186,31 @@ const Detalhes: React.FC = () => {
     };
   }, [imovel]);
 
+  // Exibição de mensagem de sucesso
   useEffect(() => {
-    fetchImovelDetails(); // Busca os detalhes do imóvel quando o componente é montado
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+    const successMessage = sessionStorage.getItem("messageSucesso");
+    if (successMessage) {
+      setMessage(successMessage);
+      sessionStorage.removeItem("messageSucesso");
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+    }
+  }, []);
 
   if (loading) {
-    return <p>Carregando detalhes do imóvel...</p>; // Exibe enquanto os dados estão sendo carregados
+    return <p>Carregando detalhes do imóvel...</p>;
   }
 
   if (!imovel) {
-    return <p>Imóvel não encontrado.</p>; // Exibe se nenhum imóvel for encontrado
+    return <p>Imóvel não encontrado.</p>;
   }
 
-  // Função para gerar as iniciais do cliente
   const getClientInitials = (nome: string) => {
     const [firstName, lastName] = nome.split(" ");
     return `${firstName.charAt(0)}${lastName ? lastName.charAt(0) : ""}`;
   };
 
-  // Função para avançar para a próxima imagem
   const nextImage = () => {
     const totalImages = imovel.outrasImagens
       ? imovel.outrasImagens.length + 1
@@ -128,7 +218,6 @@ const Detalhes: React.FC = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % totalImages);
   };
 
-  // Função para voltar para a imagem anterior
   const prevImage = () => {
     const totalImages = imovel.outrasImagens
       ? imovel.outrasImagens.length + 1
@@ -314,7 +403,12 @@ const Detalhes: React.FC = () => {
                       : `R$${imovel.valor?.toLocaleString()}`}
                   </p>
                 </div>
-                <Button variant="default" size="md" className="w-full">
+                <Button
+                  variant="default"
+                  size="md"
+                  className="w-full"
+                  onClick={handleEntrarEmContato}
+                >
                   Entrar em Contato
                 </Button>
               </div>

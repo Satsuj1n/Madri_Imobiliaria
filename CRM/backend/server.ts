@@ -9,6 +9,8 @@ import clienteRoutes from "./routes/clienteRoutes";
 import condominioRoutes from "./routes/condominioRoutes";
 import atendimentoRoutes from "./routes/atendimentoRoutes";
 import authRoutes from "./routes/authRoutes";
+import interesseRoutes from "./routes/interesseRoutes"; // Importar as rotas de interesses
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,6 +48,8 @@ app.use("/api/clientes", clienteRoutes);
 
 // Usar as rotas de Condomínios
 app.use("/api/condominios", condominioRoutes);
+
+app.use("/api/interesses", interesseRoutes); // Registrar as rotas de interesses
 
 // Rota principal
 app.get("/", (req: Request, res: Response) => {
