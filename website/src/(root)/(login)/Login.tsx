@@ -39,22 +39,29 @@ const Login = () => {
   // Função para lidar com o envio do formulário e integração com o backend
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
         formData
       );
-
+  
       // Exibir a resposta do backend no console
       console.log("Resposta do backend:", response.data);
-
+  
       // Salvando o token no localStorage
-      localStorage.setItem("token", response.data.token); // Armazena o token
-
-      // Redirecionar para a página inicial
-      navigate("/");
-
+      localStorage.setItem("token", response.data.token);
+  
+      // Verifica se existe uma URL de redirecionamento
+      const redirectInfo = sessionStorage.getItem("redirectInfo");
+      if (redirectInfo) {
+        const parsedInfo = JSON.parse(redirectInfo);
+        sessionStorage.removeItem("redirectInfo"); // Limpa o redirecionamento
+        navigate(parsedInfo.returnTo); // Redireciona para a URL salva
+      } else {
+        navigate("/"); // Redireciona para a landing page
+      }
+  
       // Atualize a página para refletir o novo estado de login
       window.location.reload(); // Recarrega a página para atualizar o estado da Navbar
     } catch (err) {

@@ -85,7 +85,6 @@ const Detalhes: React.FC = () => {
   };
 
   const handleEntrarEmContato = async () => {
-    // Validação: certifique-se de que os dados necessários estão disponíveis
     if (!imovel || !id) {
       console.error("Dados do imóvel ou ID estão ausentes.");
       alert("Ocorreu um erro ao processar sua solicitação.");
@@ -93,16 +92,20 @@ const Detalhes: React.FC = () => {
     }
   
     try {
-      // Obtém o token do cliente logado
       const token = localStorage.getItem("token");
   
       if (!token) {
+        sessionStorage.setItem(
+          "redirectInfo",
+          JSON.stringify({
+            returnTo: `/imovel/${id}`,
+          })
+        );
         alert("Você precisa estar logado para entrar em contato.");
         navigate("/login");
         return;
       }
   
-      // Obtém os dados do cliente logado do endpoint /me
       const response = await fetch("http://localhost:5000/api/auth/me", {
         method: "GET",
         headers: {
@@ -119,7 +122,6 @@ const Detalhes: React.FC = () => {
   
       const clienteLogado = await response.json();
   
-      // Dados para salvar o interesse
       const clienteData = {
         idImovel: id,
         tituloImovel: imovel.titulo,
@@ -128,7 +130,6 @@ const Detalhes: React.FC = () => {
         emailCliente: clienteLogado.email,
       };
   
-      // Salva o interesse no backend
       const interesseResponse = await fetch(
         "http://localhost:5000/api/interesses",
         {
@@ -152,10 +153,17 @@ const Detalhes: React.FC = () => {
       // Redireciona para o WhatsApp com a mensagem
       const telefoneEmpresa = "5561998680702"; // Número do WhatsApp para redirecionamento
       const mensagem = `Olá, tenho interesse no imóvel "${imovel.titulo}". Poderia me fornecer mais informações?`;
-  
-      window.location.href = `https://wa.me/${telefoneEmpresa}?text=${encodeURIComponent(
+      const whatsappURL = `https://wa.me/${telefoneEmpresa}?text=${encodeURIComponent(
         mensagem
       )}`;
+  
+      // Validação extra para garantir que a mensagem foi codificada corretamente
+      if (mensagem && whatsappURL) {
+        window.location.href = whatsappURL;
+      } else {
+        console.error("Erro ao gerar a URL do WhatsApp.");
+        alert("Não foi possível redirecionar para o WhatsApp.");
+      }
     } catch (error) {
       console.error("Erro ao salvar o interesse:", error);
       alert("Ocorreu um erro ao registrar o interesse. Tente novamente.");
