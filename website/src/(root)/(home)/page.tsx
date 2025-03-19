@@ -67,10 +67,11 @@ const LandingPage = () => {
               <button
                 variant="default"
                 size="lg"
-                className="w-full sm:w-auto rounded-lg mt-2 sm:mt-0 sm:ml-2 sm:mr-4"
+                className="inline-flex items-center justify-center whitespace-nowrap w-full sm:w-auto rounded-lg mt-2 sm:mt-0 sm:ml-2 sm:mr-4 px-4 py-2"
               >
                 Inscrever-se
               </button>
+
             </div>
 
             <p className="text-[#A0A3BD] mt-4 text-center">
