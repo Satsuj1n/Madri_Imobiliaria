@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { ProgressBar } from "components_i/ui/ProgressBar";
 import { ReactComponent as LoadingIcon } from "../../assets/icons/loading.svg"; // Ícone de carregamento
 
@@ -327,13 +327,13 @@ const EditarImagem: React.FC = () => {
               </div>
             </div>
             <div className="mt-8 flex justify-center">
-              <Button
+              <button
                 variant="default"
                 onClick={updateImages}
                 disabled={loading}
               >
                 Salvar e Concluir
-              </Button>
+              </button>
             </div>
           </div>
         )}

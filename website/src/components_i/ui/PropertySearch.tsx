@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "./Button"; // Substitua pelo seu componente Button
+import { button } from "./button"; // Substitua pelo seu componente button
 import { ReactComponent as FilterIcon } from "../../assets/icons/filter.svg"; // Substitua pelo caminho correto do seu ícone de filtro
 
 // Lista de categorias de imóveis
@@ -170,17 +170,17 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
 
         {/* Botão de Filtros */}
         <div className="ml-2">
-          <Button variant="outlineblack" size="large2" onClick={toggleFilters}>
+          <button variant="outlineblack" size="large2" onClick={toggleFilters}>
             <FilterIcon className="w-5 h-5 mr-2" />
             Filtros
-          </Button>
+          </button>
         </div>
 
         {/* Botão de Busca */}
         <div className="">
-          <Button variant="large" size="large" onClick={handleSearch}>
+          <button variant="large" size="large" onClick={handleSearch}>
             Buscar
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -194,7 +194,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
           onChange={(e) => setLocalizacao(e.target.value)}
           className="mb-4 p-6 border rounded-md w-full"
         />
-        <Button
+        <button
           variant="outlineblack"
           size="large"
           className="w-full mb-4"
@@ -202,16 +202,16 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
         >
           <FilterIcon className="w-5 h-5 mr-2" />
           Filtros
-        </Button>
+        </button>
 
-        <Button
+        <button
           variant="default"
           size="large"
           className="w-full"
           onClick={handleSearch}
         >
           Buscar
-        </Button>
+        </button>
       </div>
 
       {/* Modal de Filtros */}
@@ -423,9 +423,9 @@ const PropertySearch: React.FC<PropertySearchProps> = ({
               >
                 Remover filtros
               </button>
-              <Button variant="default" onClick={handleSearch}>
+              <button variant="default" onClick={handleSearch}>
                 Aplicar Filtros
-              </Button>
+              </button>
             </div>
           </div>
         </div>

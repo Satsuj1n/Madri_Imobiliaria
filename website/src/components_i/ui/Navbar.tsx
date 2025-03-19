@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
-import { Button } from "./Button";
+import { button } from "./button";
 import { useNavigate } from "react-router-dom";
 
 interface Cliente {
@@ -204,12 +204,12 @@ const Navbar = () => {
               isOpen ? "hidden" : ""
             }`}
           >
-            <Button variant="default" onClick={handleLoginClick}>
+            <button variant="default" onClick={handleLoginClick}>
               Entrar
-            </Button>
-            <Button variant="outlineDefault" onClick={handleRegisterClick}>
+            </button>
+            <button variant="outlineDefault" onClick={handleRegisterClick}>
               Cadastrar-se
-            </Button>
+            </button>
           </div>
         )}
 
@@ -257,18 +257,18 @@ const Navbar = () => {
             {/* Exibe "Entrar" e "Cadastrar-se" se o usuário NÃO estiver logado */}
             {!isLoggedIn && (
               <>
-                <Button
+                <button
                   onClick={handleLoginClick}
                   className="w-[90%] mx-[5%] py-2 text-white bg-blue-500 hover:bg-blue-700 text-sm font-semibold rounded-md shadow-md transition"
                 >
                   Login
-                </Button>
-                <Button
+                </button>
+                <button
                   onClick={handleRegisterClick}
                   className="w-[90%] mx-[5%] py-2 text-white bg-blue-500 hover:bg-blue-700 text-sm font-semibold rounded-md shadow-md transition"
                 >
                   Registrar
-                </Button>
+                </button>
               </>
             )}
 
@@ -282,12 +282,12 @@ const Navbar = () => {
                 >
                   Meu Perfil
                 </a>
-                <Button
+                <button
                   onClick={handleLogoutClick}
                   className="w-[90%] mx-[5%] py-2 text-white bg-[#0053f8] hover:bg-[#003297] text-sm font-semibold rounded-md shadow-md transition"
                 >
                   Sair
-                </Button>
+                </button>
               </>
             )}
           </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { Checkbox } from "../../components_i/ui/Checkbox";
 import { ProgressBar } from "components_i/ui/ProgressBar";
 
@@ -473,12 +473,12 @@ const EditarInfo: React.FC = () => {
             </div>
 
             <div className="mt-8 flex justify-between">
-              <Button variant="default" onClick={handleVoltar}>
+              <button variant="default" onClick={handleVoltar}>
                 Voltar
-              </Button>
-                <Button variant="default" type="button" onClick={updateProperty}>
+              </button>
+                <button variant="default" type="button" onClick={updateProperty}>
                 Próximo
-                </Button>
+                </button>
             </div>
           </form>
         )}

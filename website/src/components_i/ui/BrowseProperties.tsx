@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "./Button";
+import { button } from "./button";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/DownArrowIcon.svg";
 import { Checkbox } from "./Checkbox";
 
@@ -152,9 +152,9 @@ const BrowseProperties = () => {
           )}
         </div>
 
-        <Button variant="large" size="lg_text_large" onClick={handleSearch} className="w-full">
+        <button variant="large" size="lg_text_large" onClick={handleSearch} className="w-full">
           Buscar Propriedades
-        </Button>
+        </button>
       </div>
 
       <div className="hidden md:flex bg-white p-6 rounded-b-lg shadow-md w-full md:w-[980px]">
@@ -206,9 +206,9 @@ const BrowseProperties = () => {
 
           <div className="border-l border-gray-300 h-12"></div>
 
-          <Button variant="large" size="large" onClick={handleSearch}>
+          <button variant="large" size="large" onClick={handleSearch}>
             Buscar Propriedades
-          </Button>
+          </button>
         </div>
       </div>
     </div>

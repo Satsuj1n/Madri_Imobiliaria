@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import HouseCard from "./HouseCard";
 import SegmentedControl from "./SegmentedControl";
 import SearchBar from "./SearchBar";
-import { Button } from "./Button";
+import { button } from "./button";
 
 interface Imovel {
   _id: string;
@@ -175,9 +175,9 @@ const PropertyListing = () => {
       {/* Botão de Carregar Mais */}
       <div className="mb-28">
         {currentPage * itemsPerPage < filteredImoveis.length && (
-          <Button variant="large" size="large" onClick={loadMoreImoveis}>
+          <button variant="large" size="large" onClick={loadMoreImoveis}>
             Ver Mais Propriedades
-          </Button>
+          </button>
         )}
       </div>
     </div>

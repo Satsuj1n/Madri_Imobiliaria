@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -100,7 +100,7 @@ const EsqueciSenha = () => {
               />
             </div>
 
-            <Button
+            <button
               variant="default"
               size="lg"
               className="w-full mb-4"
@@ -116,7 +116,7 @@ const EsqueciSenha = () => {
               ) : (
                 "Enviar Código"
               )}
-            </Button>
+            </button>
           </form>
         </div>
       </div>
@@ -128,9 +128,9 @@ const EsqueciSenha = () => {
             <p className="text-black font-bold mb-4">
               Email não encontrado no sistema
             </p>
-            <Button variant="default" onClick={() => setShowErrorPopup(false)}>
+            <button variant="default" onClick={() => setShowErrorPopup(false)}>
               OK
-            </Button>
+            </button>
           </div>
         </div>
       )}

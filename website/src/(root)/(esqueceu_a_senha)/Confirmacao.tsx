@@ -1,7 +1,7 @@
 import React from "react";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
-import { Button } from "components_i/ui/Button";
+import { button } from "components_i/ui/button";
 
 const Confirmacao = () => {
   const navigate = useNavigate();
@@ -37,9 +37,9 @@ const Confirmacao = () => {
           <p className="text-[#6C727F] mb-2 text-center">
             Sua senha foi redefinida com sucesso. Agora você pode fazer login.
           </p>
-          <Button size="large2" variant="extraLarge" onClick={handleClickLogin}>
+          <button size="large2" variant="extraLarge" onClick={handleClickLogin}>
             Faça o Login Aqui
-          </Button>
+          </button>
         </div>
       </div>
     </div>

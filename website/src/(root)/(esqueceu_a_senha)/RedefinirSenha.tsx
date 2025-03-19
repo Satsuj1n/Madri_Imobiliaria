@@ -1,7 +1,7 @@
 // RedefinirSenha.tsx
 
 import React, { useState } from "react";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -115,7 +115,7 @@ const RedefinirSenha = () => {
               />
             </div>
 
-            <Button
+            <button
               variant="default"
               size="lg"
               className="w-full mb-4"
@@ -131,7 +131,7 @@ const RedefinirSenha = () => {
               ) : (
                 "Redefinir Senha"
               )}
-            </Button>
+            </button>
           </form>
         </div>
       </div>

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Importando Axios para as requisições
@@ -178,14 +178,14 @@ const Login = () => {
               Esqueceu a senha?
             </a>
 
-            <Button
+            <button
               variant="default"
               size="lg"
               className="w-full mb-4"
               type="submit"
             >
               Entrar
-            </Button>
+            </button>
 
             <p className="mt-6 text-sm text-gray-500 text-center">
               Não tem uma conta?{" "}
