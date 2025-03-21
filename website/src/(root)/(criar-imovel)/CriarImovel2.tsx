@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { Checkbox } from "../../components_i/ui/Checkbox";
 import { ProgressBar } from "components_i/ui/ProgressBar";
 
@@ -514,12 +514,12 @@ const CriarImovel2 = () => {
           </div>
 
           <div className="mt-8 flex justify-between">
-            <Button variant="default" onClick={handleBack}>
+            <button variant="default" onClick={handleBack}>
               Voltar
-            </Button>
-            <Button variant="default" type="submit">
+            </button>
+            <button variant="default" type="submit">
               Próximo
-            </Button>
+            </button>
           </div>
         </form>
       </div>

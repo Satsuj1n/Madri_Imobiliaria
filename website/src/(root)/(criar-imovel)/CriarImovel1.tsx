@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { ProgressBar } from "components_i/ui/ProgressBar";
 import loadingIcon from "../../assets/icons/loading.svg";
 
@@ -228,12 +228,12 @@ const CriarImovel1 = () => {
           </div>
 
           <div className="mt-8 flex justify-between">
-            <Button variant="default" onClick={handleBack}>
+            <button variant="default" onClick={handleBack}>
               Voltar
-            </Button>
-            <Button variant="default" onClick={handleNext}>
+            </button>
+            <button variant="default" onClick={handleNext}>
               Próximo
-            </Button>
+            </button>
           </div>
         </div>
       </div>

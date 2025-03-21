@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components_i/ui/Navbar";
 import Footer from "../../components_i/ui/Footer";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { ProgressBar } from "components_i/ui/ProgressBar"; // Importando a barra de progresso
 import { ReactComponent as LoadingIcon } from "../../assets/icons/loading.svg"; // Importando o ícone de carregamento
 
@@ -223,12 +223,12 @@ const AdicionarImagens = () => {
             </div>
 
             <div className="mt-8 flex justify-between w-full max-w-md">
-              <Button variant="default" onClick={handleBack} disabled={loading}>
+              <button variant="default" onClick={handleBack} disabled={loading}>
                 Voltar
-              </Button>
-              <Button variant="default" type="submit" disabled={loading}>
+              </button>
+              <button variant="default" type="submit" disabled={loading}>
                 Enviar Imagens
-              </Button>
+              </button>
             </div>
           </form>
         )}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components_i/ui/Navbar";
-import { Button } from "components_i/ui/Button";
+import { button } from "components_i/ui/button";
 import PropertyListing from "components_i/ui/PropertyListing";
 import Footer from "components_i/ui/Footer";
 import Beneficit from "components_i/ui/Beneficit";
@@ -64,13 +64,14 @@ const LandingPage = () => {
                 placeholder="Insira seu endereço de e-mail"
                 className="w-full h-12 sm:h-full pl-4 outline-none rounded-lg text-[#100A55] mb-2 sm:mb-0"
               />
-              <Button
+              <button
                 variant="default"
                 size="lg"
-                className="w-full sm:w-auto rounded-lg mt-2 sm:mt-0 sm:ml-2 sm:mr-4"
+                className="inline-flex items-center justify-center whitespace-nowrap w-full sm:w-auto rounded-lg mt-2 sm:mt-0 sm:ml-2 sm:mr-4 px-4 py-2"
               >
                 Inscrever-se
-              </Button>
+              </button>
+
             </div>
 
             <p className="text-[#A0A3BD] mt-4 text-center">
@@ -103,3 +104,4 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+

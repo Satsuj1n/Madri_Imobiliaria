@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Footer from "components_i/ui/Footer";
 import Navbar from "components_i/ui/Navbar";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { ReactComponent as BedIcon } from "../../assets/icons/bedIcon.svg";
 import { ReactComponent as BathIcon } from "../../assets/icons/bathIcon.svg";
 import { ReactComponent as SizeIcon } from "../../assets/icons/sizeIcon.svg";
@@ -297,14 +297,14 @@ const Detalhes: React.FC = () => {
               )}
 
               {imovel.outrasImagens && imovel.outrasImagens.length > 2 && (
-                <Button
+                <button
                   variant="default"
                   size="md"
                   className="absolute bottom-3 right-2"
                   onClick={() => setIsModalOpen(true)}
                 >
                   Ver todas as fotos
-                </Button>
+                </button>
               )}
             </div>
           </div>
@@ -320,9 +320,9 @@ const Detalhes: React.FC = () => {
                     : `R$${imovel.valor?.toLocaleString()}`}
                 </p>
               </div>
-              <Button variant="default" size="md" className="w-full">
+              <button variant="default" size="md" className="w-full">
                 Entrar em Contato
-              </Button>
+              </button>
             </div>
 
             <div
@@ -411,14 +411,14 @@ const Detalhes: React.FC = () => {
                       : `R$${imovel.valor?.toLocaleString()}`}
                   </p>
                 </div>
-                <Button
+                <button
                   variant="default"
                   size="md"
                   className="w-full"
                   onClick={handleEntrarEmContato}
                 >
                   Entrar em Contato
-                </Button>
+                </button>
               </div>
 
               {/* Definindo a largura máxima para o mapa */}

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Adicionando Axios para requisições HTTP
@@ -302,14 +302,14 @@ const Register = () => {
               </select>
             </div>
 
-            <Button
+            <button
               variant="default"
               size="lg"
               className="w-full mb-4"
               type="submit"
             >
               Cadastrar-se
-            </Button>
+            </button>
 
             <p className="mt-6 text-sm text-gray-500 text-center">
               Já tem uma conta?{" "}

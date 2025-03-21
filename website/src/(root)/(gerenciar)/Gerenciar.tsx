@@ -4,7 +4,7 @@ import Footer from "components_i/ui/Footer";
 import loadingIcon from "../../assets/icons/loading.svg";
 import HouseCardHorizontal from "components_i/ui/HouseCardHorizontal";
 import axios from "axios";
-import { Button } from "components_i/ui/Button";
+import { button } from "components_i/ui/button";
 import { useNavigate } from "react-router-dom";
 
 interface Imovel {
@@ -236,13 +236,13 @@ const Gerenciar: React.FC = () => {
                 Você não tem nenhum imóvel cadastrado no momento.
               </p>
               <div className="flex justify-center mt-32">
-                <Button
+                <button
                   variant="extraLarge"
                   size="extraLarge"
                   onClick={() => navigate("/criar-imovel/1")}
                 >
                   Criar Imóvel
-                </Button>
+                </button>
               </div>
             </div>
           )}

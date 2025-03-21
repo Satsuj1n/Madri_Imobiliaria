@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button } from "../../components_i/ui/Button";
+import { button } from "../../components_i/ui/button";
 import Navbar from "components_i/ui/Navbar";
 import { useNavigate } from "react-router-dom";
 
@@ -187,12 +187,12 @@ const ChangePasswordPage = () => {
                 required
               />
             </div>
-            <Button
+            <button
               type="submit"
               className="w-full bg-blue-500 text-white py-2 rounded-md"
             >
               Alterar Senha
-            </Button>
+            </button>
           </form>
         </div>
       </div>
