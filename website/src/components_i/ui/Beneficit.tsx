@@ -39,4 +39,3 @@ const Beneficit = () => {
 };
 
 export default Beneficit;
-
