@@ -26,12 +26,12 @@ const Beneficit = () => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={cardAnimationComplete ? { opacity: 1, scale: 1 } : {}}
         transition={{ duration: 0.5 }}
-        className="w-full h-auto lg:h-[468px] flex justify-center items-center"
+        className="w-full h-auto lg:h-[468px] flex justify-center items-center rounded-lg overflow-hidden"
       >
         <img
-          src="https://i.imgur.com/xsJWtXL.png"
+          src="https://i.postimg.cc/0j0c98jG/Chat-GPT-Image-7-05-2025-16-53-51.png"
           alt="Anúncio"
-          className="w-full h-full object-cover rounded-lg"
+          className="aspect-[415/200] w-full h-auto"
         />
       </motion.div>
     </div>
