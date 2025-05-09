@@ -4,34 +4,36 @@ import { useInView } from "react-intersection-observer";
 
 const Beneficit = () => {
   const [cardAnimationComplete, setCardAnimationComplete] = useState(false);
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
 
-  // Hook para detectar quando o componente está visível na tela
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.3,
-  });
-
-  // Disparar a animação quando o componente estiver visível
-  if (inView && !cardAnimationComplete) {
-    setCardAnimationComplete(true);
-  }
+  if (inView && !cardAnimationComplete) setCardAnimationComplete(true);
 
   return (
     <div
       ref={ref}
-      className="bg-[#F7F7FD] rounded-lg w-[90%] md:w-full lg:w-[90%] xl:w-[1245px] h-auto flex flex-col lg:flex-row my-8 lg:my-24 mx-auto"
+      className="
+        bg-[#F7F7FD] rounded-lg
+        w-[90%] md:w-full lg:w-[90%] xl:w-[1245px]
+        h-auto flex flex-col lg:flex-row
+        my-8 lg:my-24 mx-auto
+      "
     >
-      {/* Adição do anúncio ocupando toda a área */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={cardAnimationComplete ? { opacity: 1, scale: 1 } : {}}
         transition={{ duration: 0.5 }}
-        className="w-full h-auto lg:h-[468px] flex justify-center items-center rounded-lg overflow-hidden"
+        /* ▼ borda arredondada + recorte */
+        className="w-full h-auto flex justify-center items-center rounded-lg overflow-hidden"
       >
         <img
-          src="https://i.postimg.cc/0j0c98jG/Chat-GPT-Image-7-05-2025-16-53-51.png"
+          src="https://i.postimg.cc/TwV5TbwH/banner-1245x468-latest.png"
           alt="Anúncio"
-          className="aspect-[415/200] w-full h-auto"
+          className="
+            w-full h-auto
+            lg:max-w-[1245px]
+            aspect-[1245/468]
+            object-contain
+          "
         />
       </motion.div>
     </div>
